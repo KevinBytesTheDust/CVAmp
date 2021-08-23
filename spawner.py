@@ -1,98 +1,99 @@
 import random
-import tkinter
+import threading
+import time
+from concurrent.futures.thread import ThreadPoolExecutor
+
 from seleniumwire import webdriver
 
 from proxy import ProxyGetter
+from screen import Screen
 
 
 class BrowserManager:
-    def __init__(self, target_url):
+    def __init__(self, target_url, spawn_thread_count, delete_thread_count):
+        self._spawn_thread_count = spawn_thread_count
+        self._delete_thread_count = delete_thread_count
+
         self.target_url = target_url
 
-        self.window_height = 300
-        self.window_width = 500
-
-        self.screen_width = self.get_screen_resolution("width")
-        self.screen_height = self.get_screen_resolution("height")
+        self.screen = Screen(window_width=500, window_height=300)
+        self.proxies = ProxyGetter()
 
         self.user_agents_list = []
         with open("user-agents.txt") as user_agents:
             self.user_agents_list = user_agents.read().splitlines()
 
-        self.spawn_locations = self.generate_spawn_locations()
         self.browser_instances = []
 
-        self.proxies = ProxyGetter()
+    def __del__(self):
+        print("Deleting manager: cleaning up instances")
+        self.delete_all_instances()
 
     def get_random_user_agent(self):
         return random.choice(self.user_agents_list)
 
-    def get_screen_resolution(self, kind):
-        root = tkinter.Tk()
-        root.withdraw()
-
-        if kind == "width":
-            return root.winfo_screenwidth()
-        if kind == "height":
-            return root.winfo_screenheight()
-
-        return None
-
-    def generate_spawn_locations(self):
-        spawn_locations = []
-
-        cols = int(self.screen_width / self.window_width)
-        rows = int(self.screen_height / self.window_height)
-
-        for row in range(rows):
-            for col in range(cols):
-                spawn_locations.append((col * self.window_width, row * self.window_height))
-
-        return spawn_locations
+    def spawn_instances(self, n):
+        with ThreadPoolExecutor(max_workers=self._spawn_thread_count) as executor:
+            for i in range(n):
+                executor.submit(self.spawn_instance)
 
     def spawn_instance(self):
-        browser_instance = BrowserSpawn(
-            len(self.browser_instances),
-            self.window_height,
-            self.window_width,
-            self.get_random_user_agent(),
-            self.proxies.get_proxy(),
-            self.target_url,
-            self.spawn_locations[len(self.browser_instances)],
-        )
 
-        browser_instance.modify_driver()  # Todo: Kill instance if error
+        with threading.Lock():
+            user_agent = self.get_random_user_agent()
+            proxy = self.proxies.get_proxy()
+            screen_location = self.screen.get_free_screen_location()
+
+        if not screen_location:
+            print("no screen space left")
+            return
+
+        browser_instance = BrowserSpawn(user_agent, proxy, self.target_url, screen_location)
 
         self.browser_instances.append(browser_instance)
+
+        browser_instance.modify_driver()  # Todo: Kill instance if error
 
     def delete_latest(self):
         if not self.browser_instances:
             print("No instances found")
             return
 
-        self.browser_instances.pop()
+        with threading.Lock():
+            instance = self.browser_instances.pop()
+            print("Deleting instance no", instance.location_info["index"])
+            time.sleep(0.2)
+
+        instance.__del__()
 
     def delete_all_instances(self):
-        for i in range(len(self.browser_instances)):
-            self.delete_latest()
+        with ThreadPoolExecutor(max_workers=self._delete_thread_count) as executor:
+            for i in range(len(self.browser_instances)):
+                executor.submit(self.delete_latest)
+
+    def go_to(self, url, instance_no):
+        # Todo
+        pass
+
+    def go_to_all(self, url):
+        # Todo
+        pass
 
 
 class BrowserSpawn:
-    def __init__(
-        self, instance_no, window_height, window_width, user_agent, proxy_string, target_url, spawn_position,
-    ):
-        self.instance_no = instance_no
-        self.window_height = window_height
-        self.window_width = window_width
+    def __init__(self, user_agent, proxy_string, target_url, location_info):
         self.user_agent = user_agent
         self.proxy_string = proxy_string
         self.target_url = target_url
-        self.spawn_position = spawn_position
+
+        self.location_info = location_info
 
         self.driver = self.spawn_driver()
         self.css_retries = 3
 
     def __del__(self):
+        self.location_info["free"] = True
+
         if self.driver:
             self.driver.quit()
 
@@ -146,5 +147,5 @@ class BrowserSpawn:
                 continue
             break
 
-        self.driver.set_window_size(self.window_width, self.window_height)
-        self.driver.set_window_position(x=self.spawn_position[0], y=self.spawn_position[1], windowHandle="current")
+        self.driver.set_window_size(self.location_info["width"], self.location_info["height"])
+        self.driver.set_window_position(x=self.location_info["x"], y=self.location_info["y"], windowHandle="current")
