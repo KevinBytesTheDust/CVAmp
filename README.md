@@ -1,5 +1,7 @@
 # Crude twitch viewer bot with selenium 
 
+Disclaimer: For educational purpose only!
+
 Small script that spawns Google Chrome instances, each with a different user-agent and SOCKS5 proxy connection. 
 Each instance navigates to the twitch channel, selects the lowest possible resolution and
 adheres itself to the available screen space.
