@@ -10,7 +10,14 @@ from screen import Screen
 
 
 class BrowserManager:
-    def __init__(self, target_url, spawn_thread_count, delete_thread_count):
+    def __init__(self, target_url,
+                 spawn_thread_count,
+                 delete_thread_count,
+                 disable_capture,
+                 headless,
+                 ):
+        self._request_capture = disable_capture
+        self._headless = headless
         self._spawn_thread_count = spawn_thread_count
         self._delete_thread_count = delete_thread_count
 
@@ -48,7 +55,13 @@ class BrowserManager:
             print("no screen space left")
             return
 
-        browser_instance = BrowserSpawn(user_agent, proxy, self.target_url, screen_location)
+        browser_instance = BrowserSpawn(user_agent,
+                                        proxy,
+                                        self.target_url,
+                                        screen_location,
+                                        self._headless,
+                                        self._request_capture
+                                        )
 
         self.browser_instances.append(browser_instance)
 
@@ -81,10 +94,17 @@ class BrowserManager:
 
 
 class BrowserSpawn:
-    def __init__(self, user_agent, proxy_string, target_url, location_info):
+    def __init__(self, user_agent,
+                 proxy_string,
+                 target_url,
+                 location_info,
+                 headless,
+                 disable_capture):
         self.user_agent = user_agent
         self.proxy_string = proxy_string
         self.target_url = target_url
+        self._headless = headless
+        self._disable_capture = disable_capture
 
         self.location_info = location_info
 
@@ -97,17 +117,23 @@ class BrowserSpawn:
         if self.driver:
             self.driver.quit()
 
-    def spawn_driver(self):
+    def spawn_driver(self, request_logging=False, ):
         options = webdriver.ChromeOptions()
+        seleniumwire_options = {}
         options.add_argument("--mute-audio")
         options.add_argument("user-agent={}".format(self.user_agent))
 
-        seleniumwire_options = {}
+        if self._headless:
+            options.add_argument("--headless")
+
+        if self._disable_capture:
+            seleniumwire_options['disable_capture']: True  # Don't intercept/store any requests
 
         if self.proxy_string:
-            seleniumwire_options = {"proxy": {"http": self.proxy_string, "https": self.proxy_string,}}
+            seleniumwire_options["proxy"] = {"http": self.proxy_string, "https": self.proxy_string}
 
-        driver = webdriver.Chrome("chromedriver.exe", options=options, seleniumwire_options=seleniumwire_options)
+        driver = webdriver.Chrome("chromedriver.exe", options=options,
+                                  seleniumwire_options=seleniumwire_options)
 
         driver.set_window_size(640, 480)
 
@@ -139,13 +165,15 @@ class BrowserSpawn:
             try:
                 self.driver.find_elements_by_css_selector(
                     'div[data-a-target="player-settings-submenu-quality-option"]'
-                )[-1].click()
+                    )[-1].click()
             except:
                 print(
-                    "Unable to find", 'div[data-a-target="player-settings-submenu-quality-option"]', "try", i,
-                )
+                    "Unable to find", 'div[data-a-target="player-settings-submenu-quality-option"]',
+                    "try", i,
+                    )
                 continue
             break
 
         self.driver.set_window_size(self.location_info["width"], self.location_info["height"])
-        self.driver.set_window_position(x=self.location_info["x"], y=self.location_info["y"], windowHandle="current")
+        self.driver.set_window_position(x=self.location_info["x"], y=self.location_info["y"],
+                                        windowHandle="current")
