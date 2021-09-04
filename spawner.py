@@ -146,11 +146,15 @@ class BrowserSpawn:
         css_targets = [
             'button[data-a-target="consent-banner-accept"]',
             'button[data-test-selector="upsell-bottom-banner__dismiss-button"]',
+            'div[class*="subtember-2021-callout__dismiss"',
+            'div[class*="tw-callout__close"'
+            
             'button[data-a-target="player-overlay-mature-accept"]',
             'button[data-a-target="player-theatre-mode-button"]',
             'button[data-a-target="player-settings-button"]',
             'button[data-a-target="player-settings-menu-item-quality"]',
-        ]
+
+            ]
 
         for css_target in css_targets:
             for i in range(self.css_retries):
