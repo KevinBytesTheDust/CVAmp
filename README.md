@@ -7,10 +7,11 @@ Each instance navigates to the twitch channel, selects the lowest possible resol
 adheres itself to the available screen space.
 
 ### Important
-- Only tested on Windows 10 and Chrome Version 92.0.4515.131 
+- Maximum recommended chrome instance count is ~25.   
+  CPU load is heavy. Bandwidth is ok with low resolution.
 - Requires a list of SOCKS 5 proxies
-- Tested with 20 instances, very CPU heavy. Bandwidth is ok with low resolution.
-- works with -headless option, too.
+- Headless option can reduce CPU load by ~30%.
+- Only tested on Windows 10 and Chrome Version 93.0.4577.63
 
 ### In action
 
