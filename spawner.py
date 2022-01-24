@@ -3,6 +3,7 @@ import threading
 import time
 from concurrent.futures.thread import ThreadPoolExecutor
 
+from selenium.webdriver import Keys
 from seleniumwire import webdriver
 
 from proxy import ProxyGetter
@@ -120,8 +121,10 @@ class BrowserSpawn:
     def spawn_driver(self, request_logging=False, ):
         options = webdriver.ChromeOptions()
         seleniumwire_options = {}
+
         options.add_argument("--mute-audio")
         options.add_argument("user-agent={}".format(self.user_agent))
+        options.add_experimental_option("excludeSwitches", ['enable-automation'])  # disables automation banner
 
         if self._headless:
             options.add_argument("--headless")
@@ -137,47 +140,28 @@ class BrowserSpawn:
 
         driver.set_window_size(640, 480)
 
-        driver.get(self.target_url)
+        driver.get("https://www.twitch.tv/404")
 
         return driver
 
     def modify_driver(self):
 
-        css_targets = [
-            'button[data-a-target="consent-banner-accept"]',
-            'button[data-test-selector="upsell-bottom-banner__dismiss-button"]',
-            'div[class*="subtember-2021-callout__dismiss"',
-            'div[class*="tw-callout__close"'
-            
-            'button[data-a-target="player-overlay-mature-accept"]',
-            'button[data-a-target="player-theatre-mode-button"]',
-            'button[data-a-target="player-settings-button"]',
-            'button[data-a-target="player-settings-menu-item-quality"]',
+        twitch_settings = {
+            'mature': 'true',
+            'video-muted': '{"default": "false"}',
+            'volume': '0.5',
+            'video-quality': '{"default": "160p30"}',
+            'lowLatencyModeEnabled': 'false',
+            }
 
-            ]
-
-        for css_target in css_targets:
-            for i in range(self.css_retries):
-                try:
-                    self.driver.find_element_by_css_selector(css_target).click()
-                except:
-                    print("Unable to find", css_target, "try", i)
-                    continue
-                break
-
-        for i in range(self.css_retries):
-            try:
-                self.driver.find_elements_by_css_selector(
-                    'div[data-a-target="player-settings-submenu-quality-option"]'
-                    )[-1].click()
-            except:
-                print(
-                    "Unable to find", 'div[data-a-target="player-settings-submenu-quality-option"]',
-                    "try", i,
-                    )
-                continue
-            break
+        for key, value in twitch_settings.items():
+            tosend = """window.localStorage.setItem('{key}','{value}');""".format(key=key, value=value)
+            self.driver.execute_script(tosend)
 
         self.driver.set_window_size(self.location_info["width"], self.location_info["height"])
-        self.driver.set_window_position(x=self.location_info["x"], y=self.location_info["y"],
+        self.driver.set_window_position(x=self.location_info["x"] - 1, y=self.location_info["y"] - 1,
                                         windowHandle="current")
+
+        self.driver.get(self.target_url)
+        time.sleep(1)
+        self.driver.find_element_by_tag_name('body').send_keys(Keys.ALT, 't')
