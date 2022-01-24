@@ -120,8 +120,10 @@ class BrowserSpawn:
     def spawn_driver(self, request_logging=False, ):
         options = webdriver.ChromeOptions()
         seleniumwire_options = {}
+
         options.add_argument("--mute-audio")
         options.add_argument("user-agent={}".format(self.user_agent))
+        options.add_experimental_option("excludeSwitches", ['enable-automation'])  # disables automation banner
 
         if self._headless:
             options.add_argument("--headless")
