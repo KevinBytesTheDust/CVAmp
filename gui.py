@@ -1,6 +1,5 @@
 import sys
 import threading
-import time
 import tkinter as tk
 import webbrowser
 from tkinter import ttk
@@ -9,16 +8,6 @@ from tkinter.scrolledtext import ScrolledText
 import psutil
 
 from spawner import BrowserManager
-
-
-"""
-Todo:
-use timestamp in video_ads.stream_loudness -> {"loudness":-22.36995026265624,"timestamp":1644067146171}
-to check is stream is running
-
-use psutil.cpu_percent() and psutil.virtual_memory().percent
-
-"""
 
 
 class GUI:

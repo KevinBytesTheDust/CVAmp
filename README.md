@@ -7,19 +7,28 @@ Each instance navigates to the twitch channel, activates theater mode and adhere
 Settings in localStorage ensure the lowest possible resolution.
 
 ### Important
-- Maximum recommended chrome instance count is ~25.
+- You need to provide SOCKS 5 proxies to [proxy_list.json](proxy_list.json).   
+Buy some at [webshare.io (referred)](https://www.webshare.io/?referral_code=w6nfvip4qp3g). They are quite good. 
+- Tested with instance count: Headless ~60, headful ~25.
+- Tested on Windows 10 and Chrome Version 97.
 - CPU load and bandwidth can get heavy. Channels with 160p work best.
-- Requires a list of SOCKS 5 proxies
-- Headless option can reduce CPU load by ~30%.
-- Only tested on Windows 10 and Chrome Version 97
 
 ### In action
 
-![](instances_spawning.gif)
+Headless GUI  
+![](docs/gui.png)
+
+Headful   
+![](docs/instances_spawning.gif)
 
 ### Usage
 
 ```
+GUI: main_gui.py
+```
+```
+REPL: main.py
+
 Start in REPL and interact with manager through command examples below
 
 Spawn a single instance or multiple with threading:
