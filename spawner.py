@@ -4,6 +4,7 @@ import time
 from concurrent.futures.thread import ThreadPoolExecutor
 
 from selenium.webdriver import Keys
+from selenium.webdriver.common.by import By
 from seleniumwire import webdriver
 
 from proxy import ProxyGetter
@@ -11,11 +12,16 @@ from screen import Screen
 
 
 class BrowserManager:
-    def __init__(self, target_url,
+    def __del__(self):
+        print("Deleting manager: cleaning up instances")
+        self.delete_all_instances()
+
+    def __init__(self,
                  spawn_thread_count,
                  delete_thread_count,
                  disable_capture,
                  headless,
+                 target_url = None
                  ):
         self._request_capture = disable_capture
         self._headless = headless
@@ -33,24 +39,26 @@ class BrowserManager:
 
         self.browser_instances = []
 
-    def __del__(self):
-        print("Deleting manager: cleaning up instances")
-        self.delete_all_instances()
-
     def get_random_user_agent(self):
         return random.choice(self.user_agents_list)
 
-    def spawn_instances(self, n):
+    def spawn_instances(self, n, url=None):
         with ThreadPoolExecutor(max_workers=self._spawn_thread_count) as executor:
-            for i in range(n):
-                executor.submit(self.spawn_instance)
+            executor.map(self.spawn_instance, [url] * n)
 
-    def spawn_instance(self):
+    def spawn_instance(self, target_url=None):
+
+        if not any([target_url, self.target_url]):
+            raise Exception("No target target url provided")
 
         with threading.Lock():
             user_agent = self.get_random_user_agent()
             proxy = self.proxies.get_proxy()
-            screen_location = self.screen.get_free_screen_location()
+
+            if self._headless:
+                screen_location = self.screen.get_default_location()
+            else:
+                screen_location = self.screen.get_free_screen_location()
 
         if not screen_location:
             print("no screen space left")
@@ -58,7 +66,7 @@ class BrowserManager:
 
         browser_instance = BrowserSpawn(user_agent,
                                         proxy,
-                                        self.target_url,
+                                        target_url,
                                         screen_location,
                                         self._headless,
                                         self._request_capture
@@ -75,8 +83,8 @@ class BrowserManager:
 
         with threading.Lock():
             instance = self.browser_instances.pop()
-            print("Deleting instance no", instance.location_info["index"])
-            time.sleep(0.2)
+            print("Deleting instance #{}\n".format(len(self.browser_instances)), end="")
+            time.sleep(0.3)
 
         instance.__del__()
 
@@ -98,9 +106,10 @@ class BrowserSpawn:
     def __init__(self, user_agent,
                  proxy_string,
                  target_url,
-                 location_info,
-                 headless,
-                 disable_capture):
+                 location_info=None,
+                 headless=False,
+                 disable_capture=True):
+
         self.user_agent = user_agent
         self.proxy_string = proxy_string
         self.target_url = target_url
@@ -117,10 +126,12 @@ class BrowserSpawn:
 
         if self.driver:
             self.driver.quit()
+            self.driver = None
 
-    def spawn_driver(self, request_logging=False, ):
+    def spawn_driver(self, request_logging=False):
         options = webdriver.ChromeOptions()
         seleniumwire_options = {}
+
 
         options.add_argument("--mute-audio")
         options.add_argument("user-agent={}".format(self.user_agent))
@@ -131,9 +142,19 @@ class BrowserSpawn:
 
         if self._disable_capture:
             seleniumwire_options['disable_capture']: True  # Don't intercept/store any requests
+        else:
+            pass
+            #todo: use to tell active from inactive instances
+            # seleniumwire_options.update({
+            #     'request_storage': 'memory',
+            #     'request_storage_max_size': 100
+            #     })
 
         if self.proxy_string:
             seleniumwire_options["proxy"] = {"http": self.proxy_string, "https": self.proxy_string}
+
+
+
 
         driver = webdriver.Chrome("chromedriver.exe", options=options,
                                   seleniumwire_options=seleniumwire_options)
@@ -164,4 +185,4 @@ class BrowserSpawn:
 
         self.driver.get(self.target_url)
         time.sleep(1)
-        self.driver.find_element_by_tag_name('body').send_keys(Keys.ALT, 't')
+        self.driver.find_element(By.NAME, "body").send_keys(Keys.ALT, 't')

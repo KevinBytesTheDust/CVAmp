@@ -1,6 +1,5 @@
 import tkinter
 
-
 def get_screen_resolution(kind):
     root = tkinter.Tk()
     root.withdraw()
@@ -57,3 +56,6 @@ class Screen:
         lowest_location_info["free"] = False
 
         return lowest_location_info
+
+    def get_default_location(self):
+        return self.spawn_locations[0]
