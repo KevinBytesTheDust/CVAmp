@@ -14,6 +14,7 @@ from spawner import BrowserManager
 target_url = "https://www.twitch.tv/username"
 SPAWNER_THREAD_COUNT = 3
 CLOSER_THREAD_COUNT = 10
+PROXY_FILE_NAME = "proxy_list.txt"
 DISABLE_CAPTURE = True
 HEADLESS = False
 
@@ -21,7 +22,8 @@ manager = BrowserManager(target_url,
                          SPAWNER_THREAD_COUNT,
                          CLOSER_THREAD_COUNT,
                          DISABLE_CAPTURE,
-                         HEADLESS)
+                         HEADLESS,
+                         PROXY_FILE_NAME)
 
 print("Available proxies", len(manager.proxies.proxy_list))
 print("Available window locations", len(manager.screen.spawn_locations))

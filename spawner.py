@@ -1,3 +1,4 @@
+import os
 import random
 import threading
 import time
@@ -7,21 +8,18 @@ from selenium.webdriver import Keys
 from selenium.webdriver.common.by import By
 from seleniumwire import webdriver
 
-from proxy import ProxyGetter
+from proxy.proxy import ProxyGetter
 from screen import Screen
 
 
 class BrowserManager:
-    def __del__(self):
-        print("Deleting manager: cleaning up instances")
-        self.delete_all_instances()
-
     def __init__(self,
                  spawn_thread_count,
                  delete_thread_count,
                  disable_capture,
                  headless,
-                 target_url = None
+                 proxy_file_name,
+                 target_url=None
                  ):
         self._request_capture = disable_capture
         self._headless = headless
@@ -31,13 +29,17 @@ class BrowserManager:
         self.target_url = target_url
 
         self.screen = Screen(window_width=500, window_height=300)
-        self.proxies = ProxyGetter()
+        self.proxies = ProxyGetter(os.path.join(os.getcwd(), "proxy", proxy_file_name))
 
         self.user_agents_list = []
-        with open("user-agents.txt") as user_agents:
+        with open("tools/user-agents.txt") as user_agents:
             self.user_agents_list = user_agents.read().splitlines()
 
         self.browser_instances = []
+
+    def __del__(self):
+        print("Deleting manager: cleaning up instances")
+        self.delete_all_instances()
 
     def get_random_user_agent(self):
         return random.choice(self.user_agents_list)
@@ -132,7 +134,6 @@ class BrowserSpawn:
         options = webdriver.ChromeOptions()
         seleniumwire_options = {}
 
-
         options.add_argument("--mute-audio")
         options.add_argument("user-agent={}".format(self.user_agent))
         options.add_experimental_option("excludeSwitches", ['enable-automation'])  # disables automation banner
@@ -144,7 +145,7 @@ class BrowserSpawn:
             seleniumwire_options['disable_capture']: True  # Don't intercept/store any requests
         else:
             pass
-            #todo: use to tell active from inactive instances
+            # todo: use to tell active from inactive instances
             # seleniumwire_options.update({
             #     'request_storage': 'memory',
             #     'request_storage_max_size': 100
@@ -153,10 +154,7 @@ class BrowserSpawn:
         if self.proxy_string:
             seleniumwire_options["proxy"] = {"http": self.proxy_string, "https": self.proxy_string}
 
-
-
-
-        driver = webdriver.Chrome("chromedriver.exe", options=options,
+        driver = webdriver.Chrome("tools/chromedriver.exe", options=options,
                                   seleniumwire_options=seleniumwire_options)
 
         driver.set_window_size(640, 480)

@@ -7,8 +7,8 @@ Each instance navigates to the twitch channel, activates theater mode and adhere
 Settings in localStorage ensure the lowest possible resolution.
 
 ### Important
-- You need to provide SOCKS 5 proxies to [proxy_list.json](proxy_list.json).   
-Buy some at [webshare.io (referred)](https://www.webshare.io/?referral_code=w6nfvip4qp3g). They are quite good. 
+- You need to provide SOCKS 5 proxies to [proxy_list.txt](proxy/proxy_list.txt) or [proxy_list.json](proxy/proxy_list.json).   
+Buy some at [webshare.io (referred)](https://www.webshare.io/?referral_code=w6nfvip4qp3g), download txt and put in [proxy_list.txt](proxy/proxy_list.txt). 
 - Tested with instance count: Headless ~60, headful ~25.
 - Tested on Windows 10 and Chrome Version 97.
 - CPU load and bandwidth can get heavy. Channels with 160p work best.
