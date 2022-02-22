@@ -29,4 +29,4 @@ def test_open_one_instance(record_property):
 
     record_property("request_count", request_count)
 
-    assert request_count > 10
+    assert request_count > 2
