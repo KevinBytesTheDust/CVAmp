@@ -18,12 +18,12 @@ PROXY_FILE_NAME = "proxy_list.txt"
 DISABLE_CAPTURE = True
 HEADLESS = False
 
-manager = BrowserManager(target_url,
-                         SPAWNER_THREAD_COUNT,
-                         CLOSER_THREAD_COUNT,
-                         DISABLE_CAPTURE,
-                         HEADLESS,
-                         PROXY_FILE_NAME)
+manager = BrowserManager(spawn_thread_count=SPAWNER_THREAD_COUNT,
+                         delete_thread_count=CLOSER_THREAD_COUNT,
+                         disable_capture=DISABLE_CAPTURE,
+                         headless=HEADLESS,
+                         proxy_file_name=PROXY_FILE_NAME,
+                         target_url=target_url)
 
 print("Available proxies", len(manager.proxies.proxy_list))
 print("Available window locations", len(manager.screen.spawn_locations))
