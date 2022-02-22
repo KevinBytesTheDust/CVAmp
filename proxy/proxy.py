@@ -10,7 +10,6 @@ class ProxyGetter:
 
         self.build_proxy_list()
 
-
     def build_proxy_list(self):
 
         if self.pathed_file_name.endswith(".json"):
@@ -30,11 +29,12 @@ class ProxyGetter:
                 username = proxy_parts[2]
                 password = proxy_parts[3]
                 ip_port = ":".join(proxy_parts[0:2])
-                self.proxy_list.append(self.socks5_pattern.format(username, password, ip_port))
 
+                proxy_string = self.build_proxy_string(username, password, ip_port)
+                if proxy_string:
+                    self.proxy_list.append(proxy_string)
 
         random.shuffle(self.proxy_list)
-
 
     def build_proxy_list_json(self):
 
@@ -50,9 +50,16 @@ class ProxyGetter:
             return
 
         for ip_port in ip_list:
-            self.proxy_list.append(self.socks5_pattern.format(username, password, ip_port))
+            proxy_string = self.build_proxy_string(username, password, ip_port)
+            if proxy_string:
+                self.proxy_list.append(proxy_string)
 
         random.shuffle(self.proxy_list)
+
+    def build_proxy_string(self, username, password, ip_port):
+        if username == "username":
+            return None
+        return self.socks5_pattern.format(username, password, ip_port)
 
     def get_proxy(self):
         if not self.proxy_list:
