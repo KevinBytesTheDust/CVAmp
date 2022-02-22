@@ -4,6 +4,9 @@ import threading
 import time
 from concurrent.futures.thread import ThreadPoolExecutor
 
+from selenium.webdriver.support import expected_conditions as EC
+from selenium.webdriver.support.wait import WebDriverWait
+
 from selenium.webdriver import Keys
 from selenium.webdriver.common.by import By
 from seleniumwire import webdriver
@@ -65,6 +68,9 @@ class BrowserManager:
         if not screen_location:
             print("no screen space left")
             return
+
+        if not target_url:
+            target_url = self.target_url
 
         browser_instance = BrowserSpawn(user_agent,
                                         proxy,
@@ -153,6 +159,8 @@ class BrowserSpawn:
 
         if self.proxy_string:
             seleniumwire_options["proxy"] = {"http": self.proxy_string, "https": self.proxy_string}
+        else:
+            print("No proxy found, spawning without proxy.\n", end="")
 
         driver = webdriver.Chrome("tools/chromedriver.exe", options=options,
                                   seleniumwire_options=seleniumwire_options)
@@ -182,5 +190,7 @@ class BrowserSpawn:
                                         windowHandle="current")
 
         self.driver.get(self.target_url)
-        time.sleep(1)
-        self.driver.find_element(By.NAME, "body").send_keys(Keys.ALT, 't')
+
+        # wait for player to load
+        WebDriverWait(self.driver, 20).until(EC.presence_of_element_located((By.CLASS_NAME, 'persistent-player')))
+        self.driver.find_element(By.TAG_NAME, "body").send_keys(Keys.ALT, 't')
