@@ -139,6 +139,7 @@ class BrowserSpawn:
     def spawn_driver(self, request_logging=False):
         options = webdriver.ChromeOptions()
         seleniumwire_options = {}
+        seleniumwire_options['request_storage_base_dir'] = "."
 
         options.add_argument("--mute-audio")
         options.add_argument("user-agent={}".format(self.user_agent))
