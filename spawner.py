@@ -10,6 +10,7 @@ from proxy.proxy import ProxyGetter
 from screen import Screen
 
 import logging
+
 logger = logging.getLogger(__name__)
 
 
@@ -37,7 +38,6 @@ class BrowserManager:
 
         self.user_agents_list = self.get_user_agents()
 
-
         self.browser_instances_dict = {}
 
     def get_user_agents(self):
@@ -47,7 +47,7 @@ class BrowserManager:
         except Exception as e:
             logger.exception(e)
 
-    def set_headless(self, new_value:bool):
+    def set_headless(self, new_value: bool):
         self._headless = new_value
 
     def __del__(self):
@@ -68,7 +68,7 @@ class BrowserManager:
             self.spawn_instance(target_url)
             time.sleep(self.spawn_interval_seconds)
 
-    def spawn_instance(self, target_url = None):
+    def spawn_instance(self, target_url=None):
         t = threading.Thread(target=self.spawn_instance_thread, args=(target_url,))
         t.start()
 
@@ -113,8 +113,6 @@ class BrowserManager:
 
             self.browser_instances_dict[browser_instance_id] = instance_dict
 
-
-
         if not target_url:
             target_url = self.target_url
 
@@ -127,7 +125,6 @@ class BrowserManager:
 
         if browser_instance_id in self.browser_instances_dict:
             self.browser_instances_dict.pop(browser_instance_id)
-
 
     def delete_latest(self):
         if not self.browser_instances_dict:
@@ -146,6 +143,7 @@ class BrowserManager:
         with ThreadPoolExecutor(max_workers=self._delete_thread_count) as executor:
             for i in range(len(self.browser_instances_dict)):
                 executor.submit(self.delete_latest)
+
 
 class BrowserSpawn:
     def __init__(self, user_agent, proxy_dict, target_url, location_info=None, headless=False, id=-1):
@@ -187,7 +185,9 @@ class BrowserSpawn:
             self.location_info['free'] = True
 
     def loop_and_check(self):
+        counter = 0
         while True:
+            counter += random.randint(-1,3)
             self.page.wait_for_timeout(1000)
             for command in self.commands_queue:
                 result = command()
@@ -195,13 +195,24 @@ class BrowserSpawn:
                 if result == "exit":
                     return
 
+            # refresh page after ~600seconds
+            if counter >= 600:
+                self.reload_page()
+                counter = 0
+
+    def reload_page(self):
+        self.page.reload()
+        self.page.wait_for_selector(".persistent-player", timeout=30000)
+        self.page.wait_for_timeout(1000)
+        self.page.keyboard.press("Alt+t")
+
     def spawn_page(self):
 
         proxy_dict = self.proxy_dict
+        server_ip = proxy_dict.get('server', 'no proxy')
+
         if not proxy_dict:
             proxy_dict = None
-        else:
-            print("Using proxy", proxy_dict.get('server', 'no proxy'))
 
         p = sync_playwright().start()
 
@@ -240,8 +251,9 @@ class BrowserSpawn:
 
         self.page.goto(self.target_url)
         self.page.wait_for_timeout(1000)
-        self.page.wait_for_selector(".persistent-player",timeout=15000)
+        self.page.wait_for_selector(".persistent-player", timeout=15000)
         self.page.keyboard.press("Alt+t")
         self.page.wait_for_timeout(1000)
         self.fully_initialized = True
-        logger.info(f"{threading.currentThread()} with instance no {self.id} fully initialized")
+
+        logger.info(f"{threading.currentThread()} with instance no {self.id} fully initialized, using proxy {server_ip}")
