@@ -2,15 +2,10 @@ import os
 import random
 import threading
 import time
+
 from concurrent.futures.thread import ThreadPoolExecutor
 
-from selenium.webdriver.support import expected_conditions as EC
-from selenium.webdriver.support.wait import WebDriverWait
-
-from selenium.webdriver import Keys
-from selenium.webdriver.common.by import By
-from seleniumwire import webdriver
-
+from playwright.sync_api import sync_playwright
 from proxy.proxy import ProxyGetter
 from screen import Screen
 
@@ -19,12 +14,13 @@ class BrowserManager:
     def __init__(self,
                  spawn_thread_count,
                  delete_thread_count,
-                 disable_capture,
                  headless,
                  proxy_file_name,
+                 spawn_interval_seconds=2,
                  target_url=None
                  ):
-        self._request_capture = disable_capture
+
+        self.spawn_interval_seconds = spawn_interval_seconds
         self._headless = headless
         self._spawn_thread_count = spawn_thread_count
         self._delete_thread_count = delete_thread_count
@@ -35,10 +31,13 @@ class BrowserManager:
         self.proxies = ProxyGetter(os.path.join(os.getcwd(), "proxy", proxy_file_name))
 
         self.user_agents_list = []
-        with open("tools/user-agents.txt") as user_agents:
+        with open(os.path.join(os.getcwd(), "proxy", "user-agents.txt")) as user_agents:
             self.user_agents_list = user_agents.read().splitlines()
 
-        self.browser_instances = []
+        self.browser_instances_dict = {}
+
+    def set_headless(self, new_value:bool):
+        self._headless = new_value
 
     def __del__(self):
         print("Deleting manager: cleaning up instances")
@@ -47,132 +46,164 @@ class BrowserManager:
     def get_random_user_agent(self):
         return random.choice(self.user_agents_list)
 
-    def spawn_instances(self, n, url=None):
-        with ThreadPoolExecutor(max_workers=self._spawn_thread_count) as executor:
-            executor.map(self.spawn_instance, [url] * n)
+    def get_active_count(self):
+        return len(self.browser_instances_dict.keys())
 
-    def spawn_instance(self, target_url=None):
+    def get_fully_initialized_count(self):
+        return len([True for instance in self.browser_instances_dict.values() if instance['instance'].fully_initialized])
+
+    def spawn_instances(self, n, target_url=None):
+        for _ in range(n):
+            self.spawn_instance(target_url)
+            time.sleep(self.spawn_interval_seconds)
+
+    def spawn_instance(self, target_url = None):
+        t = threading.Thread(target=self.spawn_instance_thread, args=(target_url,))
+        t.start()
+
+    def spawn_instance_thread(self, target_url=None):
+
+        # spawn_allowed = False
+        #
+        # for spawn_try in range(30):
+        #     if self.get_active_count()-2 <= self.get_fully_initialized_count():
+        #         spawn_allowed = True
+        #         break
+        #     time.sleep(1)
+        #
+        # if not spawn_allowed:
+        #     print("Too many uninitialized instances, stopping instance spawn")
+        #     return
 
         if not any([target_url, self.target_url]):
             raise Exception("No target target url provided")
 
         with threading.Lock():
             user_agent = self.get_random_user_agent()
-            proxy = self.proxies.get_proxy()
+            proxy = self.proxies.get_proxy_as_dict()
 
             if self._headless:
                 screen_location = self.screen.get_default_location()
             else:
                 screen_location = self.screen.get_free_screen_location()
 
-        if not screen_location:
-            print("no screen space left")
-            return
+            if not screen_location:
+                print("no screen space left")
+                return
+
+            instance_dict = dict()
+
+            if not self.browser_instances_dict:
+                browser_instance_id = 1
+            else:
+                browser_instance_id = max(self.browser_instances_dict.keys()) + 1
+
+            self.browser_instances_dict[browser_instance_id] = instance_dict
 
         if not target_url:
             target_url = self.target_url
 
-        browser_instance = BrowserSpawn(user_agent,
-                                        proxy,
-                                        target_url,
-                                        screen_location,
-                                        self._headless,
-                                        self._request_capture
-                                        )
+        browser_instance = BrowserSpawn(user_agent, proxy, target_url, screen_location, self._headless, browser_instance_id)
 
-        self.browser_instances.append(browser_instance)
+        instance_dict['thread'] = threading.currentThread()
+        instance_dict['instance'] = browser_instance
 
-        browser_instance.modify_driver()  # Todo: Kill instance if error
+        browser_instance.start()
+
+        if browser_instance_id in self.browser_instances_dict:
+            self.browser_instances_dict.pop(browser_instance_id)
+
 
     def delete_latest(self):
-        if not self.browser_instances:
+        if not self.browser_instances_dict:
             print("No instances found")
             return
 
         with threading.Lock():
-            instance = self.browser_instances.pop()
-            print("Deleting instance #{}\n".format(len(self.browser_instances)), end="")
+            latest_key = max(self.browser_instances_dict.keys())
+            instance_dict = self.browser_instances_dict.pop(latest_key)
+            print(f"Issuing shutdown of instance #{latest_key}\n", end="")
             time.sleep(0.3)
 
-        instance.__del__()
+            instance_dict['instance'].commands_queue.append(lambda: "exit")
 
     def delete_all_instances(self):
         with ThreadPoolExecutor(max_workers=self._delete_thread_count) as executor:
-            for i in range(len(self.browser_instances)):
+            for i in range(len(self.browser_instances_dict)):
                 executor.submit(self.delete_latest)
 
-    def go_to(self, url, instance_no):
-        # Todo
-        pass
-
-    def go_to_all(self, url):
-        # Todo
-        pass
-
-
 class BrowserSpawn:
-    def __init__(self, user_agent,
-                 proxy_string,
-                 target_url,
-                 location_info=None,
-                 headless=False,
-                 disable_capture=True):
+    def __init__(self, user_agent, proxy_dict, target_url, location_info=None, headless=False, id=-1):
 
+        self.id = id
         self.user_agent = user_agent
-        self.proxy_string = proxy_string
+        self.proxy_dict = proxy_dict
         self.target_url = target_url
         self._headless = headless
-        self._disable_capture = disable_capture
+
+        self.fully_initialized = False
 
         self.location_info = location_info
+        if not self.location_info:
+            self.location_info = {
+                "index": -1,
+                "x": 0,
+                "y": 0,
+                "width": 500,
+                "height": 300,
+                "free": True,
+                }
 
-        self.driver = self.spawn_driver()
-        self.css_retries = 3
+        self.commands_queue = []
+        self.page = None
 
-    def __del__(self):
-        self.location_info["free"] = True
-
-        if self.driver:
-            self.driver.quit()
-            self.driver = None
-
-    def spawn_driver(self, request_logging=False):
-        options = webdriver.ChromeOptions()
-        seleniumwire_options = {}
-        seleniumwire_options['request_storage_base_dir'] = "."
-
-        options.add_argument("--mute-audio")
-        options.add_argument("user-agent={}".format(self.user_agent))
-        options.add_experimental_option("excludeSwitches", ['enable-automation'])  # disables automation banner
-
-        if self._headless:
-            options.add_argument("--headless")
-
-        if self._disable_capture:
-            seleniumwire_options['disable_capture']: True  # Don't intercept/store any requests
+    def start(self):
+        try:
+            self.spawn_page()
+            self.loop_and_check()
+        except Exception as e:
+            print(f"Instance {self.id} died")
         else:
-            pass
-            # todo: use to tell active from inactive instances
-            # seleniumwire_options.update({
-            #     'request_storage': 'memory',
-            #     'request_storage_max_size': 100
-            #     })
+            print(f"Instance {self.id} shutting down")
+        finally:
+            self.page.context.browser.close()
+            self.location_info['free'] = True
 
-        if self.proxy_string:
-            seleniumwire_options["proxy"] = {"http": self.proxy_string, "https": self.proxy_string}
+    def loop_and_check(self):
+        while True:
+            self.page.wait_for_timeout(1000)
+            for command in self.commands_queue:
+                result = command()
+
+                if result == "exit":
+                    return
+
+    def spawn_page(self):
+
+        proxy_dict = self.proxy_dict
+        if not proxy_dict:
+            proxy_dict = None
         else:
-            print("No proxy found, spawning without proxy.\n", end="")
+            print("Using proxy", proxy_dict.get('server', 'no proxy'))
 
-        driver = webdriver.Chrome("tools/chromedriver.exe", options=options,
-                                  seleniumwire_options=seleniumwire_options)
+        p = sync_playwright().start()
 
-        driver.set_window_size(640, 480)
+        browser = p.chromium.launch(
+            proxy=proxy_dict,
+            headless=self._headless,
+            channel='chrome',
+            args=["--window-position={},{}".format(self.location_info["x"], self.location_info["y"])]
+            )
+        context = browser.new_context(
+            user_agent=self.user_agent,
+            viewport={"width": 800, "height": 600},
+            proxy=proxy_dict,
+            )
 
-        driver.get("https://www.twitch.tv/404")
+        self.page = context.new_page()
+        self.page.add_init_script("""navigator.webdriver = false;""")
 
-        return driver
-
-    def modify_driver(self):
+        self.page.goto("https://www.twitch.tv/login")
 
         twitch_settings = {
             'mature': 'true',
@@ -182,16 +213,17 @@ class BrowserSpawn:
             'lowLatencyModeEnabled': 'false',
             }
 
+        self.page.click("button[data-a-target=consent-banner-accept]", timeout=1000)
+
         for key, value in twitch_settings.items():
             tosend = """window.localStorage.setItem('{key}','{value}');""".format(key=key, value=value)
-            self.driver.execute_script(tosend)
+            self.page.evaluate(tosend)
 
-        self.driver.set_window_size(self.location_info["width"], self.location_info["height"])
-        self.driver.set_window_position(x=self.location_info["x"] - 1, y=self.location_info["y"] - 1,
-                                        windowHandle="current")
+        self.page.set_viewport_size({"width": self.location_info["width"], "height": self.location_info["height"]})
 
-        self.driver.get(self.target_url)
-
-        # wait for player to load
-        WebDriverWait(self.driver, 20).until(EC.presence_of_element_located((By.CLASS_NAME, 'persistent-player')))
-        self.driver.find_element(By.TAG_NAME, "body").send_keys(Keys.ALT, 't')
+        self.page.goto(self.target_url)
+        self.page.wait_for_timeout(1000)
+        self.page.wait_for_selector(".persistent-player",timeout=5000)
+        self.page.keyboard.press("Alt+t")
+        self.page.wait_for_timeout(1000)
+        self.fully_initialized = True

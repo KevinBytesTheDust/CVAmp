@@ -1,19 +1,23 @@
-import tkinter
+import tkinter as tk
 
 def get_screen_resolution(kind):
-    root = tkinter.Tk()
-    root.withdraw()
+    root = tk.Tk()
+    return_value = None
 
     if kind == "width":
-        return root.winfo_screenwidth()
+        return_value = root.winfo_screenwidth()
     if kind == "height":
-        return root.winfo_screenheight()
+        return_value = root.winfo_screenheight()
 
-    return None
+    root.destroy()
+    return return_value
 
 
 class Screen:
     def __init__(self, window_width, window_height):
+        self.window_width_offset = 100
+        self.window_height_offset = 50
+
         self.window_width = window_width
         self.window_height = window_height
 
@@ -22,11 +26,12 @@ class Screen:
 
         self.spawn_locations = self.generate_spawn_locations()
 
+
     def generate_spawn_locations(self):
         spawn_locations = []
 
-        cols = int(self.screen_width / self.window_width)
-        rows = int(self.screen_height / self.window_height)
+        cols = int(self.screen_width / (self.window_width - self.window_width_offset))
+        rows = int(self.screen_height / (self.window_height - self.window_height_offset))
 
         index = 0
         for row in range(rows):
@@ -34,13 +39,13 @@ class Screen:
                 spawn_locations.append(
                     {
                         "index": index,
-                        "x": col * self.window_width,
-                        "y": row * self.window_height,
+                        "x": col * (self.window_width - self.window_width_offset),
+                        "y": row * (self.window_height - self.window_height_offset),
                         "width": self.window_width,
                         "height": self.window_height,
                         "free": True,
-                    }
-                )
+                        }
+                    )
 
                 index += 1
 
