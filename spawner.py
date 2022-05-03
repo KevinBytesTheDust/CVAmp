@@ -9,6 +9,9 @@ from playwright.sync_api import sync_playwright
 from proxy.proxy import ProxyGetter
 from screen import Screen
 
+import logging
+logger = logging.getLogger(__name__)
+
 
 class BrowserManager:
     def __init__(self,
@@ -19,6 +22,8 @@ class BrowserManager:
                  spawn_interval_seconds=2,
                  target_url=None
                  ):
+
+        logger.info("Manager start")
 
         self.spawn_interval_seconds = spawn_interval_seconds
         self._headless = headless
@@ -98,7 +103,11 @@ class BrowserManager:
             else:
                 browser_instance_id = max(self.browser_instances_dict.keys()) + 1
 
+            logger.info(f"{threading.currentThread()} starting instance no {browser_instance_id}")
+
             self.browser_instances_dict[browser_instance_id] = instance_dict
+
+
 
         if not target_url:
             target_url = self.target_url
@@ -122,7 +131,7 @@ class BrowserManager:
         with threading.Lock():
             latest_key = max(self.browser_instances_dict.keys())
             instance_dict = self.browser_instances_dict.pop(latest_key)
-            print(f"Issuing shutdown of instance #{latest_key}\n", end="")
+            logger.info(f"Issuing shutdown of instance #{latest_key}")
             time.sleep(0.3)
 
             instance_dict['instance'].commands_queue.append(lambda: "exit")
@@ -162,8 +171,10 @@ class BrowserSpawn:
             self.spawn_page()
             self.loop_and_check()
         except Exception as e:
+            logger.exception(e)
             print(f"Instance {self.id} died")
         else:
+            logger.info(f"{threading.currentThread()} with instance no {self.id} ended gracefully")
             print(f"Instance {self.id} shutting down")
         finally:
             self.page.context.browser.close()
@@ -227,3 +238,4 @@ class BrowserSpawn:
         self.page.keyboard.press("Alt+t")
         self.page.wait_for_timeout(1000)
         self.fully_initialized = True
+        logger.info(f"{threading.currentThread()} with instance no {self.id} fully initialized")

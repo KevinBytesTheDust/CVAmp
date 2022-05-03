@@ -1,12 +1,15 @@
 from gui import GUI
 from spawner import BrowserManager
 
+import logger_config
+
+logger_config.setup()
+
 SPAWNER_THREAD_COUNT = 3
 CLOSER_THREAD_COUNT = 10
 PROXY_FILE_NAME = "proxy_list.txt"
 HEADLESS = False
 SPAWN_INTERVAL_SECONDS = 2
-
 
 manager = BrowserManager(spawn_thread_count=SPAWNER_THREAD_COUNT,
                          delete_thread_count=CLOSER_THREAD_COUNT,
