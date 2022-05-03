@@ -19,10 +19,11 @@ Download the one-file executable for Windows from the [latest CTVB release](http
 
 ### In action
 
-Headless GUI  
+GUI  
 ![](docs/gui.png)
-
-Headful   
+ 
+Headful spawning
+(If you go headless, the browser windows will be invisible)  
 ![](docs/instances_spawning.gif)
 
 ### Usage
