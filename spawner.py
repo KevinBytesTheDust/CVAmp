@@ -35,11 +35,17 @@ class BrowserManager:
         self.screen = Screen(window_width=500, window_height=300)
         self.proxies = ProxyGetter(os.path.join(os.getcwd(), "proxy", proxy_file_name))
 
-        self.user_agents_list = []
-        with open(os.path.join(os.getcwd(), "proxy", "user-agents.txt")) as user_agents:
-            self.user_agents_list = user_agents.read().splitlines()
+        self.user_agents_list = self.get_user_agents()
+
 
         self.browser_instances_dict = {}
+
+    def get_user_agents(self):
+        try:
+            with open(os.path.join(os.getcwd(), "proxy", "user-agents.txt")) as user_agents:
+                return user_agents.read().splitlines()
+        except Exception as e:
+            logger.exception(e)
 
     def set_headless(self, new_value:bool):
         self._headless = new_value
@@ -224,7 +230,7 @@ class BrowserSpawn:
             'lowLatencyModeEnabled': 'false',
             }
 
-        self.page.click("button[data-a-target=consent-banner-accept]", timeout=1000)
+        self.page.click("button[data-a-target=consent-banner-accept]", timeout=15000)
 
         for key, value in twitch_settings.items():
             tosend = """window.localStorage.setItem('{key}','{value}');""".format(key=key, value=value)
@@ -234,7 +240,7 @@ class BrowserSpawn:
 
         self.page.goto(self.target_url)
         self.page.wait_for_timeout(1000)
-        self.page.wait_for_selector(".persistent-player",timeout=5000)
+        self.page.wait_for_selector(".persistent-player",timeout=15000)
         self.page.keyboard.press("Alt+t")
         self.page.wait_for_timeout(1000)
         self.fully_initialized = True

@@ -1,7 +1,8 @@
-import json
 import random
 from typing import Optional
 
+import logging
+logger = logging.getLogger(__name__)
 
 class ProxyGetter:
     def __init__(self, pathed_file_name="proxy/proxy_list.txt"):
@@ -13,12 +14,15 @@ class ProxyGetter:
 
     def build_proxy_list(self):
 
-        if self.pathed_file_name.endswith(".json"):
-            raise NotImplementedError("JSON file not implemented yet")
-        elif self.pathed_file_name.endswith(".txt"):
-            self.build_proxy_list_txt()
-        else:
-            print("File type not supported")
+        try:
+            if self.pathed_file_name.endswith(".json"):
+                raise NotImplementedError("JSON file not implemented yet")
+            elif self.pathed_file_name.endswith(".txt"):
+                self.build_proxy_list_txt()
+            else:
+                print("File type not supported")
+        except Exception as e:
+            logger.exception(e)
 
     def build_proxy_list_txt(self):
         with open(self.pathed_file_name, "r") as fp:

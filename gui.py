@@ -12,11 +12,11 @@ from spawner import BrowserManager
 
 class GUI:
 
-    def __init__(self, manager: BrowserManager):
+    def __init__(self, manager: BrowserManager, headless):
         self.manager = manager
         self.queue_counter = 0
         self.root = tk.Tk()
-        self.headless = tk.BooleanVar(value=True)
+        self.headless = tk.BooleanVar(value=headless)
         self.change_headmode()
 
     def spawn_one_func(self):
