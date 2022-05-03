@@ -181,7 +181,8 @@ class BrowserSpawn:
             logger.info(f"{threading.currentThread()} with instance no {self.id} ended gracefully")
             print(f"Instance {self.id} shutting down")
         finally:
-            self.page.context.browser.close()
+            if self.page:
+                self.page.context.browser.close()
             self.location_info['free'] = True
 
     def loop_and_check(self):
@@ -201,7 +202,7 @@ class BrowserSpawn:
                 counter = 0
 
     def reload_page(self):
-        self.page.reload()
+        self.page.reload(timeout=60000)
         self.page.wait_for_selector(".persistent-player", timeout=30000)
         self.page.wait_for_timeout(1000)
         self.page.keyboard.press("Alt+t")
@@ -249,7 +250,7 @@ class BrowserSpawn:
 
         self.page.set_viewport_size({"width": self.location_info["width"], "height": self.location_info["height"]})
 
-        self.page.goto(self.target_url)
+        self.page.goto(self.target_url, timeout=60000)
         self.page.wait_for_timeout(1000)
         self.page.wait_for_selector(".persistent-player", timeout=15000)
         self.page.keyboard.press("Alt+t")
