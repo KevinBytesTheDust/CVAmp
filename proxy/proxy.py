@@ -49,9 +49,9 @@ class ProxyGetter:
             return None
         return self.socks5_pattern.format(username, password, ip_port)
 
-    def get_proxy_as_dict(self) -> Optional[dict]:
+    def get_proxy_as_dict(self) -> dict:
         if not self.proxy_list:
-            return None
+            return {}
 
         proxy = self.proxy_list.pop(0)
         self.proxy_list.append(proxy)
