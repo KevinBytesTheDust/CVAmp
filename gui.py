@@ -1,3 +1,4 @@
+import sys
 import threading
 import tkinter as tk
 import webbrowser
@@ -116,12 +117,17 @@ class GUI:
 
         refresher()
 
-        # # redirect stdout
-        # def redirector(str_input):
-        #     text_area.insert(tk.INSERT, str_input)
-        #     text_area.see(tk.END)
+        # redirect stdout
+        def redirector(str_input):
 
-        #sys.stdout.write = redirector
+            if self.root:
+                text_area.insert(tk.INSERT, str_input)
+                text_area.see(tk.END)
+            else:
+                sys.stdout = sys.__stdout__
+
+        sys.stdout.write = redirector
 
         root.resizable(False, False)
         root.mainloop()
+
