@@ -1,4 +1,5 @@
 # Crude twitch viewer bot
+![](https://img.shields.io/github/downloads/jlplenio/crude-twitch-viewer-bot/v0.1.0/total)
 
 Disclaimer: For educational purpose only!
 
