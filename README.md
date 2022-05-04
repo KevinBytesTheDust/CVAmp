@@ -2,17 +2,17 @@
 
 Disclaimer: For educational purpose only!
 
-Small script that spawns muted Google Chrome instances, each with a different user-agent and HTTP proxy connection. 
+Small tool that spawns muted Google Chrome instances via [Playwright](https://github.com/microsoft/playwright-python), each with a different user-agent and HTTP proxy connection. 
 Each instance navigates to the twitch channel, activates theater mode and adheres itself to the available screen space. 
 Settings in localStorage ensure the lowest possible resolution.
 
 Download the one-file executable for Windows from the [latest CTVB release](https://github.com/jlplenio/crude-twitch-viewer-bot/releases/latest).
 
 ### Important
-- You need to provide HTTP proxies to [proxy_list.txt](tools/proxy_list.txt)
-- Buy some at [webshare.io (referred)](https://www.webshare.io/?referral_code=w6nfvip4qp3g), download txt and put in [proxy_list.txt](tools/proxy_list.txt). 
+- You need to provide HTTP proxies to [proxy_list.txt](proxy/proxy_list.txt)  
+  Buy some at [webshare.io (referred)](https://www.webshare.io/?referral_code=w6nfvip4qp3g), download txt and put in [proxy_list.txt](proxy/proxy_list.txt). 
 - Tested with instance count: Headless ~100, headful ~30.
-- Tested on Windows 10
+- Tested on Windows 10.
 - CPU load and bandwidth can get heavy. Channels with 160p work best.
 
 
