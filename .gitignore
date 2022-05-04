@@ -4,3 +4,6 @@ __pycache__
 development
 dist
 build
+playwright_test.py
+ctvb.log
+main_gui.spec
