@@ -1,32 +1,37 @@
 import time
 
-from spawner import BrowserManager
-
-
 def test_open_one_instance(record_property):
-    target_url = "https://www.twitch.tv/electricallongboard"
+    from spawner import BrowserManager
+
+    import logger_config
+
+    logger_config.setup()
+
     SPAWNER_THREAD_COUNT = 3
     CLOSER_THREAD_COUNT = 10
     PROXY_FILE_NAME = "proxy_list.txt"
-    DISABLE_CAPTURE = False
-    HEADLESS = False
+    HEADLESS = True
+    SPAWN_INTERVAL_SECONDS = 2
+
+    target_url = "https://www.twitch.tv/electricallongboard"
 
     manager = BrowserManager(spawn_thread_count=SPAWNER_THREAD_COUNT,
                              delete_thread_count=CLOSER_THREAD_COUNT,
-                             disable_capture=DISABLE_CAPTURE,
                              headless=HEADLESS,
                              proxy_file_name=PROXY_FILE_NAME,
-                             target_url=target_url)
+                             spawn_interval_seconds=SPAWN_INTERVAL_SECONDS,
+                             target_url=target_url,
+                             )
 
     manager.spawn_instance()
 
-    time.sleep(5)
+    time.sleep(10)
 
-    request_count = len(
-        [1 for r in manager.browser_instances[0].driver.requests if r.url.endswith(".ts")])
+    instances_count = manager.get_fully_initialized_count()
 
-    manager.delete_latest()
+    record_property("instances_count", instances_count)
 
-    record_property("request_count", request_count)
+    manager.__del__()
 
-    assert request_count > 2
+    assert instances_count == 1
+
