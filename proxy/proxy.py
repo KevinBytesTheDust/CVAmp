@@ -8,7 +8,6 @@ class ProxyGetter:
     def __init__(self, pathed_file_name="proxy/proxy_list.txt"):
         self.proxy_list = []
         self.pathed_file_name = pathed_file_name
-        self.socks5_pattern = "socks5://{}:{}@{}"
 
         self.build_proxy_list()
 
@@ -43,11 +42,6 @@ class ProxyGetter:
                         })
 
         random.shuffle(self.proxy_list)
-
-    def build_proxy_string(self, username, password, ip_port):
-        if username == "username":
-            return None
-        return self.socks5_pattern.format(username, password, ip_port)
 
     def get_proxy_as_dict(self) -> dict:
         if not self.proxy_list:

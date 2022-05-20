@@ -1,5 +1,6 @@
 # Crude twitch viewer bot
-[![](https://img.shields.io/github/downloads/jlplenio/crude-twitch-viewer-bot/v0.1.0/total)](https://github.com/jlplenio/crude-twitch-viewer-bot/releases/latest)
+[![](https://img.shields.io/github/downloads/jlplenio/crude-twitch-viewer-bot/total)](https://github.com/jlplenio/crude-twitch-viewer-bot/releases/latest)
+[![](https://github.com/jlplenio/crude-twitch-viewer-bot/actions/workflows/pytest.yml/badge.svg)](https://github.com/jlplenio/crude-twitch-viewer-bot/actions/workflows/pytest.yml)
 
 Disclaimer: For educational purpose only!
 

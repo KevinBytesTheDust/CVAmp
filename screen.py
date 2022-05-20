@@ -1,7 +1,16 @@
-import tkinter as tk
+import logging
+
+logger = logging.getLogger(__name__)
 
 def get_screen_resolution(kind):
-    root = tk.Tk()
+
+    try:
+        import tkinter as tk
+        root = tk.Tk()
+    except Exception as e:
+        logger.exception(e)
+        return 500
+
     return_value = None
 
     if kind == "width":

@@ -1,0 +1,34 @@
+name: pytest
+
+on: [push, pull_request]
+
+jobs:
+  test:
+
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, windows-latest]# , macos-latest]
+        python-version: [3.8] #3.7, 3.8
+
+    runs-on: ${{ matrix.os }}
+
+    name: Test ${{ matrix.os }} + Py ${{ matrix.python-version }} + ${{ github.ref }} + ${{github.base_ref}}
+
+    steps:
+    - uses: actions/checkout@v3
+    - name: Install poetry
+      run: pipx install poetry
+    - uses: actions/setup-python@v3
+      with:
+        python-version: ${{ matrix.python-version }}
+        cache: 'poetry'
+    - name: Get packages via poetry
+      run: poetry install
+    - name: Install playwright
+      run: |
+        poetry run python -m playwright install chrome
+        ls
+    - name: Unit tests with pytest
+      run: |
+        poetry run python -m pytest tests/ --log-cli-level=debug
