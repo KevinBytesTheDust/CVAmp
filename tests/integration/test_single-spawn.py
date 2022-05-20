@@ -3,10 +3,6 @@ import time
 def test_open_one_instance(record_property):
     from spawner import BrowserManager
 
-    import logger_config
-
-    logger_config.setup()
-
     SPAWNER_THREAD_COUNT = 3
     CLOSER_THREAD_COUNT = 10
     PROXY_FILE_NAME = "proxy_list.txt"
@@ -25,7 +21,10 @@ def test_open_one_instance(record_property):
 
     manager.spawn_instance()
 
-    time.sleep(10)
+    for _ in range(60):
+        if manager.get_fully_initialized_count() > 0:
+            break
+        time.sleep(1)
 
     instances_count = manager.get_fully_initialized_count()
 

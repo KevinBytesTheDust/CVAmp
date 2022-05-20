@@ -242,7 +242,10 @@ class BrowserSpawn:
             'lowLatencyModeEnabled': 'false',
             }
 
-        self.page.click("button[data-a-target=consent-banner-accept]", timeout=15000)
+        try:
+            self.page.click("button[data-a-target=consent-banner-accept]", timeout=15000)
+        except:
+            logger.warning("Cookie consent banner not found/clicked.")
 
         for key, value in twitch_settings.items():
             tosend = """window.localStorage.setItem('{key}','{value}');""".format(key=key, value=value)
