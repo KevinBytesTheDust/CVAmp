@@ -6,6 +6,9 @@ from tkinter import ttk
 from tkinter.scrolledtext import ScrolledText
 
 import psutil
+import toml
+import os
+import sys
 
 from spawner import BrowserManager
 
@@ -44,7 +47,16 @@ class GUI:
 
         root = self.root
         root.geometry("600x305+500+500")
-        root.title('Crude twitch viewer bot - jlplenio')
+
+        # Pyinstaller fix to find file, when using --onefile and --add-data
+        path_to_cwd = getattr(sys, '_MEIPASS', os.path.abspath(os.path.dirname(__file__)))
+        path_to_icon = os.path.abspath(os.path.join(path_to_cwd, 'ctvb_logo.ico'))
+        root.iconbitmap(path_to_icon)
+
+        path_to_toml = os.path.abspath(os.path.join(path_to_cwd, 'pyproject.toml'))
+        version = toml.load(path_to_toml)['tool']['poetry']['version']
+
+        root.title(f'Crude twitch viewer bot | v{version} | jlplenio')
 
         # separators
         separator_left = ttk.Separator(orient='vertical')

@@ -22,6 +22,7 @@ class ProxyGetter:
                 print("File type not supported")
         except Exception as e:
             logger.exception(e)
+            raise FileNotFoundError(f"Unable to find {self.pathed_file_name}")
 
     def build_proxy_list_txt(self):
         with open(self.pathed_file_name, "r") as fp:
