@@ -46,6 +46,7 @@ class BrowserManager:
                 return user_agents.read().splitlines()
         except Exception as e:
             logger.exception(e)
+            raise FileNotFoundError()
 
     def set_headless(self, new_value: bool):
         self._headless = new_value

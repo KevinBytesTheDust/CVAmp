@@ -1,0 +1,61 @@
+name: build
+
+on: [pull_request]
+
+env:
+  PLAYWRIGHT_BROWSERS_PATH: 0
+
+jobs:
+  build:
+    #if: ${{ github.event.workflow_run.conclusion == 'success' }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [windows-latest]
+        python-version: [3.8] #3.7, 3.8
+
+    runs-on: ${{ matrix.os }}
+
+    name: Build PyInstaller executable ${{ matrix.os }} + Py ${{ matrix.python-version }}
+    steps:
+    - uses: actions/checkout@v3
+    - uses: actions/setup-python@v3
+      with:
+        python-version: ${{ matrix.python-version }}
+
+    - name: Install poetry
+      run: pip install poetry
+
+    - name: Get packages via poetry
+      run: poetry install
+
+#    chrome is not packaged within site-packages, chromium could be used as fallback in the future, but size ~100MB
+#    - name: Install playwright
+#      run: |
+#        poetry run python -m playwright install chromium
+#        poetry run python -m playwright install chrome
+#        ls
+
+    - name: Create date env variable
+      shell: bash
+      run: |
+        echo "today=$(date +'%Y%m%d')" >> $GITHUB_ENV
+
+    - name: Get CTVB version number
+      uses: SebRollen/toml-action@v1.0.0
+      id: read_toml
+      with:
+        file: 'pyproject.toml'
+        field: 'tool.poetry.version'
+
+    - name: Build executable
+      run: |
+        poetry run pyinstaller main_gui.py --onefile --add-binary "ctvb_logo.ico;." --add-binary "pyproject.toml;." --icon ctvb_logo.ico --name CTVB_${{steps.read_toml.outputs.value}}_${{env.today}}
+        rm ./proxy/proxy.py
+        mv ./proxy/ ./dist/
+
+    - name: Upload artifact ${{ matrix.os }}
+      uses: actions/upload-artifact@v1
+      with:
+        name: CTVB_${{ steps.read_toml.outputs.value }}_${{ env.today }}
+        path: dist/

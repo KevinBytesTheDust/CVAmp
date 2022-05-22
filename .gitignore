@@ -7,3 +7,4 @@ build
 playwright_test.py
 ctvb.log
 main_gui.spec
+main.spec
