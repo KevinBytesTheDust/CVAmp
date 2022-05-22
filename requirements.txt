@@ -1,6 +1,0 @@
-greenlet==1.1.2
-playwright==1.21.0
-psutil==5.9.0
-pyee==8.1.0
-typing_extensions==4.2.0
-websockets==10.1
