@@ -2,7 +2,9 @@ import random
 from typing import Optional
 
 import logging
+
 logger = logging.getLogger(__name__)
+
 
 class ProxyGetter:
     def __init__(self, pathed_file_name="proxy/proxy_list.txt"):
@@ -36,11 +38,7 @@ class ProxyGetter:
                 ip_port = ":".join(proxy_parts[0:2])
 
                 if username != "username":
-                    self.proxy_list.append({
-                        'server': "http://"+ip_port,
-                        'username': username,
-                        'password': password
-                        })
+                    self.proxy_list.append({'server': "http://" + ip_port, 'username': username, 'password': password})
 
         random.shuffle(self.proxy_list)
 

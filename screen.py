@@ -2,10 +2,12 @@ import logging
 
 logger = logging.getLogger(__name__)
 
+
 def get_screen_resolution(kind):
 
     try:
         import tkinter as tk
+
         root = tk.Tk()
     except Exception as e:
         logger.exception(e)
@@ -35,7 +37,6 @@ class Screen:
 
         self.spawn_locations = self.generate_spawn_locations()
 
-
     def generate_spawn_locations(self):
         spawn_locations = []
 
@@ -53,8 +54,8 @@ class Screen:
                         "width": self.window_width,
                         "height": self.window_height,
                         "free": True,
-                        }
-                    )
+                    }
+                )
 
                 index += 1
 

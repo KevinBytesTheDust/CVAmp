@@ -9,8 +9,8 @@ def setup():
     if os.getenv("DEBUG"):
         handlers.append(logging.StreamHandler())
 
-    logging.basicConfig(level=logging.INFO,
-                        format='%(asctime)s;%(levelname)s;%(threadName)s;%(module)s;%(funcName)s; %(message)s',
-                        handlers=handlers)
-
-
+    logging.basicConfig(
+        level=logging.INFO,
+        format='%(asctime)s;%(levelname)s;%(threadName)s;%(module)s;%(funcName)s; %(message)s',
+        handlers=handlers,
+    )
