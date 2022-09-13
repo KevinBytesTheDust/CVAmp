@@ -10,7 +10,7 @@ def test_open_one_instance(record_property):
     HEADLESS = True
     SPAWN_INTERVAL_SECONDS = 2
 
-    target_url = "https://www.twitch.tv/shroud"
+    target_url = "https://www.twitch.tv/public_domain_television"
 
     manager = InstanceManager(
         spawn_thread_count=SPAWNER_THREAD_COUNT,
