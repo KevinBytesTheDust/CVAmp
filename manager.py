@@ -66,19 +66,19 @@ class InstanceManager:
     def get_instances_overview(self):
         return_dict = {}
         for key, instance_dict in self.browser_instances_dict.items():
-            return_dict[key] = 'alive'
+            return_dict[key] = "alive"
 
-            if instance_dict['instance'].fully_initialized:
-                return_dict[key] = 'init'
+            if instance_dict["instance"].fully_initialized:
+                return_dict[key] = "init"
 
-            if instance_dict['instance'].is_watching:
-                return_dict[key] = 'watching'
+            if instance_dict["instance"].is_watching:
+                return_dict[key] = "watching"
 
         return return_dict
 
     def get_fully_initialized_count(self):
         return len(
-            [True for instance in self.browser_instances_dict.values() if instance['instance'].fully_initialized]
+            [True for instance in self.browser_instances_dict.values() if instance["instance"].fully_initialized]
         )
 
     def spawn_instances(self, n, target_url=None):
@@ -122,10 +122,17 @@ class InstanceManager:
         if not target_url:
             target_url = self.target_url
 
-        browser_instance = Instance(user_agent, proxy, target_url, screen_location, self._headless, browser_instance_id)
+        browser_instance = Instance(
+            user_agent,
+            proxy,
+            target_url,
+            screen_location,
+            self._headless,
+            browser_instance_id,
+        )
 
-        instance_dict['thread'] = threading.currentThread()
-        instance_dict['instance'] = browser_instance
+        instance_dict["thread"] = threading.currentThread()
+        instance_dict["instance"] = browser_instance
 
         browser_instance.start()
 
@@ -137,7 +144,7 @@ class InstanceManager:
         if instance_id not in self.browser_instances_dict:
             return False
 
-        self.browser_instances_dict[instance_id]['instance'].command = 'screenshot'
+        self.browser_instances_dict[instance_id]["instance"].command = "screenshot"
         print("Saved screenshot of instance id", instance_id)
 
     def queue_refresh(self, instance_id: int) -> bool:
@@ -145,14 +152,14 @@ class InstanceManager:
             return False
 
         print("Refreshing the instance id", instance_id)
-        self.browser_instances_dict[instance_id]['instance'].command = 'refresh'
+        self.browser_instances_dict[instance_id]["instance"].command = "refresh"
 
     def delete_specific(self, instance_id: int) -> bool:
         if instance_id not in self.browser_instances_dict:
             return False
 
         print("Destroying the instance id", instance_id)
-        self.browser_instances_dict[instance_id]['instance'].command = 'exit'
+        self.browser_instances_dict[instance_id]["instance"].command = "exit"
 
     def delete_latest(self):
         if not self.browser_instances_dict:
@@ -165,7 +172,7 @@ class InstanceManager:
             logger.info(f"Issuing shutdown of instance #{latest_key}")
             time.sleep(0.3)
 
-            instance_dict['instance'].command = "exit"
+            instance_dict["instance"].command = "exit"
 
     def delete_all_instances(self):
         with ThreadPoolExecutor(max_workers=self._delete_thread_count) as executor:
