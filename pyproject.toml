@@ -12,6 +12,7 @@ toml = "^0.10.2"
 sv-ttk = "^0.1"
 pytest = "^7.1.2"
 black = "^22.6.0"
+pylint = "^2.15.4"
 
 [tool.poetry.dev-dependencies]
 pytest = "^7.1.2"

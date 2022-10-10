@@ -9,7 +9,15 @@ logger = logging.getLogger(__name__)
 
 
 class Instance:
-    def __init__(self, user_agent, proxy_dict, target_url, location_info=None, headless=False, id=-1):
+    def __init__(
+        self,
+        user_agent,
+        proxy_dict,
+        target_url,
+        location_info=None,
+        headless=False,
+        id=-1,
+    ):
 
         self.playwright = None
         self.context = None
@@ -77,7 +85,7 @@ class Instance:
                 self.context.close()
                 self.browser.close()
                 self.playwright.stop()
-            self.location_info['free'] = True
+            self.location_info["free"] = True
 
     def loop_and_check(self):
         while True:
@@ -105,7 +113,7 @@ class Instance:
     def spawn_page(self):
 
         proxy_dict = self.proxy_dict
-        server_ip = proxy_dict.get('server', 'no proxy')
+        server_ip = proxy_dict.get("server", "no proxy")
 
         if not proxy_dict:
             proxy_dict = None
@@ -115,7 +123,7 @@ class Instance:
         self.browser = self.playwright.chromium.launch(
             proxy=proxy_dict,
             headless=self._headless,
-            channel='chrome',
+            channel="chrome",
             args=["--window-position={},{}".format(self.location_info["x"], self.location_info["y"])],
         )
         self.context = self.browser.new_context(
@@ -130,11 +138,11 @@ class Instance:
         self.page.goto("https://www.twitch.tv/login", timeout=100000)
 
         twitch_settings = {
-            'mature': 'true',
-            'video-muted': '{"default": "false"}',
-            'volume': '0.5',
-            'video-quality': '{"default": "160p30"}',
-            'lowLatencyModeEnabled': 'false',
+            "mature": "true",
+            "video-muted": '{"default": "false"}',
+            "volume": "0.5",
+            "video-quality": '{"default": "160p30"}',
+            "lowLatencyModeEnabled": "false",
         }
 
         try:
@@ -146,7 +154,12 @@ class Instance:
             tosend = """window.localStorage.setItem('{key}','{value}');""".format(key=key, value=value)
             self.page.evaluate(tosend)
 
-        self.page.set_viewport_size({"width": self.location_info["width"], "height": self.location_info["height"]})
+        self.page.set_viewport_size(
+            {
+                "width": self.location_info["width"],
+                "height": self.location_info["height"],
+            }
+        )
 
         self.page.goto(self.target_url, timeout=60000)
         self.page.wait_for_timeout(1000)

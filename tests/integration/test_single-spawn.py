@@ -27,7 +27,7 @@ def test_open_one_instance(record_property):
     for _ in range(60):
         instances_overview = manager.get_instances_overview()
         if 1 in instances_overview:
-            if instances_overview[1] == 'watching':
+            if instances_overview[1] == "watching":
                 instance_is_watching = True
                 break
         time.sleep(1)
