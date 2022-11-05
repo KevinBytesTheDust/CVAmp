@@ -3,6 +3,11 @@ import time
 
 def test_open_one_instance(record_property):
     from manager import InstanceManager
+    import urllib.request, re
+
+    # get username of random online stream
+    html_text = urllib.request.urlopen("https://m.twitch.tv").read()
+    username = re.search('displayName":"*(.*?)"', str(html_text))[1]
 
     SPAWNER_THREAD_COUNT = 3
     CLOSER_THREAD_COUNT = 10
@@ -10,7 +15,8 @@ def test_open_one_instance(record_property):
     HEADLESS = True
     SPAWN_INTERVAL_SECONDS = 2
 
-    target_url = "https://www.twitch.tv/public_domain_television"
+    target_url = "https://www.twitch.tv/" + username
+    print("Watching", target_url)
 
     manager = InstanceManager(
         spawn_thread_count=SPAWNER_THREAD_COUNT,
