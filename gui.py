@@ -1,7 +1,7 @@
 import threading
 import tkinter as tk
 import webbrowser
-from tkinter import ttk
+from tkinter import ttk, DISABLED
 from tkinter.scrolledtext import ScrolledText
 
 import psutil
@@ -238,8 +238,10 @@ class GUI:
         def redirector(str_input):
 
             if self.root:
+                text_area.configure(state='normal')
                 text_area.insert(tk.INSERT, str_input)
                 text_area.see(tk.END)
+                text_area.configure(state='disabled')
             else:
                 sys.stdout = sys.__stdout__
 
