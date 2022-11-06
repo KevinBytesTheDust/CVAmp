@@ -1,7 +1,7 @@
 name: format & lint
 
 # Controls when the workflow will run
-on: [push, pull_request]
+on: [pull_request]
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
   # Run the black formatter
