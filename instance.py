@@ -124,9 +124,7 @@ class Instance:
         proxy_dict = self.proxy_dict
         server_ip = proxy_dict.get("server", "no proxy")
 
-        logger.info(
-            f"{spawn_type}ING:{threading.currentThread()} instance {self.id}, proxy {server_ip}"
-        )
+        logger.info(f"{spawn_type}ING:{threading.currentThread()} instance {self.id}, proxy {server_ip}")
 
         if not proxy_dict:
             proxy_dict = None
@@ -181,6 +179,4 @@ class Instance:
         self.page.wait_for_timeout(1000)
         self.fully_initialized = True
 
-        logger.info(
-            f"{spawn_type}ED:{threading.currentThread()} instance {self.id}, proxy {server_ip}"
-        )
+        logger.info(f"{spawn_type}ED:{threading.currentThread()} instance {self.id}, proxy {server_ip}")

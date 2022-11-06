@@ -1,18 +1,16 @@
+import logging
+import os
+import sys
 import threading
 import tkinter as tk
 import webbrowser
-from tkinter import ttk, DISABLED
+from tkinter import ttk
 from tkinter.scrolledtext import ScrolledText
 
 import psutil
 import toml
-import os
-import sys
 
 from manager import InstanceManager
-
-import logging
-
 from utils import InstanceCommands
 
 logger = logging.getLogger(__name__)
@@ -24,9 +22,16 @@ class InstanceBox(tk.Frame):
 
         self.instance_id = None
         self.manager = manager
-        self.bind("<Button-1>", lambda event: self.manager.queue_command(self.instance_id, InstanceCommands.REFRESH))  # left click
-        self.bind("<Button-3>", lambda event: self.manager.queue_command(self.instance_id, InstanceCommands.EXIT))  # right click
-        self.bind("<Control-1>", lambda event: self.manager.queue_command(self.instance_id, InstanceCommands.SCREENSHOT))  # control left click
+
+        self.bind(
+            "<Button-1>", lambda event: self.manager.queue_command(self.instance_id, InstanceCommands.REFRESH)
+        )  # left clickk
+        self.bind(
+            "<Button-3>", lambda event: self.manager.queue_command(self.instance_id, InstanceCommands.EXIT)
+        )  # right click
+        self.bind(
+            "<Control-1>", lambda event: self.manager.queue_command(self.instance_id, InstanceCommands.SCREENSHOT)
+        )  # control left click
 
     def modify(self, status, instance_id):
         self.instance_id = instance_id
