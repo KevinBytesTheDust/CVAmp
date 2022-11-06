@@ -28,7 +28,7 @@ class Instance:
         self._headless = headless
 
         self.fully_initialized = False
-        self.refresh_timer_s = random.randint(10, 20) * 60
+        self.refresh_timer_s = random.randint(300,600)
 
         self.location_info = location_info
         if not self.location_info:
@@ -96,7 +96,7 @@ class Instance:
             active_counter += page_timeout_s
             if active_counter >= self.refresh_timer_s:
                 self.clean_up_playwright()
-                self.spawn_page()
+                self.spawn_page(restart=True)
                 active_counter = 0
 
             if self.command == InstanceCommands.EXIT:
