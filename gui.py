@@ -13,6 +13,8 @@ from manager import InstanceManager
 
 import logging
 
+from utils import InstanceCommands
+
 logger = logging.getLogger(__name__)
 
 
@@ -22,18 +24,9 @@ class InstanceBox(tk.Frame):
 
         self.instance_id = None
         self.manager = manager
-        self.bind(
-            "<Button-1>",
-            lambda event: self.manager.queue_refresh(instance_id=self.instance_id),
-        )  # left click
-        self.bind(
-            "<Button-3>",
-            lambda event: self.manager.delete_specific(instance_id=self.instance_id),
-        )  # right click
-        self.bind(
-            "<Control-1>",
-            lambda event: self.manager.queue_screenshot(instance_id=self.instance_id),
-        )  # control left click
+        self.bind("<Button-1>", lambda event: self.manager.queue_command(self.instance_id, InstanceCommands.REFRESH))  # left click
+        self.bind("<Button-3>", lambda event: self.manager.queue_command(self.instance_id, InstanceCommands.EXIT))  # right click
+        self.bind("<Control-1>", lambda event: self.manager.queue_command(self.instance_id, InstanceCommands.SCREENSHOT))  # control left click
 
     def modify(self, status, instance_id):
         self.instance_id = instance_id
