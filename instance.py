@@ -1,8 +1,10 @@
 import datetime
 import json
-import threading
-from playwright.sync_api import sync_playwright
 import logging
+import random
+import threading
+
+from playwright.sync_api import sync_playwright
 
 from utils import InstanceCommands
 
@@ -26,7 +28,7 @@ class Instance:
         self._headless = headless
 
         self.fully_initialized = False
-        self.refresh_timer_s = 60
+        self.refresh_timer_s = random.randint(10, 20) * 60
 
         self.location_info = location_info
         if not self.location_info:
@@ -88,7 +90,7 @@ class Instance:
         page_timeout_s = 5
         active_counter = 0
         while True:
-            self.page.wait_for_timeout(page_timeout_s*1000)
+            self.page.wait_for_timeout(page_timeout_s * 1000)
             self.is_watching = self.check_if_watching()
 
             active_counter += page_timeout_s
