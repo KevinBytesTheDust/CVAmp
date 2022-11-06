@@ -7,7 +7,7 @@ def test_open_one_instance(record_property):
 
     # get username of random online stream
     html_text = urllib.request.urlopen("https://m.twitch.tv").read()
-    username = re.search('displayName":"*(.*?)"', str(html_text))[1]
+    username = re.search('"login":"*(.*?)"', str(html_text))[1]
 
     SPAWNER_THREAD_COUNT = 3
     CLOSER_THREAD_COUNT = 10
