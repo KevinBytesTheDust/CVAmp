@@ -74,7 +74,7 @@ class Instance:
 
     def start(self):
         try:
-            self.spawn_page(refresh=True)
+            self.spawn_page()
             self.loop_and_check()
         except Exception as e:
             logger.exception(e)
@@ -95,7 +95,6 @@ class Instance:
 
             active_counter += page_timeout_s
             if active_counter >= self.refresh_timer_s:
-                print("restarting", self.id)
                 self.clean_up_playwright()
                 self.spawn_page()
                 active_counter = 0
@@ -106,7 +105,7 @@ class Instance:
                 print("Saved screenshot of instance id", self.id)
                 self.save_screenshot()
             if self.command == InstanceCommands.REFRESH:
-                print("Refreshing the instance id", self.id)
+                print("Manual refresh of instance id", self.id)
                 self.reload_page()
             self.command = InstanceCommands.NONE
 
@@ -120,8 +119,8 @@ class Instance:
         self.page.wait_for_timeout(1000)
         self.page.keyboard.press("Alt+t")
 
-    def spawn_page(self, refresh=False):
-        spawn_type = "START" if refresh else "RESTART"
+    def spawn_page(self, restart=False):
+        spawn_type = "RESTART" if restart else "START"
 
         proxy_dict = self.proxy_dict
         server_ip = proxy_dict.get("server", "no proxy")
