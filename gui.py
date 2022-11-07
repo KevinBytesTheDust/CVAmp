@@ -25,13 +25,13 @@ class InstanceBox(tk.Frame):
 
         self.bind(
             "<Button-1>", lambda event: self.manager.queue_command(self.instance_id, InstanceCommands.REFRESH)
-            )  # left clickk
+        )  # left clickk
         self.bind(
             "<Button-3>", lambda event: self.manager.queue_command(self.instance_id, InstanceCommands.EXIT)
-            )  # right click
+        )  # right click
         self.bind(
             "<Control-1>", lambda event: self.manager.queue_command(self.instance_id, InstanceCommands.SCREENSHOT)
-            )  # control left click
+        )  # control left click
 
     def modify(self, status, instance_id):
         self.instance_id = instance_id
@@ -40,7 +40,7 @@ class InstanceBox(tk.Frame):
             "alive": "grey",
             "init": "yellow",
             "watching": "#44d209",
-            }
+        }
 
         color = color_codes[status]
         self.configure(background=color)
@@ -115,8 +115,8 @@ class GUI:
             command=lambda: self.manager.set_headless(self.headless.get()),
             onvalue=True,
             offvalue=False,
-            )
-        headless_checkbox.place(x=200,y=94)
+        )
+        headless_checkbox.place(x=200, y=94)
 
         auto_restart_checkbox = ttk.Checkbutton(
             root,
@@ -125,7 +125,7 @@ class GUI:
             command=lambda: self.manager.set_auto_restart(self.auto_restart.get()),
             onvalue=True,
             offvalue=False,
-            )
+        )
         auto_restart_checkbox.place(x=320, y=94)
 
         # right
@@ -158,7 +158,7 @@ class GUI:
             anchor="w",
             text="Spawn 1 instance",
             command=lambda: self.spawn_one_func(),
-            )
+        )
         spawn_one.place(x=180, y=35)
         spawn_three = tk.Button(
             root,
@@ -166,7 +166,7 @@ class GUI:
             anchor="w",
             text="Spawn 3 instances",
             command=lambda: self.spawn_three_func(),
-            )
+        )
         spawn_three.place(x=180, y=65)
         destroy_one = tk.Button(
             root,
@@ -174,7 +174,7 @@ class GUI:
             anchor="w",
             text="Destroy 1 instance",
             command=lambda: self.delete_one_func(),
-            )
+        )
         destroy_one.place(x=305, y=35)
         destroy_all = tk.Button(
             root,
@@ -182,7 +182,7 @@ class GUI:
             anchor="w",
             text="Destroy all instances",
             command=lambda: self.delete_all_func(),
-            )
+        )
         destroy_all.place(x=305, y=65)
 
         # mid text box
@@ -190,7 +190,7 @@ class GUI:
         text_area.place(
             x=20,
             y=120,
-            )
+        )
 
         id_counter = 1
         for row in range(5):
@@ -203,7 +203,7 @@ class GUI:
                     relief="raised",
                     width=10,
                     height=10,
-                    )
+                )
                 box.place(x=24 + col * 11, y=230 + row * 12)
                 self.instances_boxes.append(box)
                 id_counter += 1
@@ -214,7 +214,7 @@ class GUI:
             text=r"https://github.com/jlplenio/crude-twitch-viewer-bot",
             fg="blue",
             cursor="hand2",
-            )
+        )
         lbl.bind("<Button-1>", lambda event: webbrowser.open(lbl.cget("text")))
         lbl.place(x=150, y=288)
 

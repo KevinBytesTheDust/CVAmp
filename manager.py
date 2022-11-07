@@ -55,17 +55,19 @@ class InstanceManager:
 
     def get_headless(self) -> bool:
         return self._headless
+
     def set_headless(self, new_value: bool):
         self._headless = new_value
 
     def get_auto_restart(self) -> bool:
         return self._auto_restart
+
     def set_auto_restart(self, new_value: bool):
 
         for instance in self.browser_instances_dict.values():
             instance["instance"].auto_restart = new_value
 
-        logger.info(f"Setting auto-restart functionality for all instances to "+str(new_value))
+        logger.info(f"Setting auto-restart functionality for all instances to " + str(new_value))
 
         self._auto_restart = new_value
 
