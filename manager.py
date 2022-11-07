@@ -4,7 +4,6 @@ import threading
 import time
 
 from concurrent.futures.thread import ThreadPoolExecutor
-from enum import Enum, auto
 
 from proxy.proxy import ProxyGetter
 from screen import Screen
@@ -23,6 +22,7 @@ class InstanceManager:
         spawn_thread_count,
         delete_thread_count,
         headless,
+        auto_restart,
         proxy_file_name,
         spawn_interval_seconds=2,
         target_url=None,
@@ -32,6 +32,7 @@ class InstanceManager:
 
         self.spawn_interval_seconds = spawn_interval_seconds
         self._headless = headless
+        self._auto_restart = auto_restart
         self._spawn_thread_count = spawn_thread_count
         self._delete_thread_count = delete_thread_count
 
@@ -52,8 +53,21 @@ class InstanceManager:
             logger.exception(e)
             raise FileNotFoundError()
 
+    def get_headless(self) -> bool:
+        return self._headless
     def set_headless(self, new_value: bool):
         self._headless = new_value
+
+    def get_auto_restart(self) -> bool:
+        return self._auto_restart
+    def set_auto_restart(self, new_value: bool):
+
+        for instance in self.browser_instances_dict.values():
+            instance["instance"].auto_restart = new_value
+
+        logger.info(f"Setting auto-restart functionality for all instances to "+str(new_value))
+
+        self._auto_restart = new_value
 
     def __del__(self):
         print("Deleting manager: cleaning up instances")
@@ -130,6 +144,7 @@ class InstanceManager:
             target_url,
             screen_location,
             self._headless,
+            self._auto_restart,
             browser_instance_id,
         )
 

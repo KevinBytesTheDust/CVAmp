@@ -12,7 +12,7 @@ logger = logging.getLogger(__name__)
 
 
 class Instance:
-    def __init__(self, user_agent, proxy_dict, target_url, location_info=None, headless=False, instance_id=-1):
+    def __init__(self, user_agent, proxy_dict, target_url, location_info=None, headless=False, auto_restart=False, instance_id=-1):
 
         self.playwright = None
         self.context = None
@@ -25,10 +25,11 @@ class Instance:
         self.user_agent = user_agent
         self.proxy_dict = proxy_dict
         self.target_url = target_url
-        self._headless = headless
+        self.headless = headless
+        self.auto_restart = auto_restart
 
         self.fully_initialized = False
-        self.refresh_timer_s = random.randint(300,600)
+        self.refresh_timer_s = random.randint(480, 720)
 
         self.location_info = location_info
         if not self.location_info:
@@ -39,7 +40,7 @@ class Instance:
                 "width": 500,
                 "height": 300,
                 "free": True,
-            }
+                }
 
         self.command = None
         self.page = None
@@ -95,8 +96,9 @@ class Instance:
 
             active_counter += page_timeout_s
             if active_counter >= self.refresh_timer_s:
-                self.clean_up_playwright()
-                self.spawn_page(restart=True)
+                if self.auto_restart:
+                    self.clean_up_playwright()
+                    self.spawn_page(restart=True)
                 active_counter = 0
 
             if self.command == InstanceCommands.EXIT:
@@ -134,15 +136,15 @@ class Instance:
 
         self.browser = self.playwright.chromium.launch(
             proxy=proxy_dict,
-            headless=self._headless,
+            headless=self.headless,
             channel="chrome",
             args=["--window-position={},{}".format(self.location_info["x"], self.location_info["y"])],
-        )
+            )
         self.context = self.browser.new_context(
             user_agent=self.user_agent,
             viewport={"width": 800, "height": 600},
             proxy=proxy_dict,
-        )
+            )
 
         self.page = self.context.new_page()
         self.page.add_init_script("""navigator.webdriver = false;""")
@@ -155,7 +157,7 @@ class Instance:
             "volume": "0.5",
             "video-quality": '{"default": "160p30"}',
             "lowLatencyModeEnabled": "false",
-        }
+            }
 
         try:
             self.page.click("button[data-a-target=consent-banner-accept]", timeout=15000)
@@ -170,8 +172,8 @@ class Instance:
             {
                 "width": self.location_info["width"],
                 "height": self.location_info["height"],
-            }
-        )
+                }
+            )
 
         self.page.goto(self.target_url, timeout=60000)
         self.page.wait_for_timeout(1000)
