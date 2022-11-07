@@ -1,22 +1,19 @@
 import datetime
 import json
+import logging
 import random
 import threading
+
 from playwright.sync_api import sync_playwright
-import logging
+
+from utils import InstanceCommands
 
 logger = logging.getLogger(__name__)
 
 
 class Instance:
     def __init__(
-        self,
-        user_agent,
-        proxy_dict,
-        target_url,
-        location_info=None,
-        headless=False,
-        id=-1,
+        self, user_agent, proxy_dict, target_url, location_info=None, headless=False, auto_restart=False, instance_id=-1
     ):
 
         self.playwright = None
@@ -26,13 +23,15 @@ class Instance:
         self.last_active_timestamp = None
         self.is_watching = False
 
-        self.id = id
+        self.id = instance_id
         self.user_agent = user_agent
         self.proxy_dict = proxy_dict
         self.target_url = target_url
-        self._headless = headless
+        self.headless = headless
+        self.auto_restart = auto_restart
 
         self.fully_initialized = False
+        self.refresh_timer_s = random.randint(480, 720)
 
         self.location_info = location_info
         if not self.location_info:
@@ -69,36 +68,50 @@ class Instance:
                 return True
         return False
 
+    def clean_up_playwright(self):
+        if any([self.page, self.context, self.browser]):
+            self.page.close()
+            self.context.close()
+            self.browser.close()
+            self.playwright.stop()
+
     def start(self):
         try:
             self.spawn_page()
             self.loop_and_check()
         except Exception as e:
             logger.exception(e)
-            print(f"Instance {self.id} died")
+            print(f"Instance {self.id} died: {type(e).__name__}. Please see ctvb.log.")
         else:
             logger.info(f"{threading.currentThread()} with instance no {self.id} ended gracefully")
             print(f"Instance {self.id} shutting down")
         finally:
-            if any([self.page, self.context, self.browser]):
-                self.page.close()
-                self.context.close()
-                self.browser.close()
-                self.playwright.stop()
-            self.location_info["free"] = True
+            self.clean_up_playwright()
+            self.location_info['free'] = True
 
     def loop_and_check(self):
+        page_timeout_s = 5
+        active_counter = 0
         while True:
-            self.page.wait_for_timeout(5000)
+            self.page.wait_for_timeout(page_timeout_s * 1000)
             self.is_watching = self.check_if_watching()
 
-            if self.command == "exit":
+            active_counter += page_timeout_s
+            if active_counter >= self.refresh_timer_s:
+                if self.auto_restart:
+                    self.clean_up_playwright()
+                    self.spawn_page(restart=True)
+                active_counter = 0
+
+            if self.command == InstanceCommands.EXIT:
                 return
-            if self.command == "screenshot":
+            if self.command == InstanceCommands.SCREENSHOT:
+                print("Saved screenshot of instance id", self.id)
                 self.save_screenshot()
-            if self.command == "refresh":
+            if self.command == InstanceCommands.REFRESH:
+                print("Manual refresh of instance id", self.id)
                 self.reload_page()
-            self.command = None
+            self.command = InstanceCommands.NONE
 
     def save_screenshot(self):
         filename = datetime.datetime.now().strftime("%Y%m%d_%H%M%S") + f"_instance{self.id}.png"
@@ -110,10 +123,13 @@ class Instance:
         self.page.wait_for_timeout(1000)
         self.page.keyboard.press("Alt+t")
 
-    def spawn_page(self):
+    def spawn_page(self, restart=False):
+        spawn_type = "RESTART" if restart else "START"
 
         proxy_dict = self.proxy_dict
         server_ip = proxy_dict.get("server", "no proxy")
+
+        logger.info(f"{spawn_type}ING:{threading.currentThread()} instance {self.id}, proxy {server_ip}")
 
         if not proxy_dict:
             proxy_dict = None
@@ -122,7 +138,7 @@ class Instance:
 
         self.browser = self.playwright.chromium.launch(
             proxy=proxy_dict,
-            headless=self._headless,
+            headless=self.headless,
             channel="chrome",
             args=["--window-position={},{}".format(self.location_info["x"], self.location_info["y"])],
         )
@@ -168,6 +184,4 @@ class Instance:
         self.page.wait_for_timeout(1000)
         self.fully_initialized = True
 
-        logger.info(
-            f"{threading.currentThread()} with instance no {self.id} fully initialized, using proxy {server_ip}"
-        )
+        logger.info(f"{spawn_type}ED:{threading.currentThread()} instance {self.id}, proxy {server_ip}")

@@ -1,3 +1,6 @@
+import logging
+import os
+import sys
 import threading
 import tkinter as tk
 import webbrowser
@@ -6,12 +9,9 @@ from tkinter.scrolledtext import ScrolledText
 
 import psutil
 import toml
-import os
-import sys
 
 from manager import InstanceManager
-
-import logging
+from utils import InstanceCommands
 
 logger = logging.getLogger(__name__)
 
@@ -22,17 +22,15 @@ class InstanceBox(tk.Frame):
 
         self.instance_id = None
         self.manager = manager
+
         self.bind(
-            "<Button-1>",
-            lambda event: self.manager.queue_refresh(instance_id=self.instance_id),
-        )  # left click
+            "<Button-1>", lambda event: self.manager.queue_command(self.instance_id, InstanceCommands.REFRESH)
+        )  # left clickk
         self.bind(
-            "<Button-3>",
-            lambda event: self.manager.delete_specific(instance_id=self.instance_id),
+            "<Button-3>", lambda event: self.manager.queue_command(self.instance_id, InstanceCommands.EXIT)
         )  # right click
         self.bind(
-            "<Control-1>",
-            lambda event: self.manager.queue_screenshot(instance_id=self.instance_id),
+            "<Control-1>", lambda event: self.manager.queue_command(self.instance_id, InstanceCommands.SCREENSHOT)
         )  # control left click
 
     def modify(self, status, instance_id):
@@ -49,22 +47,23 @@ class InstanceBox(tk.Frame):
 
 
 class GUI:
-    def __init__(self, manager: InstanceManager, headless: bool):
+    def __init__(self, manager: InstanceManager):
         self.manager = manager
         self.queue_counter = 0
         self.root = tk.Tk()
-        self.headless = tk.BooleanVar(value=headless)
-        self.change_headmode()
         self.instances_boxes = []
+
+        self.headless = tk.BooleanVar(value=manager.get_headless())
+        self.auto_restart = tk.BooleanVar(value=manager.get_auto_restart())
 
     def spawn_one_func(self):
         print("Spawning one instance. Please wait for alive & watching instances increase.")
-        target_url = self.root.children["!entry"].get()
+        target_url = self.root.nametowidget("channel_url_entry").get()
         threading.Thread(target=self.manager.spawn_instance, args=(target_url,)).start()
 
     def spawn_three_func(self):
         print("Spawning three instances. Please wait for alive & watching instances increase.")
-        target_url = self.root.children["!entry"].get()
+        target_url = self.root.nametowidget("channel_url_entry").get()
         threading.Thread(target=self.manager.spawn_instances, args=(3, target_url)).start()
 
     def delete_one_func(self):
@@ -74,9 +73,6 @@ class GUI:
     def delete_all_func(self):
         print("Destroying all instances. Please wait for alive & watching instances decrease.")
         threading.Thread(target=self.manager.delete_all_instances).start()
-
-    def change_headmode(self):
-        self.manager.set_headless(self.headless.get())
 
     def run(self):
 
@@ -115,12 +111,22 @@ class GUI:
         headless_checkbox = ttk.Checkbutton(
             root,
             text="headless",
-            command=self.change_headmode,
             variable=self.headless,
+            command=lambda: self.manager.set_headless(self.headless.get()),
             onvalue=True,
             offvalue=False,
         )
-        headless_checkbox.place(x=55, y=88)
+        headless_checkbox.place(x=200, y=94)
+
+        auto_restart_checkbox = ttk.Checkbutton(
+            root,
+            variable=self.auto_restart,
+            text="auto restart",
+            command=lambda: self.manager.set_auto_restart(self.auto_restart.get()),
+            onvalue=True,
+            offvalue=False,
+        )
+        auto_restart_checkbox.place(x=320, y=94)
 
         # right
         instances_text = tk.Label(root, text="Instances", borderwidth=2)
@@ -142,7 +148,7 @@ class GUI:
         ram_usage_text.place(x=510, y=88)
 
         # mid log
-        channel_url = tk.Entry(root, width=40)
+        channel_url = tk.Entry(root, width=40, name="channel_url_entry")
         channel_url.place(x=180, y=10)
         channel_url.insert(0, "https://www.twitch.tv/channel_name")
 
@@ -153,7 +159,7 @@ class GUI:
             text="Spawn 1 instance",
             command=lambda: self.spawn_one_func(),
         )
-        spawn_one.place(x=180, y=40)
+        spawn_one.place(x=180, y=35)
         spawn_three = tk.Button(
             root,
             width=15,
@@ -161,7 +167,7 @@ class GUI:
             text="Spawn 3 instances",
             command=lambda: self.spawn_three_func(),
         )
-        spawn_three.place(x=180, y=80)
+        spawn_three.place(x=180, y=65)
         destroy_one = tk.Button(
             root,
             width=15,
@@ -169,7 +175,7 @@ class GUI:
             text="Destroy 1 instance",
             command=lambda: self.delete_one_func(),
         )
-        destroy_one.place(x=305, y=40)
+        destroy_one.place(x=305, y=35)
         destroy_all = tk.Button(
             root,
             width=15,
@@ -177,7 +183,7 @@ class GUI:
             text="Destroy all instances",
             command=lambda: self.delete_all_func(),
         )
-        destroy_all.place(x=305, y=80)
+        destroy_all.place(x=305, y=65)
 
         # mid text box
         text_area = ScrolledText(root, height="7", width="92", font=("regular", 8))
@@ -238,8 +244,10 @@ class GUI:
         def redirector(str_input):
 
             if self.root:
+                text_area.configure(state='normal')
                 text_area.insert(tk.INSERT, str_input)
                 text_area.see(tk.END)
+                text_area.configure(state='disabled')
             else:
                 sys.stdout = sys.__stdout__
 

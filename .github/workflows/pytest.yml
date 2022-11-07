@@ -1,6 +1,6 @@
 name: pytest
 
-on: [push, pull_request]
+on: [pull_request]
 
 jobs:
   test:
@@ -10,7 +10,7 @@ jobs:
       fail-fast: false
       matrix:
         os: [ubuntu-latest] # , windows-latest] , macos-latest]
-        python-version: ["3.8", "3.9", "3.10"]
+        python-version: ["3.10"]
 
     runs-on: ${{ matrix.os }}
 

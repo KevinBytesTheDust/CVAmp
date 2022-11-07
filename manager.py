@@ -10,7 +10,8 @@ from screen import Screen
 
 import logging
 
-from spawner import Instance
+from instance import Instance
+from utils import InstanceCommands
 
 logger = logging.getLogger(__name__)
 
@@ -21,6 +22,7 @@ class InstanceManager:
         spawn_thread_count,
         delete_thread_count,
         headless,
+        auto_restart,
         proxy_file_name,
         spawn_interval_seconds=2,
         target_url=None,
@@ -30,6 +32,7 @@ class InstanceManager:
 
         self.spawn_interval_seconds = spawn_interval_seconds
         self._headless = headless
+        self._auto_restart = auto_restart
         self._spawn_thread_count = spawn_thread_count
         self._delete_thread_count = delete_thread_count
 
@@ -50,8 +53,23 @@ class InstanceManager:
             logger.exception(e)
             raise FileNotFoundError()
 
+    def get_headless(self) -> bool:
+        return self._headless
+
     def set_headless(self, new_value: bool):
         self._headless = new_value
+
+    def get_auto_restart(self) -> bool:
+        return self._auto_restart
+
+    def set_auto_restart(self, new_value: bool):
+
+        for instance in self.browser_instances_dict.values():
+            instance["instance"].auto_restart = new_value
+
+        logger.info(f"Setting auto-restart functionality for all instances to " + str(new_value))
+
+        self._auto_restart = new_value
 
     def __del__(self):
         print("Deleting manager: cleaning up instances")
@@ -128,6 +146,7 @@ class InstanceManager:
             target_url,
             screen_location,
             self._headless,
+            self._auto_restart,
             browser_instance_id,
         )
 
@@ -140,26 +159,11 @@ class InstanceManager:
             del browser_instance
             self.browser_instances_dict.pop(browser_instance_id)
 
-    def queue_screenshot(self, instance_id: int) -> bool:
+    def queue_command(self, instance_id: int, command: InstanceCommands) -> bool:
         if instance_id not in self.browser_instances_dict:
             return False
 
-        self.browser_instances_dict[instance_id]["instance"].command = "screenshot"
-        print("Saved screenshot of instance id", instance_id)
-
-    def queue_refresh(self, instance_id: int) -> bool:
-        if instance_id not in self.browser_instances_dict:
-            return False
-
-        print("Refreshing the instance id", instance_id)
-        self.browser_instances_dict[instance_id]["instance"].command = "refresh"
-
-    def delete_specific(self, instance_id: int) -> bool:
-        if instance_id not in self.browser_instances_dict:
-            return False
-
-        print("Destroying the instance id", instance_id)
-        self.browser_instances_dict[instance_id]["instance"].command = "exit"
+        self.browser_instances_dict[instance_id]['instance'].command = command
 
     def delete_latest(self):
         if not self.browser_instances_dict:
@@ -172,7 +176,7 @@ class InstanceManager:
             logger.info(f"Issuing shutdown of instance #{latest_key}")
             time.sleep(0.3)
 
-            instance_dict["instance"].command = "exit"
+            instance_dict['instance'].command = InstanceCommands.EXIT
 
     def delete_all_instances(self):
         with ThreadPoolExecutor(max_workers=self._delete_thread_count) as executor:

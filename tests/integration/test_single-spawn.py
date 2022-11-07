@@ -1,4 +1,7 @@
+import logging
 import time
+
+logger = logging.getLogger(__name__)
 
 
 def test_open_one_instance(record_property):
@@ -7,21 +10,23 @@ def test_open_one_instance(record_property):
 
     # get username of random online stream
     html_text = urllib.request.urlopen("https://m.twitch.tv").read()
-    username = re.search('displayName":"*(.*?)"', str(html_text))[1]
+    username = re.search('"login":"*(.*?)"', str(html_text))[1]
 
     SPAWNER_THREAD_COUNT = 3
     CLOSER_THREAD_COUNT = 10
     PROXY_FILE_NAME = "proxy_list.txt"
     HEADLESS = True
+    AUTO_RESTART = True
     SPAWN_INTERVAL_SECONDS = 2
 
     target_url = "https://www.twitch.tv/" + username
-    print("Watching", target_url)
+    logger.info("Watching" + str(target_url))
 
     manager = InstanceManager(
         spawn_thread_count=SPAWNER_THREAD_COUNT,
         delete_thread_count=CLOSER_THREAD_COUNT,
         headless=HEADLESS,
+        auto_restart=AUTO_RESTART,
         proxy_file_name=PROXY_FILE_NAME,
         spawn_interval_seconds=SPAWN_INTERVAL_SECONDS,
         target_url=target_url,
