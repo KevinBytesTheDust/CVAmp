@@ -13,7 +13,14 @@ logger = logging.getLogger(__name__)
 
 class Instance:
     def __init__(
-        self, user_agent, proxy_dict, target_url, location_info=None, headless=False, auto_restart=False, instance_id=-1
+        self,
+        user_agent,
+        proxy_dict,
+        target_url,
+        location_info=None,
+        headless=False,
+        auto_restart=False,
+        instance_id=-1,
     ):
 
         self.playwright = None
