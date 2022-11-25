@@ -30,19 +30,17 @@ class InstanceManager:
 
         logger.info("Manager start")
 
-        self.spawn_interval_seconds = spawn_interval_seconds
-        self._headless = headless
-        self._auto_restart = auto_restart
         self._spawn_thread_count = spawn_thread_count
         self._delete_thread_count = delete_thread_count
-
+        self._headless = headless
+        self._auto_restart = auto_restart
+        self.proxies = ProxyGetter(os.path.join(os.getcwd(), "proxy", proxy_file_name))
+        self.spawn_interval_seconds = spawn_interval_seconds
         self.target_url = target_url
 
+        self.manager_lock = threading.Lock()
         self.screen = Screen(window_width=500, window_height=300)
-        self.proxies = ProxyGetter(os.path.join(os.getcwd(), "proxy", proxy_file_name))
-
         self.user_agents_list = self.get_user_agents()
-
         self.browser_instances_dict = {}
 
     def get_user_agents(self):
@@ -113,7 +111,7 @@ class InstanceManager:
         if not any([target_url, self.target_url]):
             raise Exception("No target target url provided")
 
-        with threading.Lock():
+        with self.manager_lock:
             user_agent = self.get_random_user_agent()
             proxy = self.proxies.get_proxy_as_dict()
 
@@ -170,12 +168,10 @@ class InstanceManager:
             print("No instances found")
             return
 
-        with threading.Lock():
+        with self.manager_lock:
             latest_key = max(self.browser_instances_dict.keys())
             instance_dict = self.browser_instances_dict.pop(latest_key)
             logger.info(f"Issuing shutdown of instance #{latest_key}")
-            time.sleep(0.3)
-
             instance_dict['instance'].command = InstanceCommands.EXIT
 
     def delete_all_instances(self):

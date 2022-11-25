@@ -245,7 +245,7 @@ class GUI:
 
             if self.root:
                 text_area.configure(state='normal')
-                text_area.insert(tk.INSERT, str_input)
+                text_area.insert(tk.END, str_input)
                 text_area.see(tk.END)
                 text_area.configure(state='disabled')
             else:

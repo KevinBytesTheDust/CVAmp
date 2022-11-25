@@ -9,6 +9,7 @@ from playwright.sync_api import sync_playwright
 from utils import InstanceCommands
 
 logger = logging.getLogger(__name__)
+instance_lock = threading.Lock()
 
 
 class Instance:
@@ -91,7 +92,8 @@ class Instance:
             print(f"Instance {self.id} died: {type(e).__name__}. Please see ctvb.log.")
         else:
             logger.info(f"{threading.currentThread()} with instance no {self.id} ended gracefully")
-            print(f"Instance {self.id} shutting down")
+            with instance_lock:
+                print(f"Instance {self.id} shutting down")
         finally:
             self.clean_up_playwright()
             self.location_info['free'] = True
