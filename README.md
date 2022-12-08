@@ -14,6 +14,8 @@ Settings in localStorage ensure the lowest possible resolution.
 
 Read the comprehensive [wiki](https://github.com/jlplenio/crude-twitch-viewer-bot/wiki) for a [detailed tutorial](https://github.com/jlplenio/crude-twitch-viewer-bot/wiki/Detailed-Tutorial), [usage tips](https://github.com/jlplenio/crude-twitch-viewer-bot/wiki/Advanced-features-and-controls) and [troubleshooting steps](https://github.com/jlplenio/crude-twitch-viewer-bot/wiki/Troubleshooting).
 
+[:coffee: You can sponsor me a coffee](https://ko-fi.com/jlplenio) if you enjoy this tool and want to support its continued development. 
+
 ### Important
 - You need to provide your own HTTP proxies to the [proxy_list.txt](proxy/proxy_list.txt)  
   Buy trusted proxies [here](https://www.webshare.io/?referral_code=w6nfvip4qp3g) or follow the [Webshare.io Proxies Guide](https://github.com/jlplenio/crude-twitch-viewer-bot/wiki/Webshare.io-Proxies-Guide).
