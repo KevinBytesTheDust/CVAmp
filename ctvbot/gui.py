@@ -79,12 +79,15 @@ class GUI:
         root = self.root
         root.geometry("600x305+500+500")
 
-        # Pyinstaller fix to find file, when using --onefile and --add-data
-        path_to_cwd = getattr(sys, "_MEIPASS", os.path.abspath(os.path.dirname(__file__)))
-        path_to_icon = os.path.abspath(os.path.join(path_to_cwd, "../ctvbot_logo.ico"))
+        # path to use, when the tool is not package with pyinstaller -onefile
+        non_pyinstaller_path = os.path.dirname(os.path.abspath(os.path.dirname(__file__)))
+
+        # Pyinstaller fix to find added binaries in extracted project folder in TEMP
+        path_to_binaries = getattr(sys, "_MEIPASS", non_pyinstaller_path)  # default to last arg
+        path_to_icon = os.path.abspath(os.path.join(path_to_binaries, "ctvbot_logo.ico"))
         root.iconbitmap(path_to_icon)
 
-        path_to_toml = os.path.abspath(os.path.join(path_to_cwd, "../pyproject.toml"))
+        path_to_toml = os.path.abspath(os.path.join(path_to_binaries, "pyproject.toml"))
         version = toml.load(path_to_toml)["tool"]["poetry"]["version"]
 
         root.title(f"Crude twitch viewer bot | v{version} | jlplenio")
