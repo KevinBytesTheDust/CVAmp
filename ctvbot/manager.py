@@ -1,17 +1,14 @@
+import logging
 import os
 import random
 import threading
 import time
-
 from concurrent.futures.thread import ThreadPoolExecutor
 
-from proxy.proxy import ProxyGetter
-from screen import Screen
-
-import logging
-
-from instance import Instance
-from utils import InstanceCommands
+from .instance import Instance
+from .proxy import ProxyGetter
+from .screen import Screen
+from .utils import InstanceCommands
 
 logger = logging.getLogger(__name__)
 
@@ -45,7 +42,7 @@ class InstanceManager:
 
     def get_user_agents(self):
         try:
-            with open(os.path.join(os.getcwd(), "proxy", "user-agents.txt")) as user_agents:
+            with open(os.path.join(os.getcwd(), "proxy/user-agents.txt")) as user_agents:
                 return user_agents.read().splitlines()
         except Exception as e:
             logger.exception(e)

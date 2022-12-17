@@ -10,8 +10,8 @@ from tkinter.scrolledtext import ScrolledText
 import psutil
 import toml
 
-from manager import InstanceManager
-from utils import InstanceCommands
+from .manager import InstanceManager
+from .utils import InstanceCommands
 
 logger = logging.getLogger(__name__)
 
@@ -81,10 +81,10 @@ class GUI:
 
         # Pyinstaller fix to find file, when using --onefile and --add-data
         path_to_cwd = getattr(sys, "_MEIPASS", os.path.abspath(os.path.dirname(__file__)))
-        path_to_icon = os.path.abspath(os.path.join(path_to_cwd, "ctvb_logo.ico"))
+        path_to_icon = os.path.abspath(os.path.join(path_to_cwd, "../ctvbot_logo.ico"))
         root.iconbitmap(path_to_icon)
 
-        path_to_toml = os.path.abspath(os.path.join(path_to_cwd, "pyproject.toml"))
+        path_to_toml = os.path.abspath(os.path.join(path_to_cwd, "../pyproject.toml"))
         version = toml.load(path_to_toml)["tool"]["poetry"]["version"]
 
         root.title(f"Crude twitch viewer bot | v{version} | jlplenio")

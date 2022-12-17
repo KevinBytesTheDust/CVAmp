@@ -4,7 +4,7 @@ import os
 
 def setup():
 
-    handlers = [logging.FileHandler("ctvb.log", mode="w")]
+    handlers = [logging.FileHandler("ctvbot.log", mode="w")]
 
     if os.getenv("DEBUG"):
         handlers.append(logging.StreamHandler())

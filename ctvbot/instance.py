@@ -6,7 +6,7 @@ import threading
 
 from playwright.sync_api import sync_playwright
 
-from utils import InstanceCommands
+from .utils import InstanceCommands
 
 logger = logging.getLogger(__name__)
 instance_lock = threading.Lock()
@@ -89,7 +89,7 @@ class Instance:
             self.loop_and_check()
         except Exception as e:
             logger.exception(e)
-            print(f"Instance {self.id} died: {type(e).__name__}. Please see ctvb.log.")
+            print(f"Instance {self.id} died: {type(e).__name__}. Please see ctvbot.log.")
         else:
             logger.info(f"{threading.currentThread()} with instance no {self.id} ended gracefully")
             with instance_lock:
