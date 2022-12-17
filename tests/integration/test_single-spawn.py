@@ -5,7 +5,7 @@ logger = logging.getLogger(__name__)
 
 
 def test_open_one_instance(record_property):
-    from manager import InstanceManager
+    from ctvbot.manager import InstanceManager
     import urllib.request, re
 
     # get username of random online stream

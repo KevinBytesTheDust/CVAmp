@@ -26,4 +26,4 @@ A clear and concise description of what the bug is.
 If applicable, add screenshots to help explain your problem.
 
 **logs**
-If applicable, post the part of the ctvb.log, that refers to the problem.
+If applicable, post the part of the ctvbot.log, that refers to the problem.

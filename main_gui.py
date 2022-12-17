@@ -1,7 +1,6 @@
-from gui import GUI
-from manager import InstanceManager
-
-import logger_config
+from ctvbot import logger_config
+from ctvbot.gui import GUI
+from ctvbot.manager import InstanceManager
 
 logger_config.setup()
 

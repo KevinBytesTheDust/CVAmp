@@ -44,8 +44,7 @@ jobs:
 
     - name: Build executable
       run: |
-        poetry run pyinstaller main_gui.py --onefile --add-binary "ctvb_logo.ico;." --add-binary "pyproject.toml;." --icon ctvb_logo.ico --name CTVBot_${{steps.read_toml.outputs.value}}_${{env.today}}
-        rm ./proxy/proxy.py
+        poetry run pyinstaller main_gui.py --onefile --add-binary "ctvbot_logo.ico;." --add-binary "pyproject.toml;." --icon ctvbot_logo.ico --name CTVBot_${{steps.read_toml.outputs.value}}_${{env.today}}
         mv ./proxy/ ./dist/
 
     - name: Zip executable
