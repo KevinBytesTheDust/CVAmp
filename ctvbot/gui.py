@@ -226,19 +226,19 @@ class GUI:
 
             instances_overview = self.manager.get_instances_overview()
 
-            proxy_available.configure(text=len(self.manager.proxies.proxy_list))
-
             for (id, status), box in zip(instances_overview.items(), self.instances_boxes):
                 box.modify(status, id)
 
             for index in range(len(instances_overview), len(self.instances_boxes)):
                 self.instances_boxes[index].modify("inactive", None)
 
-            alive_instances.configure(text=self.manager.get_active_count())
-            watching_count = len([1 for id, status in instances_overview.items() if status == "watching"])
-            watching_instances.configure(text=str(watching_count))
+            proxy_available.configure(text=len(self.manager.proxies.proxy_list))
+            alive_instances.configure(text=self.manager.instances_alive_count)
+            watching_instances.configure(text=str(self.manager.instances_watching_count))
+
             cpu_usage_text.configure(text=" {:.2f}% CPU".format(psutil.cpu_percent()))
             ram_usage_text.configure(text=" {:.2f}% RAM".format(psutil.virtual_memory().percent))
+
             root.after(1000, refresher)  # every x milliseconds...
 
         refresher()

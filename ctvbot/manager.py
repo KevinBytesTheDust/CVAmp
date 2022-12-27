@@ -8,6 +8,7 @@ from concurrent.futures.thread import ThreadPoolExecutor
 from .instance import Instance
 from .proxy import ProxyGetter
 from .screen import Screen
+from .service import StatusChecker
 from .utils import InstanceCommands
 
 logger = logging.getLogger(__name__)
@@ -39,6 +40,10 @@ class InstanceManager:
         self.screen = Screen(window_width=500, window_height=300)
         self.user_agents_list = self.get_user_agents()
         self.browser_instances_dict = {}
+        self.status_checker = StatusChecker(self, update_interval_s=60)
+
+        self.instances_alive_count = 0
+        self.instances_watching_count = 0
 
     def get_user_agents(self):
         try:
@@ -73,18 +78,22 @@ class InstanceManager:
     def get_random_user_agent(self):
         return random.choice(self.user_agents_list)
 
-    def get_active_count(self):
-        return len(self.browser_instances_dict.keys())
+    def update_instances_alive_count(self):
+        self.instances_alive_count = len(self.browser_instances_dict.keys())
+
+    def update_instances_watching_count(self):
+        self.instances_watching_count = len([1 for _, status in self.get_instances_overview().items() if status == "watching"])
 
     def get_instances_overview(self):
         return_dict = {}
         for key, instance_dict in self.browser_instances_dict.items():
             return_dict[key] = "alive"
+            instance = instance_dict["instance"]
 
-            if instance_dict["instance"].fully_initialized:
+            if instance.fully_initialized:
                 return_dict[key] = "init"
 
-            if instance_dict["instance"].is_watching:
+            if instance.is_watching:
                 return_dict[key] = "watching"
 
         return return_dict
