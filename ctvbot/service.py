@@ -1,5 +1,7 @@
 from __future__ import annotations
 import logging
+import threading
+import time
 from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
@@ -9,17 +11,21 @@ logger = logging.getLogger(__name__)
 
 
 class StatusChecker:
-    def __init__(self, manager: InstanceManager, update_interval_s=60):
+    def __init__(self, manager: InstanceManager, update_interval_s=2):
         self.update_interval = update_interval_s
-        self.worker_thread = None
         self.manager = manager
+        self.worker_thread = threading.Thread(target=self.loop, daemon=True)
+        self.check_status = True
 
-        # start thread
+        self.worker_thread.start()
+
     def loop(self):
-        self.manager.update_instances_alive_count()
-        self.manager.update_instances_watching_count()
-        # see if gui updates
-        # send to relic?
+        while self.check_status:
+            self.manager.update_instances_overview()
+            self.manager.update_instances_alive_count()
+            self.manager.update_instances_watching_count()
+            time.sleep(self.update_interval)
 
 
-
+class RestartChecker:
+    pass

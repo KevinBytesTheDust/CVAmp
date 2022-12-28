@@ -1,3 +1,4 @@
+import datetime
 import logging
 import os
 import random
@@ -40,10 +41,12 @@ class InstanceManager:
         self.screen = Screen(window_width=500, window_height=300)
         self.user_agents_list = self.get_user_agents()
         self.browser_instances_dict = {}
-        self.status_checker = StatusChecker(self, update_interval_s=60)
 
+        self.instances_overview = dict()
         self.instances_alive_count = 0
         self.instances_watching_count = 0
+
+        self.status_checker = StatusChecker(manager=self, update_interval_s=2)
 
     def get_user_agents(self):
         try:
@@ -72,8 +75,9 @@ class InstanceManager:
         self._auto_restart = new_value
 
     def __del__(self):
-        print("Deleting manager: cleaning up instances")
+        print("Deleting manager: cleaning up instances", datetime.datetime.now())
         self.delete_all_instances()
+        print("Manager shutting down", datetime.datetime.now())
 
     def get_random_user_agent(self):
         return random.choice(self.user_agents_list)
@@ -82,21 +86,23 @@ class InstanceManager:
         self.instances_alive_count = len(self.browser_instances_dict.keys())
 
     def update_instances_watching_count(self):
-        self.instances_watching_count = len([1 for _, status in self.get_instances_overview().items() if status == "watching"])
+        self.instances_watching_count = len(
+            [1 for _, status in self.instances_overview.items() if status == "watching"]
+        )
 
-    def get_instances_overview(self):
-        return_dict = {}
+    def update_instances_overview(self):
+        new_overview = {}
         for key, instance_dict in self.browser_instances_dict.items():
-            return_dict[key] = "alive"
+            new_overview[key] = "alive"
             instance = instance_dict["instance"]
 
             if instance.fully_initialized:
-                return_dict[key] = "init"
+                new_overview[key] = "init"
 
             if instance.is_watching:
-                return_dict[key] = "watching"
+                new_overview[key] = "watching"
 
-        return return_dict
+        self.instances_overview = new_overview
 
     def get_fully_initialized_count(self):
         return len(
@@ -109,7 +115,7 @@ class InstanceManager:
             time.sleep(self.spawn_interval_seconds)
 
     def spawn_instance(self, target_url=None):
-        t = threading.Thread(target=self.spawn_instance_thread, args=(target_url,))
+        t = threading.Thread(target=self.spawn_instance_thread, args=(target_url,), daemon=True)
         t.start()
 
     def spawn_instance_thread(self, target_url=None):

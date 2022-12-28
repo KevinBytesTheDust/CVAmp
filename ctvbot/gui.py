@@ -1,3 +1,4 @@
+import datetime
 import logging
 import os
 import sys
@@ -55,6 +56,9 @@ class GUI:
 
         self.headless = tk.BooleanVar(value=manager.get_headless())
         self.auto_restart = tk.BooleanVar(value=manager.get_auto_restart())
+
+    def __del__(self):
+        print("Gui shutting down", datetime.datetime.now())
 
     def spawn_one_func(self):
         print("Spawning one instance. Please wait for alive & watching instances increase.")
@@ -224,7 +228,7 @@ class GUI:
         # refresh counters
         def refresher():
 
-            instances_overview = self.manager.get_instances_overview()
+            instances_overview = self.manager.instances_overview
 
             for (id, status), box in zip(instances_overview.items(), self.instances_boxes):
                 box.modify(status, id)
