@@ -11,6 +11,7 @@ from tkinter.scrolledtext import ScrolledText
 import psutil
 import toml
 
+from . import utils
 from .manager import InstanceManager
 from .utils import InstanceCommands
 
@@ -36,14 +37,19 @@ class InstanceBox(tk.Frame):
 
     def modify(self, status, instance_id):
         self.instance_id = instance_id
+
+        # todo: enum
         color_codes = {
             "inactive": "SystemButtonFace",
-            "alive": "grey",
-            "init": "yellow",
+            "starting": "grey",
+            "initialized": "yellow",
+            "restarting": "yellow",
+            "buffering": "yellow",
             "watching": "#44d209",
+            "shutdown": "SystemButtonFace",
         }
 
-        color = color_codes[status]
+        color = color_codes[status.value]
         self.configure(background=color)
 
 
@@ -234,7 +240,7 @@ class GUI:
                 box.modify(status, id)
 
             for index in range(len(instances_overview), len(self.instances_boxes)):
-                self.instances_boxes[index].modify("inactive", None)
+                self.instances_boxes[index].modify(utils.InstanceStatus.INACTIVE, None)
 
             proxy_available.configure(text=len(self.manager.proxies.proxy_list))
             alive_instances.configure(text=self.manager.instances_alive_count)
@@ -243,7 +249,7 @@ class GUI:
             cpu_usage_text.configure(text=" {:.2f}% CPU".format(psutil.cpu_percent()))
             ram_usage_text.configure(text=" {:.2f}% RAM".format(psutil.virtual_memory().percent))
 
-            root.after(1000, refresher)  # every x milliseconds...
+            root.after(750, refresher)
 
         refresher()
 
