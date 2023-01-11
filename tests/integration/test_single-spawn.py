@@ -1,5 +1,6 @@
 import time
 
+
 def test_open_one_instance(record_property):
     from ctvbot.manager import InstanceManager
     import urllib.request, re
@@ -20,7 +21,7 @@ def test_open_one_instance(record_property):
     SPAWN_INTERVAL_SECONDS = 2
 
     target_url = "https://www.twitch.tv/" + username
-    print("Watching" + str(target_url))
+    print("Watching", str(target_url))
 
     manager = InstanceManager(
         spawn_thread_count=SPAWNER_THREAD_COUNT,

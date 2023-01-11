@@ -1,6 +1,5 @@
 import logging
 import os
-from datetime import datetime
 
 import psutil
 
@@ -9,7 +8,6 @@ def setup():
     import sys
 
     print(sys.argv[0])
-
 
     handlers = [logging.FileHandler("ctvbot.log", mode="w")]
 

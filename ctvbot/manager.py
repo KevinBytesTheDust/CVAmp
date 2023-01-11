@@ -199,7 +199,6 @@ class InstanceManager:
             return
 
         instance = self.browser_instances[instance_id]
-        # todo: uniform logging and prints in gui textbox
         print(f"Issuing shutdown of instance #{instance_id}")
         instance.command = InstanceCommands.EXIT
 

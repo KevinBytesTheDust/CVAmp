@@ -17,5 +17,3 @@ class InstanceStatus(Enum):
     INITIALIZED = 'initialized'
     SHUTDOWN = 'shutdown'
     INACTIVE = "inactive"
-
-
