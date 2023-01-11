@@ -1,8 +1,6 @@
-from ctvbot import logger_config
 from ctvbot.gui import GUI
 from ctvbot.manager import InstanceManager
 
-logger_config.setup()
 
 SPAWNER_THREAD_COUNT = 3
 CLOSER_THREAD_COUNT = 10

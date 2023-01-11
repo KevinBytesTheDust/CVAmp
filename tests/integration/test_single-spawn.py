@@ -1,7 +1,4 @@
-import logging
 import time
-
-logger = logging.getLogger(__name__)
 
 
 def test_open_one_instance(record_property):
@@ -9,7 +6,11 @@ def test_open_one_instance(record_property):
     import urllib.request, re
 
     # get username of random online stream
-    html_text = urllib.request.urlopen("https://m.twitch.tv").read()
+    for i in range(10):
+        html_text = urllib.request.urlopen("https://m.twitch.tv").read()
+        if html_text:
+            break
+        time.sleep(1)
     username = re.search('"login":"*(.*?)"', str(html_text))[1]
 
     SPAWNER_THREAD_COUNT = 3
@@ -20,7 +21,7 @@ def test_open_one_instance(record_property):
     SPAWN_INTERVAL_SECONDS = 2
 
     target_url = "https://www.twitch.tv/" + username
-    logger.info("Watching" + str(target_url))
+    print("Watching", str(target_url))
 
     manager = InstanceManager(
         spawn_thread_count=SPAWNER_THREAD_COUNT,
@@ -36,11 +37,9 @@ def test_open_one_instance(record_property):
 
     instance_is_watching = False
     for _ in range(60):
-        instances_overview = manager.get_instances_overview()
-        if 1 in instances_overview:
-            if instances_overview[1] == "watching":
-                instance_is_watching = True
-                break
+        if manager.instances_watching_count > 0:
+            instance_is_watching = True
+            break
         time.sleep(1)
 
     manager.__del__()

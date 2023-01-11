@@ -1,3 +1,4 @@
+import datetime
 import logging
 import os
 import sys
@@ -10,6 +11,7 @@ from tkinter.scrolledtext import ScrolledText
 import psutil
 import toml
 
+from . import utils
 from .manager import InstanceManager
 from .utils import InstanceCommands
 
@@ -35,14 +37,19 @@ class InstanceBox(tk.Frame):
 
     def modify(self, status, instance_id):
         self.instance_id = instance_id
+
+        # todo: enum
         color_codes = {
             "inactive": "SystemButtonFace",
-            "alive": "grey",
-            "init": "yellow",
+            "starting": "grey",
+            "initialized": "yellow",
+            "restarting": "yellow",
+            "buffering": "yellow",
             "watching": "#44d209",
+            "shutdown": "SystemButtonFace",
         }
 
-        color = color_codes[status]
+        color = color_codes[status.value]
         self.configure(background=color)
 
 
@@ -55,6 +62,9 @@ class GUI:
 
         self.headless = tk.BooleanVar(value=manager.get_headless())
         self.auto_restart = tk.BooleanVar(value=manager.get_auto_restart())
+
+    def __del__(self):
+        print("Gui shutting down", datetime.datetime.now())
 
     def spawn_one_func(self):
         print("Spawning one instance. Please wait for alive & watching instances increase.")
@@ -224,22 +234,22 @@ class GUI:
         # refresh counters
         def refresher():
 
-            instances_overview = self.manager.get_instances_overview()
-
-            proxy_available.configure(text=len(self.manager.proxies.proxy_list))
+            instances_overview = self.manager.instances_overview
 
             for (id, status), box in zip(instances_overview.items(), self.instances_boxes):
                 box.modify(status, id)
 
             for index in range(len(instances_overview), len(self.instances_boxes)):
-                self.instances_boxes[index].modify("inactive", None)
+                self.instances_boxes[index].modify(utils.InstanceStatus.INACTIVE, None)
 
-            alive_instances.configure(text=self.manager.get_active_count())
-            watching_count = len([1 for id, status in instances_overview.items() if status == "watching"])
-            watching_instances.configure(text=str(watching_count))
+            proxy_available.configure(text=len(self.manager.proxies.proxy_list))
+            alive_instances.configure(text=self.manager.instances_alive_count)
+            watching_instances.configure(text=str(self.manager.instances_watching_count))
+
             cpu_usage_text.configure(text=" {:.2f}% CPU".format(psutil.cpu_percent()))
             ram_usage_text.configure(text=" {:.2f}% RAM".format(psutil.virtual_memory().percent))
-            root.after(1000, refresher)  # every x milliseconds...
+
+            root.after(750, refresher)
 
         refresher()
 
