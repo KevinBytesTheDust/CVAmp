@@ -27,7 +27,7 @@ class InstanceBox(tk.Frame):
 
         self.bind(
             "<Button-1>", lambda event: self.manager.queue_command(self.instance_id, InstanceCommands.REFRESH)
-        )  # left clickk
+        )  # left click
         self.bind(
             "<Button-3>", lambda event: self.manager.queue_command(self.instance_id, InstanceCommands.EXIT)
         )  # right click
@@ -40,13 +40,13 @@ class InstanceBox(tk.Frame):
 
         # todo: enum
         color_codes = {
-            "inactive": "SystemButtonFace",
+            "inactive": None,
             "starting": "grey",
             "initialized": "yellow",
             "restarting": "yellow",
             "buffering": "yellow",
             "watching": "#44d209",
-            "shutdown": "SystemButtonFace",
+            "shutdown": None,
         }
 
         color = color_codes[status.value]
@@ -95,7 +95,9 @@ class GUI:
         # Pyinstaller fix to find added binaries in extracted project folder in TEMP
         path_to_binaries = getattr(sys, "_MEIPASS", non_pyinstaller_path)  # default to last arg
         path_to_icon = os.path.abspath(os.path.join(path_to_binaries, "ctvbot_logo.ico"))
-        root.iconbitmap(path_to_icon)
+
+        if os.name == 'nt':
+            root.iconbitmap(path_to_icon)
 
         path_to_toml = os.path.abspath(os.path.join(path_to_binaries, "pyproject.toml"))
         version = toml.load(path_to_toml)["tool"]["poetry"]["version"]
@@ -211,7 +213,6 @@ class GUI:
                 box = InstanceBox(
                     self.manager,
                     self.root,
-                    background="SystemButtonFace",
                     bd=0.5,
                     relief="raised",
                     width=10,
