@@ -16,7 +16,7 @@ https://github.com/jlplenio/crude-twitch-viewer-bot/wiki/Troubleshooting
 -->
 
 **Desktop (please complete the following information):**
- - CTVB version: [e.g. 0.3.0]
+ - CTVBot version: [e.g. 0.4.0]
  - Windows version: [e.g. 10]
 
 **Describe the bug**
