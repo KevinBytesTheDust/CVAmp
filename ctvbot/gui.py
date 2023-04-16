@@ -17,6 +17,8 @@ from .utils import InstanceCommands
 
 logger = logging.getLogger(__name__)
 
+system_default_color = None
+
 
 class InstanceBox(tk.Frame):
     def __init__(self, manager, parent, *args, **kwargs):
@@ -40,13 +42,13 @@ class InstanceBox(tk.Frame):
 
         # todo: enum
         color_codes = {
-            "inactive": None,
+            "inactive": system_default_color,
             "starting": "grey",
             "initialized": "yellow",
             "restarting": "yellow",
             "buffering": "yellow",
             "watching": "#44d209",
-            "shutdown": None,
+            "shutdown": system_default_color,
         }
 
         color = color_codes[status.value]
@@ -62,6 +64,9 @@ class GUI:
 
         self.headless = tk.BooleanVar(value=manager.get_headless())
         self.auto_restart = tk.BooleanVar(value=manager.get_auto_restart())
+
+        global system_default_color
+        system_default_color = self.root.cget("bg")
 
     def __del__(self):
         print("Gui shutting down", datetime.datetime.now())
@@ -207,7 +212,6 @@ class GUI:
             y=120,
         )
 
-        id_counter = 1
         for row in range(5):
             for col in range(50):
                 box = InstanceBox(
@@ -220,7 +224,6 @@ class GUI:
                 )
                 box.place(x=24 + col * 11, y=230 + row * 12)
                 self.instances_boxes.append(box)
-                id_counter += 1
 
         # bottom
         lbl = tk.Label(
