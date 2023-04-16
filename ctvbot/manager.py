@@ -5,7 +5,7 @@ import random
 import threading
 import time
 
-from . import logger_config, utils
+from . import logger_config, utils, sites
 
 logger_config.setup()
 from .instance import Instance
@@ -100,13 +100,22 @@ class InstanceManager:
     def update_instances_overview(self):
         new_overview = {}
         for instance_id, instance in self.browser_instances.items():
-            new_overview[instance_id] = instance.status
+            if instance.status != utils.InstanceStatus.SHUTDOWN:
+                new_overview[instance_id] = instance.status
+
         self.instances_overview = new_overview
 
     def spawn_instances(self, n, target_url=None):
         for _ in range(n):
             self.spawn_instance(target_url)
             time.sleep(self.spawn_interval_seconds)
+
+    def get_site_class(self, target_url):
+        for site_name, site_class in utils.supported_sites.items():
+            if site_name in target_url:
+                return site_class
+
+        return sites.Unknown
 
     def spawn_instance(self, target_url=None):
 
@@ -157,10 +166,14 @@ class InstanceManager:
                 print("no screen space left")
                 return
 
-            server_ip = proxy.get("server", "no proxy")
-            logger.info(f"Ordered instance {browser_instance_id}, {threading.currentThread().name}, proxy {server_ip}")
+            site_class = self.get_site_class(target_url)
 
-            browser_instance = Instance(
+            server_ip = proxy.get("server", "no proxy")
+            logger.info(
+                f"Ordered {site_class.name} instance {browser_instance_id}, {threading.currentThread().name}, proxy {server_ip}"
+            )
+
+            browser_instance = site_class(
                 user_agent,
                 proxy,
                 target_url,

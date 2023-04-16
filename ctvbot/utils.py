@@ -1,4 +1,11 @@
 from enum import Enum, auto
+from ctvbot import sites
+
+supported_sites = {
+    'twitch.tv/': sites.Twitch,
+    'youtube.com/': sites.Youtube,
+    'kick.com/': sites.Kick,
+}
 
 
 class InstanceCommands(Enum):
