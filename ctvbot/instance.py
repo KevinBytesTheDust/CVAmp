@@ -64,6 +64,9 @@ class Instance(ABC):
 
     @status.setter
     def status(self, new_status):
+        if self._status == new_status:
+            return
+
         self._status = new_status
         self.status_reporter(self.id, new_status)
 
@@ -101,6 +104,7 @@ class Instance(ABC):
             if self.command == utils.InstanceCommands.RESTART:
                 self.clean_up_playwright()
                 self.spawn_page(restart=True)
+                self.todo_after_spawn()
             if self.command == utils.InstanceCommands.SCREENSHOT:
                 print("Saved screenshot of instance id", self.id)
                 self.save_screenshot()

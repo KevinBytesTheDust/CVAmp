@@ -30,8 +30,6 @@ class Youtube(Instance):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        # todo check if status and therefore viewercount is implemented, if not
-        # say in log window and turn viewers and box colors to ???
 
     def todo_every_loop(self):
         self.page.keyboard.press("Tab")
@@ -51,9 +49,6 @@ class Kick(Instance):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-
-        # check if status and therefore viewer count is implemented, if not
-        # say in log window and turn viewers and box colors to ???
 
     def todo_every_loop(self):
         self.page.keyboard.press("Tab")
