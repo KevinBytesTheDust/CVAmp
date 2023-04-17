@@ -12,7 +12,6 @@ class ProxyGetter:
         self.build_proxy_list()
 
     def build_proxy_list(self):
-
         try:
             if self.pathed_file_name.endswith(".json"):
                 raise NotImplementedError("JSON file not implemented yet")

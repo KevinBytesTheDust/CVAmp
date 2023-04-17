@@ -1,16 +1,18 @@
 import datetime
-import json
 import logging
 import threading
 
 from playwright.sync_api import sync_playwright
+from abc import ABC
+
 
 from . import utils
 
 logger = logging.getLogger(__name__)
 
 
-class Instance:
+class Instance(ABC):
+    name = "BASE"
     instance_lock = threading.Lock()
 
     def __init__(
@@ -24,14 +26,13 @@ class Instance:
         auto_restart=False,
         instance_id=-1,
     ):
-
         self.playwright = None
         self.context = None
         self.browser = None
         self.last_active_resume_time = 0
         self.last_active_timestamp = None
         self.status_reporter = status_reporter
-        self.thread = threading.currentThread()
+        self.thread = threading.current_thread()
 
         self.id = instance_id
         self._status = "alive"
@@ -63,35 +64,8 @@ class Instance:
 
     @status.setter
     def status(self, new_status):
-        if self._status == new_status:
-            return
-
         self._status = new_status
         self.status_reporter(self.id, new_status)
-
-    def update_status(self):
-        datetime_now = datetime.datetime.now()
-
-        # set default timestamp, to give the steam time to progress
-        if not self.last_active_timestamp:
-            self.last_active_timestamp = datetime_now - datetime.timedelta(seconds=10)
-
-        if self.last_active_timestamp > datetime_now - datetime.timedelta(seconds=10):
-            self.status = utils.InstanceStatus.WATCHING
-            return
-
-        current_resume_time = self.page.evaluate("window.localStorage.getItem('livestreamResumeTimes');")
-
-        if current_resume_time:
-            resume_time = json.loads(current_resume_time)
-            resume_time = list(resume_time.values())[0]
-
-            if resume_time > self.last_active_resume_time:
-                self.last_active_timestamp = datetime.datetime.now()
-                self.last_active_resume_time = resume_time
-                self.status = utils.InstanceStatus.WATCHING
-                return
-        self.status = utils.InstanceStatus.BUFFERING
 
     def clean_up_playwright(self):
         if any([self.page, self.context, self.browser]):
@@ -103,22 +77,25 @@ class Instance:
     def start(self):
         try:
             self.spawn_page()
+            self.todo_after_spawn()
             self.loop_and_check()
         except Exception as e:
-            logger.exception(e)
-            print(f"Instance {self.id} died: {type(e).__name__}. Please see ctvbot.log.")
+            logger.exception(f"{e} died at page {self.page.url}")
+            print(f"{self.name} Instance {self.id} died: {type(e).__name__}. Please see ctvbot.log.")
         else:
             logger.info(f"ENDED: instance {self.id}")
             with self.instance_lock:
                 print(f"Instance {self.id} shutting down")
         finally:
+            self.status = utils.InstanceStatus.SHUTDOWN
             self.clean_up_playwright()
-            self.location_info['free'] = True
+            self.location_info["free"] = True
 
     def loop_and_check(self):
         page_timeout_s = 5
         while True:
             self.page.wait_for_timeout(page_timeout_s * 1000)
+            self.todo_every_loop()
             self.update_status()
 
             if self.command == utils.InstanceCommands.RESTART:
@@ -131,7 +108,6 @@ class Instance:
                 print("Manual refresh of instance id", self.id)
                 self.reload_page()
             if self.command == utils.InstanceCommands.EXIT:
-                self.status = utils.InstanceStatus.SHUTDOWN
                 return
             self.command = utils.InstanceCommands.NONE
 
@@ -139,15 +115,7 @@ class Instance:
         filename = datetime.datetime.now().strftime("%Y%m%d_%H%M%S") + f"_instance{self.id}.png"
         self.page.screenshot(path=filename)
 
-    def reload_page(self):
-        self.page.reload(timeout=30000)
-        self.page.wait_for_selector(".persistent-player", timeout=30000)
-        self.page.wait_for_timeout(1000)
-        self.page.keyboard.press("Alt+t")
-
     def spawn_page(self, restart=False):
-        spawn_type = "RESTART" if restart else "START"
-
         proxy_dict = self.proxy_dict
 
         self.status = utils.InstanceStatus.RESTARTING if restart else utils.InstanceStatus.STARTING
@@ -161,7 +129,10 @@ class Instance:
             proxy=proxy_dict,
             headless=self.headless,
             channel="chrome",
-            args=["--window-position={},{}".format(self.location_info["x"], self.location_info["y"])],
+            args=[
+                "--window-position={},{}".format(self.location_info["x"], self.location_info["y"]),
+                "--mute-audio",
+            ],
         )
         self.context = self.browser.new_context(
             user_agent=self.user_agent,
@@ -172,36 +143,34 @@ class Instance:
         self.page = self.context.new_page()
         self.page.add_init_script("""navigator.webdriver = false;""")
 
-        self.page.goto("https://www.twitch.tv/login", timeout=100000)
-
-        twitch_settings = {
-            "mature": "true",
-            "video-muted": '{"default": "false"}',
-            "volume": "0.5",
-            "video-quality": '{"default": "160p30"}',
-            "lowLatencyModeEnabled": "false",
-        }
-
-        try:
-            self.page.click("button[data-a-target=consent-banner-accept]", timeout=15000)
-        except:
-            logger.warning("Cookie consent banner not found/clicked.")
-
-        for key, value in twitch_settings.items():
-            tosend = """window.localStorage.setItem('{key}','{value}');""".format(key=key, value=value)
-            self.page.evaluate(tosend)
-
-        self.page.set_viewport_size(
-            {
-                "width": self.location_info["width"],
-                "height": self.location_info["height"],
-            }
-        )
-
+    def todo_after_load(self):
         self.page.goto(self.target_url, timeout=60000)
         self.page.wait_for_timeout(1000)
-        self.page.wait_for_selector(".persistent-player", timeout=15000)
-        self.page.keyboard.press("Alt+t")
-        self.page.wait_for_timeout(1000)
 
+    def reload_page(self):
+        self.page.reload(timeout=30000)
+        self.todo_after_load()
+
+    def todo_after_spawn(self):
+        """
+        Basic behaviour after a page is spawned. Override for more functionality
+        e.g. load cookies, additional checks before instance is truly called "initialized"
+        :return:
+        """
         self.status = utils.InstanceStatus.INITIALIZED
+        self.page.goto(self.target_url, timeout=60000)
+
+    def todo_every_loop(self):
+        """
+        Add behaviour to be executed every loop
+        e.g. to fake page interaction to not count as inactive to the website.
+        """
+        pass
+
+    def update_status(self) -> None:
+        """
+        Mechanism is called every loop. Figure out if it is watching and working and updated status.
+        if X:
+            self.status = utils.InstanceStatus.WATCHING
+        """
+        pass

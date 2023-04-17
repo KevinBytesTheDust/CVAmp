@@ -17,6 +17,8 @@ from .utils import InstanceCommands
 
 logger = logging.getLogger(__name__)
 
+system_default_color = None
+
 
 class InstanceBox(tk.Frame):
     def __init__(self, manager, parent, *args, **kwargs):
@@ -40,13 +42,13 @@ class InstanceBox(tk.Frame):
 
         # todo: enum
         color_codes = {
-            "inactive": None,
+            "inactive": system_default_color,
             "starting": "grey",
             "initialized": "yellow",
             "restarting": "yellow",
             "buffering": "yellow",
             "watching": "#44d209",
-            "shutdown": None,
+            "shutdown": system_default_color,
         }
 
         color = color_codes[status.value]
@@ -62,6 +64,9 @@ class GUI:
 
         self.headless = tk.BooleanVar(value=manager.get_headless())
         self.auto_restart = tk.BooleanVar(value=manager.get_auto_restart())
+
+        global system_default_color
+        system_default_color = self.root.cget("bg")
 
     def __del__(self):
         print("Gui shutting down", datetime.datetime.now())
@@ -85,7 +90,6 @@ class GUI:
         threading.Thread(target=self.manager.delete_all_instances).start()
 
     def run(self):
-
         root = self.root
         root.geometry("600x305+500+500")
 
@@ -96,7 +100,7 @@ class GUI:
         path_to_binaries = getattr(sys, "_MEIPASS", non_pyinstaller_path)  # default to last arg
         path_to_icon = os.path.abspath(os.path.join(path_to_binaries, "ctvbot_logo.ico"))
 
-        if os.name == 'nt':
+        if os.name == "nt":
             root.iconbitmap(path_to_icon)
 
         path_to_toml = os.path.abspath(os.path.join(path_to_binaries, "pyproject.toml"))
@@ -207,7 +211,6 @@ class GUI:
             y=120,
         )
 
-        id_counter = 1
         for row in range(5):
             for col in range(50):
                 box = InstanceBox(
@@ -220,7 +223,6 @@ class GUI:
                 )
                 box.place(x=24 + col * 11, y=230 + row * 12)
                 self.instances_boxes.append(box)
-                id_counter += 1
 
         # bottom
         lbl = tk.Label(
@@ -234,7 +236,6 @@ class GUI:
 
         # refresh counters
         def refresher():
-
             instances_overview = self.manager.instances_overview
 
             for (id, status), box in zip(instances_overview.items(), self.instances_boxes):
@@ -256,16 +257,17 @@ class GUI:
 
         # redirect stdout
         def redirector(str_input):
-
             if self.root:
-                text_area.configure(state='normal')
+                text_area.configure(state="normal")
                 text_area.insert(tk.END, str_input)
                 text_area.see(tk.END)
-                text_area.configure(state='disabled')
+                text_area.configure(state="disabled")
             else:
                 sys.stdout = sys.__stdout__
 
         sys.stdout.write = redirector
+
+        print("Status detection (watching/buffering) is only supported for Twitch.tv channels.\n")
 
         root.resizable(False, False)
         root.mainloop()
