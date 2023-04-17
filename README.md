@@ -8,7 +8,7 @@ Disclaimer: For educational purpose only. Any discussion of illegal use will be 
 
 Small GUI tool that spawns muted Google Chrome instances via [Playwright](https://github.com/microsoft/playwright-python), each with a different user-agent and HTTP proxy connection. 
 Each instance navigates to the twitch channel, activates theater mode and adheres itself to the available screen space. 
-Settings in localStorage ensure the lowest possible resolution.
+Settings in localStorage ensure the lowest possible resolution. Only Twitch.tv is fully supported. Unstable support for kick.com, youtube.com and other streaming platforms.
 
 - Download the one-file executable for Windows from the [latest CTVBot release](https://github.com/jlplenio/crude-twitch-viewer-bot/releases/latest).  
 
@@ -19,6 +19,7 @@ Read the comprehensive [wiki](https://github.com/jlplenio/crude-twitch-viewer-bo
 ### Important
 - You need to provide your own private HTTP proxies to the [proxy_list.txt](proxy/proxy_list.txt)  
   Buy trusted proxies [here](https://www.webshare.io/?referral_code=w6nfvip4qp3g) or follow the [Webshare.io Proxies Guide](https://github.com/jlplenio/crude-twitch-viewer-bot/wiki/Webshare.io-Proxies-Guide).
+- Only Twitch.tv is fully supported. Unstable support for kick.com, youtube.com and other streaming platforms.
 - Chrome needs to be already installed on your system.
 - Tested with instance count: Headless ~100, headful ~30.
 - Tested on Windows 10. Linux and macOS is experimental.
