@@ -90,7 +90,6 @@ class GUI:
         threading.Thread(target=self.manager.delete_all_instances).start()
 
     def run(self):
-
         root = self.root
         root.geometry("600x305+500+500")
 
@@ -101,7 +100,7 @@ class GUI:
         path_to_binaries = getattr(sys, "_MEIPASS", non_pyinstaller_path)  # default to last arg
         path_to_icon = os.path.abspath(os.path.join(path_to_binaries, "ctvbot_logo.ico"))
 
-        if os.name == 'nt':
+        if os.name == "nt":
             root.iconbitmap(path_to_icon)
 
         path_to_toml = os.path.abspath(os.path.join(path_to_binaries, "pyproject.toml"))
@@ -237,7 +236,6 @@ class GUI:
 
         # refresh counters
         def refresher():
-
             instances_overview = self.manager.instances_overview
 
             for (id, status), box in zip(instances_overview.items(), self.instances_boxes):
@@ -259,12 +257,11 @@ class GUI:
 
         # redirect stdout
         def redirector(str_input):
-
             if self.root:
-                text_area.configure(state='normal')
+                text_area.configure(state="normal")
                 text_area.insert(tk.END, str_input)
                 text_area.see(tk.END)
-                text_area.configure(state='disabled')
+                text_area.configure(state="disabled")
             else:
                 sys.stdout = sys.__stdout__
 

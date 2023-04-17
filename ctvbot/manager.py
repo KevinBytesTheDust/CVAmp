@@ -28,7 +28,6 @@ class InstanceManager:
         spawn_interval_seconds=2,
         target_url=None,
     ):
-
         logger.info("Manager start")
 
         self._spawn_thread_count = spawn_thread_count
@@ -118,7 +117,6 @@ class InstanceManager:
         return sites.Unknown
 
     def spawn_instance(self, target_url=None):
-
         if not self.browser_instances:
             browser_instance_id = 1
         else:
@@ -146,7 +144,6 @@ class InstanceManager:
         self.reconfigure_auto_restart_status()
 
     def spawn_instance_thread(self, target_url, status_reporter, browser_instance_id):
-
         if not any([target_url, self.target_url]):
             raise Exception("No target target url provided")
 

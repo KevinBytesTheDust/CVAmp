@@ -26,7 +26,6 @@ class Instance(ABC):
         auto_restart=False,
         instance_id=-1,
     ):
-
         self.playwright = None
         self.context = None
         self.browser = None
@@ -65,7 +64,6 @@ class Instance(ABC):
 
     @status.setter
     def status(self, new_status):
-
         self._status = new_status
         self.status_reporter(self.id, new_status)
 
@@ -91,7 +89,7 @@ class Instance(ABC):
         finally:
             self.status = utils.InstanceStatus.SHUTDOWN
             self.clean_up_playwright()
-            self.location_info['free'] = True
+            self.location_info["free"] = True
 
     def loop_and_check(self):
         page_timeout_s = 5
@@ -118,7 +116,6 @@ class Instance(ABC):
         self.page.screenshot(path=filename)
 
     def spawn_page(self, restart=False):
-
         proxy_dict = self.proxy_dict
 
         self.status = utils.InstanceStatus.RESTARTING if restart else utils.InstanceStatus.STARTING

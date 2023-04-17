@@ -4,7 +4,6 @@ logger = logging.getLogger(__name__)
 
 
 def get_screen_resolution(kind):
-
     try:
         import tkinter as tk
 

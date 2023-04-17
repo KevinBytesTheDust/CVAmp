@@ -2,9 +2,9 @@ from enum import Enum, auto
 from ctvbot import sites
 
 supported_sites = {
-    'twitch.tv/': sites.Twitch,
-    'youtube.com/': sites.Youtube,
-    'kick.com/': sites.Kick,
+    "twitch.tv/": sites.Twitch,
+    "youtube.com/": sites.Youtube,
+    "kick.com/": sites.Kick,
 }
 
 
@@ -17,10 +17,10 @@ class InstanceCommands(Enum):
 
 
 class InstanceStatus(Enum):
-    STARTING = 'starting'
-    BUFFERING = 'buffering'
-    WATCHING = 'watching'
-    RESTARTING = 'restarting'
-    INITIALIZED = 'initialized'
-    SHUTDOWN = 'shutdown'
+    STARTING = "starting"
+    BUFFERING = "buffering"
+    WATCHING = "watching"
+    RESTARTING = "restarting"
+    INITIALIZED = "initialized"
+    SHUTDOWN = "shutdown"
     INACTIVE = "inactive"

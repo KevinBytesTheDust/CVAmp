@@ -15,7 +15,7 @@ class Unknown(Instance):
         super().__init__(*args, **kwargs)
 
     def todo_every_loop(self):
-        self.page.keyboard.press('Tab')
+        self.page.keyboard.press("Tab")
 
     def update_status(self):
         pass
@@ -34,7 +34,7 @@ class Youtube(Instance):
         # say in log window and turn viewers and box colors to ???
 
     def todo_every_loop(self):
-        self.page.keyboard.press('Tab')
+        self.page.keyboard.press("Tab")
 
     def update_status(self):
         pass
@@ -56,7 +56,7 @@ class Kick(Instance):
         # say in log window and turn viewers and box colors to ???
 
     def todo_every_loop(self):
-        self.page.keyboard.press('Tab')
+        self.page.keyboard.press("Tab")
 
     def update_status(self):
         pass
