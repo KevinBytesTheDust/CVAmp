@@ -24,3 +24,7 @@ class InstanceStatus(Enum):
     INITIALIZED = "initialized"
     SHUTDOWN = "shutdown"
     INACTIVE = "inactive"
+
+
+class CloudflareBlockException(Exception):
+    pass

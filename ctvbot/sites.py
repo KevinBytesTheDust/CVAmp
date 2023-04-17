@@ -65,6 +65,9 @@ class Kick(Instance):
         self.page.goto(self.target_url, timeout=60000)
         self.page.wait_for_timeout(1000)
 
+        if 'cloudflare' in self.page.content().lower():
+            raise utils.CloudflareBlockException("Blocked by Cloudflare.")
+
 
 class Twitch(Instance):
     name = "TWITCH"
