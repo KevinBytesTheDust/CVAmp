@@ -1,6 +1,7 @@
 import datetime
 import logging
 import os
+import platform
 import random
 import threading
 import time
@@ -8,7 +9,6 @@ import time
 from . import logger_config, utils, sites
 
 logger_config.setup()
-from .instance import Instance
 from .proxy import ProxyGetter
 from .screen import Screen
 from .service import RestartChecker
@@ -28,7 +28,7 @@ class InstanceManager:
         spawn_interval_seconds=2,
         target_url=None,
     ):
-        logger.info("Manager start")
+        logger.info(f"Manager start on {platform.platform()}")
 
         self._spawn_thread_count = spawn_thread_count
         self._delete_thread_count = delete_thread_count
