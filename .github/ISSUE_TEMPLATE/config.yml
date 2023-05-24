@@ -11,7 +11,7 @@ contact_links:
     about: |
       Receive help from the users and supporters.
 
-  - name: Start a General Disussion
+  - name: Start a General Discussion
     url: https://github.com/jlplenio/crude-twitch-viewer-bot/discussions/new?category=general
     about: |
       Discuss and exchange with other users and supporters.
