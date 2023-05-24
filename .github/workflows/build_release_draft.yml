@@ -1,11 +1,9 @@
 name: Build and Release
 
-#on:
-#  push:
-#    tags:
-#      - "v*"
-
-on: [pull_request]
+on:
+  push:
+    tags:
+      - "v*"
 
 env:
   PLAYWRIGHT_BROWSERS_PATH: 0
