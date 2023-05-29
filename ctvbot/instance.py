@@ -83,8 +83,9 @@ class Instance(ABC):
             self.todo_after_spawn()
             self.loop_and_check()
         except Exception as e:
+            message = e.args[0][:25] if e.args else ""
             logger.exception(f"{e} died at page {self.page.url if self.page else None}")
-            print(f"{self.name} Instance {self.id} died: {type(e).__name__}. Please see ctvbot.log.")
+            print(f"{self.name} Instance {self.id} died: {type(e).__name__}:{message}... Please see ctvbot.log.")
         else:
             logger.info(f"ENDED: instance {self.id}")
             with self.instance_lock:
@@ -147,8 +148,21 @@ class Instance(ABC):
         self.page = self.context.new_page()
         self.page.add_init_script("""navigator.webdriver = false;""")
 
+    def goto_with_retry(self, url, max_tries=3, timeout=20000):
+        """
+        Tries to navigate to a page max_tries times. Raises the last exception if all attempts fail.
+        """
+        for attempt in range(1, max_tries + 1):
+            try:
+                self.page.goto(url, timeout=timeout)
+                return
+            except Exception:
+                logger.warning(f"Instance {self.id} failed connection attempt #{attempt}.")
+                if attempt == max_tries:
+                    raise
+
     def todo_after_load(self):
-        self.page.goto(self.target_url, timeout=60000)
+        self.goto_with_retry(self.target_url)
         self.page.wait_for_timeout(1000)
 
     def reload_page(self):
@@ -162,7 +176,7 @@ class Instance(ABC):
         :return:
         """
         self.status = utils.InstanceStatus.INITIALIZED
-        self.page.goto(self.target_url, timeout=60000)
+        self.goto_with_retry(self.target_url)
 
     def todo_every_loop(self):
         """
