@@ -14,7 +14,7 @@ https://github.com/jlplenio/crude-twitch-viewer-bot/wiki/Troubleshooting
 2. Please ensure that there is not an issue already for the bug.
 ------------------------------------------------------------------------->
 
-**Please answers the following questions:**
+**Please answer the following questions:**
 - CTVBot version? [e.g. 0.4.0]
 - OS with version? [e.g. Windows 10, Ubuntu 20.04]
 - Streaming platform? [e.g. twitch.tv, kick.com, youtube.com]
