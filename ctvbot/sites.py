@@ -76,27 +76,44 @@ class Twitch(Instance):
         self.page.keyboard.press("Alt+t")
 
     def update_status(self):
-        datetime_now = datetime.datetime.now()
+        current_time = datetime.datetime.now()
+        if not self.status_info:
+            self.status_info = {
+                "last_active_resume_time": 0,
+                "last_active_timestamp": current_time - datetime.timedelta(seconds=10),
+                "last_stream_id": None,
+            }
 
-        # set default timestamp, to give the steam time to progress
-        if not self.last_active_timestamp:
-            self.last_active_timestamp = datetime_now - datetime.timedelta(seconds=10)
-
-        if self.last_active_timestamp > datetime_now - datetime.timedelta(seconds=10):
+        # If the stream was active less than 10 seconds ago, it's still being watched
+        time_since_last_activity = current_time - self.status_info["last_active_timestamp"]
+        if time_since_last_activity < datetime.timedelta(seconds=10):
             self.status = utils.InstanceStatus.WATCHING
             return
 
-        current_resume_time = self.page.evaluate("window.localStorage.getItem('livestreamResumeTimes');")
+        # Fetch the current resume time for the stream
+        fetched_resume_times = self.page.evaluate("window.localStorage.getItem('livestreamResumeTimes');")
+        if fetched_resume_times:
+            resume_times_dict = json.loads(fetched_resume_times)
+            current_stream_id = list(resume_times_dict.keys())[-1]
+            current_resume_time = list(resume_times_dict.values())[-1]
 
-        if current_resume_time:
-            resume_time = json.loads(current_resume_time)
-            resume_time = list(resume_time.values())[0]
+            # If this is the first run, set the last stream id to current stream id
+            if not self.status_info["last_stream_id"]:
+                self.status_info["last_stream_id"] = current_stream_id
 
-            if resume_time > self.last_active_resume_time:
-                self.last_active_timestamp = datetime.datetime.now()
-                self.last_active_resume_time = resume_time
+            # If the stream has restarted, reset last_active_resume_time
+            if current_stream_id != self.status_info["last_stream_id"]:
+                self.status_info["last_stream_id"] = current_stream_id
+                self.status_info["last_active_resume_time"] = 0
+
+            # If the current resume time has advanced past the last active resume time, update and set status to
+            if current_resume_time > self.status_info["last_active_resume_time"]:
+                self.status_info["last_active_timestamp"] = current_time
+                self.status_info["last_active_resume_time"] = current_resume_time
                 self.status = utils.InstanceStatus.WATCHING
                 return
+
+        # If none of the above conditions are met, the stream is buffering
         self.status = utils.InstanceStatus.BUFFERING
 
     def todo_after_spawn(self):

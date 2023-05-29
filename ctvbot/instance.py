@@ -29,8 +29,7 @@ class Instance(ABC):
         self.playwright = None
         self.context = None
         self.browser = None
-        self.last_active_resume_time = 0
-        self.last_active_timestamp = None
+        self.status_info = {}
         self.status_reporter = status_reporter
         self.thread = threading.current_thread()
 
