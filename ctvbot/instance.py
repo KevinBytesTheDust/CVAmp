@@ -83,7 +83,7 @@ class Instance(ABC):
             self.todo_after_spawn()
             self.loop_and_check()
         except Exception as e:
-            logger.exception(f"{e} died at page {self.page.url}")
+            logger.exception(f"{e} died at page {self.page.url if self.page else None}")
             print(f"{self.name} Instance {self.id} died: {type(e).__name__}. Please see ctvbot.log.")
         else:
             logger.info(f"ENDED: instance {self.id}")
