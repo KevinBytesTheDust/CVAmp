@@ -21,7 +21,7 @@ class Unknown(Instance):
         pass
 
     def todo_after_spawn(self):
-        self.page.goto(self.target_url, timeout=60000)
+        self.goto_with_retry(self.target_url)
         self.page.wait_for_timeout(1000)
 
 
@@ -38,7 +38,7 @@ class Youtube(Instance):
         pass
 
     def todo_after_spawn(self):
-        self.page.goto(self.target_url, timeout=60000)
+        self.goto_with_retry(self.target_url)
         self.page.wait_for_timeout(1000)
         self.page.query_selector_all("button.yt-spec-button-shape-next--call-to-action")[-1].click()
         self.status = utils.InstanceStatus.INITIALIZED
@@ -57,7 +57,7 @@ class Kick(Instance):
         pass
 
     def todo_after_spawn(self):
-        self.page.goto(self.target_url, timeout=60000)
+        self.goto_with_retry(self.target_url)
         self.page.wait_for_timeout(1000)
 
         if 'cloudflare' in self.page.content().lower():
@@ -100,7 +100,7 @@ class Twitch(Instance):
         self.status = utils.InstanceStatus.BUFFERING
 
     def todo_after_spawn(self):
-        self.page.goto("https://www.twitch.tv/login", timeout=100000)
+        self.goto_with_retry("https://www.twitch.tv/login")
 
         twitch_settings = {
             "mature": "true",
@@ -126,7 +126,7 @@ class Twitch(Instance):
             }
         )
 
-        self.page.goto(self.target_url, timeout=60000)
+        self.goto_with_retry(self.target_url)
         self.page.wait_for_timeout(1000)
         self.page.wait_for_selector(".persistent-player", timeout=15000)
         self.page.keyboard.press("Alt+t")
