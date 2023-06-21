@@ -149,4 +149,9 @@ class Twitch(Instance):
         self.page.keyboard.press("Alt+t")
         self.page.wait_for_timeout(1000)
 
+        try:
+            self.page.click("button[data-a-target=content-classification-gate-overlay-start-watching-button]", timeout = 15000)
+        except:
+            logger.warning("banner 18+ not found/clicked.")
+
         self.status = utils.InstanceStatus.INITIALIZED
