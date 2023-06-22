@@ -7,10 +7,10 @@
 Disclaimer: For educational purpose only. Any discussion of illegal use will be deleted immediately! 
 
 Small GUI tool that spawns muted Google Chrome instances via [Playwright](https://github.com/microsoft/playwright-python), each with a different user-agent and HTTP proxy connection. 
-Each instance navigates to the twitch channel, activates theater mode and adheres itself to the available screen space. 
-Settings in localStorage ensure the lowest possible resolution. Only Twitch.tv is fully supported. Unstable support for kick.com, youtube.com and other streaming platforms.
+Each instance navigates to the streaming channel and selects the lowest possible resolution. 
+Twitch.tv is fully supported. Unstable support for kick.com, youtube.com and other streaming platforms.
 
-- Download the one-file executable for Windows from the [latest CTVBot release](https://github.com/jlplenio/crude-twitch-viewer-bot/releases/latest).  
+- Download the one-file executable for Windows, Linux and MacOS from the [latest CTVBot release](https://github.com/jlplenio/crude-twitch-viewer-bot/releases/latest).  
 
 Read the comprehensive [wiki](https://github.com/jlplenio/crude-twitch-viewer-bot/wiki) for a [detailed tutorial](https://github.com/jlplenio/crude-twitch-viewer-bot/wiki/Detailed-Tutorial), [usage tips](https://github.com/jlplenio/crude-twitch-viewer-bot/wiki/Advanced-features-and-controls) and [troubleshooting steps](https://github.com/jlplenio/crude-twitch-viewer-bot/wiki/Troubleshooting).
 
@@ -25,36 +25,33 @@ Read the comprehensive [wiki](https://github.com/jlplenio/crude-twitch-viewer-bo
 - Tested on Windows 10. Linux and macOS is experimental.
 - CPU load and bandwidth can get heavy. Channels with 160p work best.
 
+### Platform support overview
+
+| Platform       | Twitch             | Youtube            | Kick      |
+|----------------|--------------------|--------------------|-----------|
+| Functional     | :heavy_check_mark: | :heavy_check_mark: | :warning: |
+| Login/Auth     | :hourglass:        | :x:                | :x:       |
+| Lowest Quality | :heavy_check_mark: | :heavy_check_mark: | :x:       |
+| Status Updates | :heavy_check_mark: | :heavy_check_mark: | :x:       |
+
+:heavy_check_mark: Supported, :warning: Problems/Instability, :x: Unsupported, :hourglass: In Development 
+
 ### In Action
 
 ![](docs/gui.png)
 
-#### Color codes of the square boxes
+#### Controls and Color codes of the square boxes
 
 ⬛ - Instance is spawned.    🟨 - Instance is buffering.    🟩 - Instance is actively watching.
- 
-#### Headful Spawning
-![](docs/instances_spawning.gif)  
-(If you go headless, the browser windows will be invisible)  
 
+🖱️ Left click: Refresh page.
+🖱️ Right click: Destroy instance.
+🖱️ Left click + CTRL: Take screenshot.
 
-### Usage Windows
+### Usage
 
 Read the comprehensive [wiki](https://github.com/jlplenio/crude-twitch-viewer-bot/wiki) for a [detailed tutorial](https://github.com/jlplenio/crude-twitch-viewer-bot/wiki/Detailed-Tutorial), [usage tips](https://github.com/jlplenio/crude-twitch-viewer-bot/wiki/Advanced-features-and-controls) and [troubleshooting steps](https://github.com/jlplenio/crude-twitch-viewer-bot/wiki/Troubleshooting).
 
-#### Quickstart Steps
-Download the one-file executable for Windows from the [latest CTVB release](https://github.com/jlplenio/crude-twitch-viewer-bot/releases/latest).
-
-1. Extract zip file to a folder.
-2. Add your private proxies to [proxy_list.txt](proxy/proxy_list.txt)  
-Buy trusted proxies [here](https://www.webshare.io/?referral_code=w6nfvip4qp3g) or follow the [Webshare.io Proxies Guide](https://github.com/jlplenio/crude-twitch-viewer-bot/wiki/Webshare.io-Proxies-Guide).
-3. Start executable and wait for the GUI to appear.
-4. Spawn instances patiently.
-
-#### Interactions with the square boxes
-🖱️ Left click: Refresh page.  
-🖱️ Right click: Destroy instance.  
-🖱️ Left click + CTRL: Take screenshot (saved in root folder).   
 
 
 
