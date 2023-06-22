@@ -52,7 +52,6 @@ class Youtube(Instance):
             pass
 
     def update_status(self):
-
         current_time = datetime.datetime.now()
 
         if not self.status_info:
@@ -97,7 +96,7 @@ class Youtube(Instance):
         try:
             self.page.click(self.cookie_css, timeout=10000)
         except:
-            raise Exception("Cookie consent banner not found/clicked.")
+            logger.warning("Cookie consent banner not found/clicked.")
 
         for key, value in self.local_storage.items():
             tosend = """window.localStorage.setItem('{key}','{value}');""".format(key=key, value=value)

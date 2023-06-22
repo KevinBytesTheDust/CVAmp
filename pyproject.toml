@@ -11,7 +11,7 @@ psutil = "^5.9.0"
 toml = "^0.10.2"
 sv-ttk = "^0.1"
 pytest = "^7.1.2"
-black = "^22.6.0"
+black = "23.3.0"
 pylint = "^2.15.4"
 python-dateutil = "^2.8.2"
 
