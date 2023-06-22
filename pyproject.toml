@@ -13,6 +13,7 @@ sv-ttk = "^0.1"
 pytest = "^7.1.2"
 black = "^22.6.0"
 pylint = "^2.15.4"
+python-dateutil = "^2.8.2"
 
 [tool.poetry.dev-dependencies]
 pytest = "^7.1.2"

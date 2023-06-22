@@ -21,7 +21,7 @@ Read the comprehensive [wiki](https://github.com/jlplenio/crude-twitch-viewer-bo
 | Platform              |                  Twitch                   |      Youtube       |   Kick    |
 |-----------------------|:-----------------------------------------:|:------------------:|:---------:|
 | General Functionality |            :heavy_check_mark:             | :heavy_check_mark: | :warning: |
-| Lowest Quality Select |            :heavy_check_mark:             | :heavy_check_mark: |    :x:    |
+| Lowest Quality Select |            :heavy_check_mark:             | :heavy_check_mark: |    :heavy_check_mark:    |
 | Status Boxes Updates  |            :heavy_check_mark:             | :heavy_check_mark: |    :x:    |
 | Login/Authentication  | [:gem:](https://ko-fi.com/jlplenio/tiers) |        :x:         |    :x:    |
 
