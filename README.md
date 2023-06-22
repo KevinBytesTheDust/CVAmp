@@ -9,7 +9,7 @@
 Download the one-file executable for Windows, Linux and MacOS from the [latest CTVBot release](https://github.com/jlplenio/crude-twitch-viewer-bot/releases/latest).  
 Read the comprehensive [wiki](https://github.com/jlplenio/crude-twitch-viewer-bot/wiki) for a [detailed tutorial](https://github.com/jlplenio/crude-twitch-viewer-bot/wiki/Detailed-Tutorial), [usage tips](https://github.com/jlplenio/crude-twitch-viewer-bot/wiki/Advanced-features-and-controls) and [troubleshooting steps](https://github.com/jlplenio/crude-twitch-viewer-bot/wiki/Troubleshooting).
 
-[:coffee: You can sponsor me a coffee](https://ko-fi.com/jlplenio) if you enjoy this tool and want to support its continued development. 
+[:coffee: Sponsor me a coffee](https://ko-fi.com/jlplenio) or become a :gem: [Supporter & Feature Tester](https://ko-fi.com/jlplenio/tiers) to support the development. 
 
 ### Mandatory Requirements
 - You need to provide your own private HTTP proxies to the [proxy_list.txt](proxy/proxy_list.txt)  
@@ -18,14 +18,14 @@ Read the comprehensive [wiki](https://github.com/jlplenio/crude-twitch-viewer-bo
 
 ### Platform Support Overview
 
-| Platform              |       Twitch       |      Youtube       |   Kick    |
-|-----------------------|:------------------:|:------------------:|:---------:|
-| General Functionality | :heavy_check_mark: | :heavy_check_mark: | :warning: |
-| Lowest Quality Select | :heavy_check_mark: | :heavy_check_mark: |    :x:    |
-| Status Boxes Updates  | :heavy_check_mark: | :heavy_check_mark: |    :x:    |
-| Login/Authentication  |    :hourglass:     |        :x:         |    :x:    |
+| Platform              |                  Twitch                   |      Youtube       |   Kick    |
+|-----------------------|:-----------------------------------------:|:------------------:|:---------:|
+| General Functionality |            :heavy_check_mark:             | :heavy_check_mark: | :warning: |
+| Lowest Quality Select |            :heavy_check_mark:             | :heavy_check_mark: |    :x:    |
+| Status Boxes Updates  |            :heavy_check_mark:             | :heavy_check_mark: |    :x:    |
+| Login/Authentication  | [:gem:](https://ko-fi.com/jlplenio/tiers) |        :x:         |    :x:    |
 
-:heavy_check_mark: Supported, :warning: Problems/Instability, :x: Unsupported, :hourglass: In Development 
+:heavy_check_mark: Supported, :warning: Problems/Instability, :x: Unsupported, [:gem: In Development](https://ko-fi.com/jlplenio/tiers) 
 
 ### In Action
 
