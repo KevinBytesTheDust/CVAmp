@@ -1,6 +1,9 @@
 import datetime
 import json
 import logging
+import time
+
+from dateutil.relativedelta import relativedelta
 
 from ctvbot import utils
 from ctvbot.instance import Instance
@@ -27,6 +30,15 @@ class Unknown(Instance):
 
 class Youtube(Instance):
     name = "YOUTUBE"
+    cookie_css = ".eom-button-row.style-scope.ytd-consent-bump-v2-lightbox > ytd-button-renderer:nth-child(1) button"
+
+    now_timestamp_ms = int(time.time() * 1000)
+    next_year_timestamp_ms = int((datetime.datetime.now() + relativedelta(years=1)).timestamp() * 1000)
+    local_storage = {
+        "yt-player-quality": r"""{{"data":"{{\\"quality\\":144,\\"previousQuality\\":144}}","expiration":{0},"creation":{1}}}""".format(
+            next_year_timestamp_ms, now_timestamp_ms
+        ),
+    }
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -34,18 +46,74 @@ class Youtube(Instance):
     def todo_every_loop(self):
         self.page.keyboard.press("Tab")
 
+        try:
+            self.page.click("button.ytp-ad-skip-button", timeout=100)
+        except:
+            pass
+
     def update_status(self):
-        pass
+        current_time = datetime.datetime.now()
+
+        if not self.status_info:
+            self.status_info = {
+                "last_active_resume_time": 0,
+                "last_active_timestamp": current_time - datetime.timedelta(seconds=10),
+                "last_stream_id": None,
+            }
+
+        # If the stream was active less than 10 seconds ago, it's still being watched
+        time_since_last_activity = current_time - self.status_info["last_active_timestamp"]
+        if time_since_last_activity < datetime.timedelta(seconds=15):
+            self.status = utils.InstanceStatus.WATCHING
+            return
+
+        # Fetch the current resume time for the stream
+        current_resume_time = int(
+            self.page.evaluate(
+                '''() => {
+            const element = document.querySelector(".ytp-progress-bar");
+            return element.getAttribute("aria-valuenow");
+        }'''
+            )
+        )
+
+        if current_resume_time:
+            # If the current resume time has advanced past the last active resume time, update and set status to
+            if current_resume_time > self.status_info["last_active_resume_time"]:
+                self.status_info["last_active_timestamp"] = current_time
+                self.status_info["last_active_resume_time"] = current_resume_time
+                self.status = utils.InstanceStatus.WATCHING
+                return
+
+        # If none of the above conditions are met, the stream is buffering
+        self.status = utils.InstanceStatus.BUFFERING
 
     def todo_after_spawn(self):
-        self.goto_with_retry(self.target_url)
+        self.goto_with_retry("https://www.youtube.com/")
+
         self.page.wait_for_timeout(1000)
-        self.page.query_selector_all("button.yt-spec-button-shape-next--call-to-action")[-1].click()
+
+        try:
+            self.page.click(self.cookie_css, timeout=10000)
+        except:
+            logger.warning("Cookie consent banner not found/clicked.")
+
+        for key, value in self.local_storage.items():
+            tosend = """window.localStorage.setItem('{key}','{value}');""".format(key=key, value=value)
+            self.page.evaluate(tosend)
+
+        self.goto_with_retry(self.target_url)
+        self.page.keyboard.press("t")
         self.status = utils.InstanceStatus.INITIALIZED
 
 
 class Kick(Instance):
     name = "KICK"
+    local_storage = {
+        "agreed_to_mature_content": "true",
+        "kick_cookie_accepted": "true",
+        "kick_video_size": "160p",
+    }
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -57,15 +125,29 @@ class Kick(Instance):
         pass
 
     def todo_after_spawn(self):
+        self.goto_with_retry("https://kick.com/auth/login")
+        self.page.wait_for_timeout(5000)
+
+        for key, value in self.local_storage.items():
+            tosend = """window.localStorage.setItem('{key}','{value}');""".format(key=key, value=value)
+            self.page.evaluate(tosend)
+
         self.goto_with_retry(self.target_url)
         self.page.wait_for_timeout(1000)
-
         if 'cloudflare' in self.page.content().lower():
             raise utils.CloudflareBlockException("Blocked by Cloudflare.")
 
 
 class Twitch(Instance):
     name = "TWITCH"
+    cookie_css = "button[data-a-target=consent-banner-accept]"
+    local_storage = {
+        "mature": "true",
+        "video-muted": '{"default": "false"}',
+        "volume": "0.5",
+        "video-quality": '{"default": "160p30"}',
+        "lowLatencyModeEnabled": "false",
+    }
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -119,20 +201,12 @@ class Twitch(Instance):
     def todo_after_spawn(self):
         self.goto_with_retry("https://www.twitch.tv/login")
 
-        twitch_settings = {
-            "mature": "true",
-            "video-muted": '{"default": "false"}',
-            "volume": "0.5",
-            "video-quality": '{"default": "160p30"}',
-            "lowLatencyModeEnabled": "false",
-        }
-
         try:
-            self.page.click("button[data-a-target=consent-banner-accept]", timeout=15000)
+            self.page.click(self.cookie_css, timeout=15000)
         except:
             logger.warning("Cookie consent banner not found/clicked.")
 
-        for key, value in twitch_settings.items():
+        for key, value in self.local_storage.items():
             tosend = """window.localStorage.setItem('{key}','{value}');""".format(key=key, value=value)
             self.page.evaluate(tosend)
 
@@ -150,8 +224,10 @@ class Twitch(Instance):
         self.page.wait_for_timeout(1000)
 
         try:
-            self.page.click("button[data-a-target=content-classification-gate-overlay-start-watching-button]", timeout = 15000)
+            self.page.click(
+                "button[data-a-target=content-classification-gate-overlay-start-watching-button]", timeout=15000
+            )
         except:
-            logger.warning("banner 18+ not found/clicked.")
+            logger.info("Mature button not found/clicked.")
 
         self.status = utils.InstanceStatus.INITIALIZED
