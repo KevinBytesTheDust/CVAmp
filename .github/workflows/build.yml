@@ -1,7 +1,10 @@
 name: Build and Test
 
-on: [pull_request]
-
+on:
+  push:
+    tags:
+      - "v*"
+  workflow_dispatch: {}
 env:
   PLAYWRIGHT_BROWSERS_PATH: 0
 
