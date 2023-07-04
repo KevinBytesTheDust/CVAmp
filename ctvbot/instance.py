@@ -135,7 +135,6 @@ class Instance(ABC):
             channel="chrome",
             args=[
                 "--window-position={},{}".format(self.location_info["x"], self.location_info["y"]),
-                "--mute-audio",
             ],
         )
         self.context = self.browser.new_context(
