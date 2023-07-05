@@ -221,6 +221,7 @@ class Twitch(Instance):
         self.page.wait_for_timeout(1000)
         self.page.wait_for_selector(".persistent-player", timeout=15000)
         self.page.keyboard.press("Alt+t")
+        self.page.keyboard.press("m")
         self.page.wait_for_timeout(1000)
 
         try:
