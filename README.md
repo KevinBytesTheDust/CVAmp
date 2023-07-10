@@ -23,9 +23,11 @@ Read the comprehensive [wiki](https://github.com/jlplenio/crude-twitch-viewer-bo
 | General Functionality |            :heavy_check_mark:             | :heavy_check_mark: | :warning: |
 | Lowest Quality Select |            :heavy_check_mark:             | :heavy_check_mark: |    :heavy_check_mark:    |
 | Status Boxes Updates  |            :heavy_check_mark:             | :heavy_check_mark: |    :x:    |
-| Login/Authentication  | ⏳[:gem:](https://ko-fi.com/jlplenio/tiers) |        :x:         |    :x:    |
+| Login/Authentication  | ⏳[:gem:](https://github.com/jlplenio/crude-twitch-viewer-bot/discussions/categories/supporter-feature-tester) |        :x:         |    :x:    |
+| Automatic Follow | ⏳[:gem:](https://github.com/jlplenio/crude-twitch-viewer-bot/discussions/categories/supporter-feature-tester)  |        :x:         |    :x:    |
+| Automatic Chat | ⏳ |        :x:         |    :x:    |
 
-:heavy_check_mark: Supported, :warning: Problems, :x: Unsupported, ⏳ In Development, [:gem: Preview Available](https://ko-fi.com/jlplenio/tiers) 
+:heavy_check_mark: Supported, :warning: Problems, :x: Unsupported, ⏳ In Development, [:gem: Preview Available](https://github.com/jlplenio/crude-twitch-viewer-bot/discussions/categories/supporter-feature-tester) 
 
 ### In Action
 
