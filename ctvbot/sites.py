@@ -225,7 +225,7 @@ class Twitch(Instance):
 
         try:
             self.page.click(
-                "button[data-a-target=content-classification-gate-overlay-start-watching-button]", timeout=15000
+                "button[data-a-target=content-classification-gate-overlay-start-watching-button]", timeout=3000
             )
         except:
             logger.info("Mature button not found/clicked.")
