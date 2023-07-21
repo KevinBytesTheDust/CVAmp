@@ -267,7 +267,5 @@ class GUI:
 
         sys.stdout.write = redirector
 
-        print("Status detection (watching/buffering) is only supported for Twitch.tv channels.\n")
-
         root.resizable(False, False)
         root.mainloop()

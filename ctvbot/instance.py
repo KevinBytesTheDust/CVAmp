@@ -95,7 +95,7 @@ class Instance(ABC):
             self.location_info["free"] = True
 
     def loop_and_check(self):
-        page_timeout_s = 5
+        page_timeout_s = 10
         while True:
             self.page.wait_for_timeout(page_timeout_s * 1000)
             self.todo_every_loop()
