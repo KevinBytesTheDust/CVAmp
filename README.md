@@ -25,7 +25,7 @@ Read the comprehensive [wiki](https://github.com/jlplenio/crude-twitch-viewer-bo
 | Status Boxes Updates  |            :heavy_check_mark:             | :heavy_check_mark: |    :x:    |
 | Login/Authentication  | ⏳[:gem:](https://github.com/jlplenio/crude-twitch-viewer-bot/discussions/categories/supporter-feature-tester) |        :x:         |    :x:    |
 | Automatic Follow | ⏳[:gem:](https://github.com/jlplenio/crude-twitch-viewer-bot/discussions/categories/supporter-feature-tester)  |        :x:         |    :x:    |
-| Automatic Chat | ⏳ |        :x:         |    :x:    |
+| Automatic Chat | ⏳[:gem:](https://github.com/jlplenio/crude-twitch-viewer-bot/discussions/categories/supporter-feature-tester) |        :x:         |    :x:    |
 
 :heavy_check_mark: Supported, :warning: Problems, :x: Unsupported, ⏳ In Development, [:gem: Preview Available](https://github.com/jlplenio/crude-twitch-viewer-bot/discussions/categories/supporter-feature-tester) 
 
