@@ -1,9 +1,6 @@
 name: Build and Release
 
-on:
-  push:
-    tags:
-      - "v*"
+on: [pull_request]
 
 env:
   PLAYWRIGHT_BROWSERS_PATH: 0
@@ -53,7 +50,7 @@ jobs:
         if [ "$RUNNER_OS" == "Windows" ]; then
           poetry run pyinstaller main_gui.py --onefile --add-binary "ctvbot_logo.ico;." --add-binary "pyproject.toml;." --icon ctvbot_logo.ico --name ${{env.output_filename}}
         else
-          poetry run pyinstaller main_gui.py --onefile --add-binary "ctvbot_logo.ico:." --add-binary "pyproject.toml:." --icon ctvbot_logo.ico --name ${{env.output_filename}}.bin
+          poetry run pyinstaller main_gui.py --onefile --add-binary "ctvbot_logo.ico:." --add-binary "pyproject.toml:." --icon ctvbot_logo.ico --name ${{env.output_filename}}.bin --windowed
         fi
         mv ./proxy/ ./dist/
 
