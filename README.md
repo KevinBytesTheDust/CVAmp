@@ -11,7 +11,7 @@ Download the one-file executable for Windows, Linux and MacOS from the [latest C
 Read the comprehensive [wiki](https://github.com/jlplenio/crude-twitch-viewer-bot/wiki) for a [detailed tutorial](https://github.com/jlplenio/crude-twitch-viewer-bot/wiki/Detailed-Tutorial), [usage tips](https://github.com/jlplenio/crude-twitch-viewer-bot/wiki/Advanced-features-and-controls) and [troubleshooting steps](https://github.com/jlplenio/crude-twitch-viewer-bot/wiki/Troubleshooting).  
 Ask questions in the [discussions](https://github.com/jlplenio/crude-twitch-viewer-bot/discussions) or [report issues](https://github.com/jlplenio/crude-twitch-viewer-bot/issues).
 
-:coffee: [Sponsor me a coffee](https://ko-fi.com/jlplenio) or become a :gem: [Supporter & Feature Tester](https://ko-fi.com/jlplenio/posts) to support the development. 
+Get exlusive Feature Previews as a [:gem: Supporter & Feature Tester](https://ko-fi.com/jlplenio/posts).
 
 ### Mandatory Requirements
 - You need to provide your own private HTTP proxies to the [proxy_list.txt](proxy/proxy_list.txt)  
@@ -50,6 +50,8 @@ Ask questions in the [discussions](https://github.com/jlplenio/crude-twitch-view
 The Crude Twitch Viewer Bot (CTVBot) is a small GUI tool that spawns muted Google Chrome instances via [Playwright](https://github.com/microsoft/playwright-python), each with a different user-agent and HTTP proxy connection. Each instance navigates to the streaming channel and selects the lowest possible resolution.
 
 Read the comprehensive [wiki](https://github.com/jlplenio/crude-twitch-viewer-bot/wiki) for a [detailed tutorial](https://github.com/jlplenio/crude-twitch-viewer-bot/wiki/Detailed-Tutorial), [usage tips](https://github.com/jlplenio/crude-twitch-viewer-bot/wiki/Advanced-features-and-controls) and [troubleshooting steps](https://github.com/jlplenio/crude-twitch-viewer-bot/wiki/Troubleshooting).
+
+Support my creativity and [sponsor me a coffee :coffee:](https://ko-fi.com/jlplenio)
 
 ### Full disclaimer
 This project was established to contribute to open-source collaboration and showcase the educational value of reverse engineering. Although its primary purpose is for learning and understanding, users must be aware that altering viewer metrics on platforms such as Twitch violates their Terms of Service and could lead to legal repercussions. We urge users to engage with this tool responsibly. Misuse is solely at your discretion and risk. Discussions promoting illegal activities will be promptly removed.
