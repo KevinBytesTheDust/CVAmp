@@ -4,7 +4,7 @@
 [![format & lint](https://github.com/jlplenio/crude-twitch-viewer-bot/actions/workflows/format_lint.yml/badge.svg)](https://github.com/jlplenio/crude-twitch-viewer-bot/actions/workflows/format_lint.yml)
 [![](https://github.com/jlplenio/crude-twitch-viewer-bot/actions/workflows/build.yml/badge.svg)](https://github.com/jlplenio/crude-twitch-viewer-bot/actions/workflows/build.yml)
 
->Disclaimer: For educational purpose only. Any discussion of illegal use will be deleted immediately!
+>Disclaimer: For educational purpose only. Any discussion of illegal use will be deleted immediately!  
 >Full disclaimer below.
 ### Getting Started
 Download the one-file executable for Windows, Linux and MacOS from the [latest CTVBot release](https://github.com/jlplenio/crude-twitch-viewer-bot/releases/latest).  
