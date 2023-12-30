@@ -25,11 +25,11 @@ Get exlusive Feature Previews as a [:gem: Supporter & Feature Tester](https://ko
 | General Functionality |            :heavy_check_mark:             | :heavy_check_mark: | :warning: |
 | Lowest Quality Select |            :heavy_check_mark:             | :heavy_check_mark: |    :heavy_check_mark:    |
 | Status Boxes Updates  |            :heavy_check_mark:             | :heavy_check_mark: |    :x:    |
-| Login/Authentication  | ⏳[:gem:](https://github.com/jlplenio/crude-twitch-viewer-bot/discussions/219) |        :x:         |    :x:    |
-| Automatic Follow | ⏳[:gem:](https://github.com/jlplenio/crude-twitch-viewer-bot/discussions/219)  |        :x:         |    :x:    |
-| Automatic Chat | ⏳[:gem:](https://github.com/jlplenio/crude-twitch-viewer-bot/discussions/219) |        :x:         |    :x:    |
+| Login/Authentication  | ⏳[:gem:](https://github.com/jlplenio/crude-twitch-viewer-bot/discussions/235) |        :x:         |    :x:    |
+| Automatic Follow | ⏳[:gem:](https://github.com/jlplenio/crude-twitch-viewer-bot/discussions/235)  |        :x:         |    :x:    |
+| Automatic Chat | ⏳[:gem:](https://github.com/jlplenio/crude-twitch-viewer-bot/discussions/235) |        :x:         |    :x:    |
 
-:heavy_check_mark: Supported, :warning: Problems, :x: Unsupported, ⏳ In Development, [:gem: Preview Available](https://github.com/jlplenio/crude-twitch-viewer-bot/discussions/219) 
+:heavy_check_mark: Supported, :warning: Problems, :x: Unsupported, ⏳ In Development, [:gem: Preview Available](https://github.com/jlplenio/crude-twitch-viewer-bot/discussions/235) 
 
 ### In Action
 
