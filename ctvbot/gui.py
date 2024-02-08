@@ -169,7 +169,7 @@ class GUI:
         # mid log
         channel_url = tk.Entry(root, width=40, name="channel_url_entry")
         channel_url.place(x=180, y=10)
-        channel_url.insert(0, "https://www.twitch.tv/channel_name")
+        channel_url.insert(0, "https://www.twitch.tv/capybara2c")
 
         spawn_one = tk.Button(
             root,
