@@ -1,6 +1,9 @@
 name: Build and Test
 
-on: [push]
+on:
+  push:
+    tags:
+      - "v*"
 
 env:
   PLAYWRIGHT_BROWSERS_PATH: 0
