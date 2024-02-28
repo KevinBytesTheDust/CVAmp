@@ -54,7 +54,7 @@ jobs:
         else
           poetry run pyinstaller main_gui.py --onefile --add-binary "ctvbot_logo.ico:." --hidden-import=tkinter --add-binary "pyproject.toml:." --icon ctvbot_logo.ico --name ${{env.output_filename}}.bin
         fi
-        mv ./config/ ./dist/
+        mv ./proxy/ ./dist/
 
     - name: Zip executable
       uses: vimtor/action-zip@v1
