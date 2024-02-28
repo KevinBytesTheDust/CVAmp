@@ -13,20 +13,19 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        os: [windows-latest, macos-latest, ubuntu-latest]
-        python-version: [3.9]
+        os: [windows-2022, ubuntu-22.04, macos-12, macos-14] #14 is M1
+        python-version: [3.11]
 
     runs-on: ${{ matrix.os }}
 
     name: Build ${{ matrix.os }} executable
     steps:
     - uses: actions/checkout@v3
-    - name: Install poetry
-      run: pipx install poetry
-    - uses: actions/setup-python@v4
+    - uses: actions/setup-python@v5
       with:
         python-version: ${{ matrix.python-version }}
-#        cache: 'poetry'
+    - name: Install poetry
+      run: pip install poetry
     - name: Get packages via poetry
       run: poetry install
 
@@ -42,9 +41,9 @@ jobs:
       run: |
         export today=$(date +'%Y%m%d')
         if [ "$RUNNER_OS" == "Windows" ]; then
-          echo "output_filename=CTVBot${{steps.read_toml.outputs.value}}_${today}_${{runner.os}}" >> $GITHUB_ENV
+          echo "output_filename=CTVBot${{steps.read_toml.outputs.value}}_${today}_${{runner.os}}-${{runner.arch}}" >> $GITHUB_ENV
         else
-          echo "output_filename=CTVBot${{steps.read_toml.outputs.value}}_${today}_${{runner.os}}_experimental" >> $GITHUB_ENV
+          echo "output_filename=CTVBot${{steps.read_toml.outputs.value}}_${today}_${{runner.os}}-${{runner.arch}}_experimental" >> $GITHUB_ENV
         fi
 
     - name: Build executable
@@ -53,9 +52,9 @@ jobs:
         if [ "$RUNNER_OS" == "Windows" ]; then
           poetry run pyinstaller main_gui.py --onefile --add-binary "ctvbot_logo.ico;." --add-binary "pyproject.toml;." --icon ctvbot_logo.ico --name ${{env.output_filename}}
         else
-          poetry run pyinstaller main_gui.py --onefile --add-binary "ctvbot_logo.ico:." --add-binary "pyproject.toml:." --icon ctvbot_logo.ico --name ${{env.output_filename}}.bin
+          poetry run pyinstaller main_gui.py --onefile --add-binary "ctvbot_logo.ico:." --hidden-import=tkinter --add-binary "pyproject.toml:." --icon ctvbot_logo.ico --name ${{env.output_filename}}.bin
         fi
-        mv ./proxy/ ./dist/
+        mv ./config/ ./dist/
 
     - name: Zip executable
       uses: vimtor/action-zip@v1
