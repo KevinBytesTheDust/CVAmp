@@ -7,7 +7,9 @@
 >Disclaimer: For educational purpose only. Any discussion of illegal use will be deleted immediately!  
 >Full disclaimer below.
 ### Getting Started
-Download the one-file executable for Windows, Linux and MacOS from the [latest CTVBot release](https://github.com/jlplenio/crude-twitch-viewer-bot/releases/latest).  
+1. Download the one-file executable for Windows, Linux and MacOS from the [latest CTVBot release](https://github.com/jlplenio/crude-twitch-viewer-bot/releases/latest).  
+2. Provide your own proxies or get 10 free for testing [here](https://www.webshare.io/?referral_code=w6nfvip4qp3g). See our [Proxies Guide](https://github.com/jlplenio/crude-twitch-viewer-bot/wiki/Webshare.io-Proxies-Guide) for setup.
+   
 Read the comprehensive [wiki](https://github.com/jlplenio/crude-twitch-viewer-bot/wiki) for a [detailed tutorial](https://github.com/jlplenio/crude-twitch-viewer-bot/wiki/Detailed-Tutorial), [usage tips](https://github.com/jlplenio/crude-twitch-viewer-bot/wiki/Advanced-features-and-controls) and [troubleshooting steps](https://github.com/jlplenio/crude-twitch-viewer-bot/wiki/Troubleshooting).  
 Ask questions in the [discussions](https://github.com/jlplenio/crude-twitch-viewer-bot/discussions) or [report issues](https://github.com/jlplenio/crude-twitch-viewer-bot/issues).
 
@@ -15,7 +17,7 @@ Get exlusive Feature Previews as a [:gem: Supporter & Feature Tester](https://ko
 
 ### Mandatory Requirements
 - You need to provide your own private HTTP proxies to the [proxy_list.txt](proxy/proxy_list.txt)  
-  Buy trusted proxies [here](https://www.webshare.io/?referral_code=w6nfvip4qp3g) or follow the [Webshare.io Proxies Guide](https://github.com/jlplenio/crude-twitch-viewer-bot/wiki/Webshare.io-Proxies-Guide).
+  Receive 10 free proxies to test [here](https://www.webshare.io/?referral_code=w6nfvip4qp3g) or follow the [Webshare.io Proxies Guide](https://github.com/jlplenio/crude-twitch-viewer-bot/wiki/Webshare.io-Proxies-Guide).
 - Chrome needs to be already installed on your system.
 
 ### Platform Support Overview
