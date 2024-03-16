@@ -17,7 +17,7 @@ Get exlusive Feature Previews as a [:gem: Supporter & Feature Tester](https://ko
 
 ### Mandatory Requirements
 - You need to provide your own private HTTP proxies to the [proxy_list.txt](proxy/proxy_list.txt)  
-  Receive 10 free proxies to test [here](https://www.webshare.io/?referral_code=w6nfvip4qp3g) or follow the [Webshare.io Proxies Guide](https://github.com/jlplenio/crude-twitch-viewer-bot/wiki/Webshare.io-Proxies-Guide).
+  Get 10 free proxies for testing [here](https://www.webshare.io/?referral_code=w6nfvip4qp3g) or follow the [Webshare.io Proxies Guide](https://github.com/jlplenio/crude-twitch-viewer-bot/wiki/Webshare.io-Proxies-Guide).
 - Chrome needs to be already installed on your system.
 
 ### Platform Support Overview
