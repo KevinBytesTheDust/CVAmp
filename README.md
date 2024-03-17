@@ -30,6 +30,7 @@ Get exlusive Feature Previews as a [:gem: Supporter & Feature Tester](https://ko
 | Login/Authentication  | ⏳[:gem:](https://github.com/jlplenio/crude-twitch-viewer-bot/discussions/235) |        :x:         |    :x:    |
 | Automatic Follow | ⏳[:gem:](https://github.com/jlplenio/crude-twitch-viewer-bot/discussions/235)  |        :x:         |    :x:    |
 | Automatic Chat | ⏳[:gem:](https://github.com/jlplenio/crude-twitch-viewer-bot/discussions/235) |        :x:         |    :x:    |
+| Low CPU Usage Mode | ⏳[:gem:](https://github.com/jlplenio/crude-twitch-viewer-bot/discussions/235) |        :x:         |    :x:    |
 
 :heavy_check_mark: Supported, :warning: Problems, :x: Unsupported, ⏳ In Development, [:gem: Preview Available](https://github.com/jlplenio/crude-twitch-viewer-bot/discussions/235) 
 
