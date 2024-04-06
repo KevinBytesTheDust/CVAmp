@@ -18,14 +18,9 @@ jobs:
 
     steps:
     - uses: actions/checkout@v3
+    - uses: actions/setup-python@v5
     - name: Install poetry
-      run: pipx install poetry
-
-    - uses: actions/setup-python@v4
-      with:
-        python-version: ${{ matrix.python-version }}
-        # uses cache if poetry.lock is unchanged
-        cache: 'poetry'
+      run: pip install poetry
     - name: Get packages via poetry
       run: poetry install
 

@@ -91,8 +91,7 @@ class Youtube(Instance):
     now_timestamp_ms = int(time.time() * 1000)
     next_year_timestamp_ms = int((datetime.datetime.now() + relativedelta(years=1)).timestamp() * 1000)
     local_storage = {
-        "yt-player-quality": r"""{{"data":"{{\\"quality\\":144,\\"previousQuality\\":144}}","expiration":{0},
-        "creation":{1}}}""".format(
+        "yt-player-quality": r"""{{"data":"{{\\"quality\\":144,\\"previousQuality\\":144}}","expiration":{0},"creation":{1}}}""".format(
             next_year_timestamp_ms, now_timestamp_ms
         ),
     }
