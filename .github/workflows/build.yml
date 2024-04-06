@@ -7,53 +7,60 @@ env:
 
 jobs:
   build:
-    #if: ${{ github.event.workflow_run.conclusion == 'success' }}
     strategy:
       fail-fast: false
       matrix:
-        os: [windows-latest]
-        python-version: [3.11] #3.7, 3.8
+        os: [ubuntu-20.04]
+        python-version: [3.11]
 
     runs-on: ${{ matrix.os }}
 
-    name: Build PyInstaller executable ${{ matrix.os }} + Py ${{ matrix.python-version }}
+    name: Build ${{ matrix.os }} executable
     steps:
     - uses: actions/checkout@v3
-    - name: Install poetry
-      run: pipx install poetry
-    - uses: actions/setup-python@v4
+    - uses: actions/setup-python@v5
       with:
         python-version: ${{ matrix.python-version }}
-#        cache: 'poetry'
+    - name: Install poetry
+      run: pip install poetry
     - name: Get packages via poetry
       run: poetry install
 
-#    chrome is not packaged within site-packages, chromium could be used as fallback in the future, but size ~100MB
-#    - name: Install playwright
-#      run: |
-#        poetry run python -m playwright install chromium
-#        poetry run python -m playwright install chrome
-#        ls
-
-    - name: Create date env variable
-      shell: bash
-      run: |
-        echo "today=$(date +'%Y%m%d')" >> $GITHUB_ENV
-
-    - name: Get CTVB version number
+    - name: Get CTVBot version number
       uses: SebRollen/toml-action@v1.0.0
       id: read_toml
       with:
         file: 'pyproject.toml'
         field: 'tool.poetry.version'
 
-    - name: Build executable
+    - name: Create date and file name env variable
+      shell: bash
       run: |
-        poetry run pyinstaller main_gui.py --onefile --add-binary "ctvbot_logo.ico;." --add-binary "pyproject.toml;." --icon ctvbot_logo.ico --name CTVB_${{steps.read_toml.outputs.value}}_${{env.today}}
+        export today=$(date +'%Y%m%d')
+        if [ "$RUNNER_OS" == "Windows" ]; then
+          echo "output_filename=CTVBot${{steps.read_toml.outputs.value}}_${today}_${{runner.os}}-${{runner.arch}}" >> $GITHUB_ENV
+        else
+          echo "output_filename=CTVBot${{steps.read_toml.outputs.value}}_${today}_${{runner.os}}-${{runner.arch}}_experimental" >> $GITHUB_ENV
+        fi
+
+    - name: Build executable
+      shell: bash
+      run: |
+        if [ "$RUNNER_OS" == "Windows" ]; then
+          poetry run pyinstaller main_gui.py --onefile --add-binary "ctvbot_logo.ico;." --add-binary "pyproject.toml;." --icon ctvbot_logo.ico --name ${{env.output_filename}}
+        else
+          poetry run pyinstaller main_gui.py --onefile --add-binary "ctvbot_logo.ico:." --hidden-import=tkinter --add-binary "pyproject.toml:." --icon ctvbot_logo.ico --name ${{env.output_filename}}.bin
+        fi
         mv ./proxy/ ./dist/
 
-    - name: Upload artifact ${{ matrix.os }}
+    - name: Zip executable
+      uses: vimtor/action-zip@v1
+      with:
+        files: dist/
+        dest: ${{env.output_filename}}.zip
+
+    - name: Upload zipped artifact ${{ matrix.os }}
       uses: actions/upload-artifact@v1
       with:
-        name: CTVB_${{ steps.read_toml.outputs.value }}_${{ env.today }}
-        path: dist/
+        name: ${{env.output_filename}}
+        path: ${{env.output_filename}}.zip

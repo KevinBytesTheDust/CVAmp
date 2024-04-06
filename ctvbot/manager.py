@@ -7,6 +7,7 @@ import threading
 import time
 
 from . import logger_config, utils, sites
+from .instance import Instance
 
 logger_config.setup()
 from .proxy import ProxyGetter
@@ -110,7 +111,7 @@ class InstanceManager:
             time.sleep(self.spawn_interval_seconds)
 
     def get_site_class(self, target_url):
-        for site_name, site_class in utils.supported_sites.items():
+        for site_name, site_class in Instance.supported_sites.items():
             if site_name in target_url:
                 return site_class
 
@@ -167,7 +168,7 @@ class InstanceManager:
 
             server_ip = proxy.get("server", "no proxy")
             logger.info(
-                f"Ordered {site_class.name} instance {browser_instance_id}, {threading.currentThread().name}, proxy {server_ip}, user_agent {user_agent}"
+                f"Ordered {site_class.site_name} instance {browser_instance_id}, {threading.currentThread().name}, proxy {server_ip}, user_agent {user_agent}"
             )
 
             browser_instance = site_class(

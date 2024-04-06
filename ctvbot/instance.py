@@ -12,8 +12,10 @@ logger = logging.getLogger(__name__)
 
 
 class Instance(ABC):
-    name = "BASE"
+    site_name = "BASE"
+    site_url = None
     instance_lock = threading.Lock()
+    supported_sites = dict()
 
     def __init__(
         self,
@@ -57,6 +59,10 @@ class Instance(ABC):
         self.command = None
         self.page = None
 
+    def __init_subclass__(cls, **kwargs):
+        if cls.site_name != "UNKNOWN":
+            cls.supported_sites[cls.site_url] = cls
+
     @property
     def status(self):
         return self._status
@@ -84,7 +90,7 @@ class Instance(ABC):
         except Exception as e:
             message = e.args[0][:25] if e.args else ""
             logger.exception(f"{e} died at page {self.page.url if self.page else None}")
-            print(f"{self.name} Instance {self.id} died: {type(e).__name__}:{message}... Please see ctvbot.log.")
+            print(f"{self.site_name} Instance {self.id} died: {type(e).__name__}:{message}... Please see ctvbot.log.")
         else:
             logger.info(f"ENDED: instance {self.id}")
             with self.instance_lock:

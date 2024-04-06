@@ -12,7 +12,8 @@ logger = logging.getLogger(__name__)
 
 
 class Unknown(Instance):
-    name = "UNKNOWN"
+    site_name = "UNKNOWN"
+    site_url = None
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -28,14 +29,70 @@ class Unknown(Instance):
         self.page.wait_for_timeout(1000)
 
 
+class Chzzk(Instance):
+    site_name = "CHZZK"
+    site_url = "chzzk.naver.com"
+
+    local_storage = {"live-player-video-track": r"""{"label":"360p","kind":"low-latency","width":640,"height":360}"""}
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.status_info = {}
+
+    def todo_every_loop(self):
+        try:
+            self.page.click("button.btn_skip", timeout=100)
+        except:
+            pass
+
+    def update_status(self):
+        html = self.page.evaluate('document.querySelector("div#live_player_layout").innerHTML')
+        if "pzp-pc--live" in html:
+            if "pzp-pc--loading" not in html:
+                self.status = utils.InstanceStatus.WATCHING
+                return
+        self.status = utils.InstanceStatus.BUFFERING
+
+    def todo_after_spawn(self):
+        self.goto_with_retry("https://chzzk.naver.com/category")
+
+        self.page.wait_for_timeout(1000)
+
+        for key, value in self.local_storage.items():
+            tosend = """window.localStorage.setItem('{key}','{value}');""".format(key=key, value=value)
+            self.page.evaluate(tosend)
+
+        self.goto_with_retry(self.target_url)
+
+        self.page.wait_for_selector("#live_player_layout", timeout=30000)
+        self.page.wait_for_timeout(1000)
+        self.page.keyboard.press("f")
+
+        self.page.set_viewport_size(
+            {
+                "width": self.location_info["width"],
+                "height": self.location_info["height"],
+            }
+        )
+
+        self.status = utils.InstanceStatus.INITIALIZED
+
+    def todo_after_load(self):
+        self.page.wait_for_selector("#live_player_layout", timeout=30000)
+        self.page.wait_for_timeout(1000)
+        self.page.keyboard.press("f")
+
+
 class Youtube(Instance):
-    name = "YOUTUBE"
+    site_name = "YOUTUBE"
+    site_url = "youtube.com"
     cookie_css = ".eom-button-row.style-scope.ytd-consent-bump-v2-lightbox > ytd-button-renderer:nth-child(1) button"
 
     now_timestamp_ms = int(time.time() * 1000)
     next_year_timestamp_ms = int((datetime.datetime.now() + relativedelta(years=1)).timestamp() * 1000)
     local_storage = {
-        "yt-player-quality": r"""{{"data":"{{\\"quality\\":144,\\"previousQuality\\":144}}","expiration":{0},"creation":{1}}}""".format(
+        "yt-player-quality": r"""{{"data":"{{\\"quality\\":144,\\"previousQuality\\":144}}","expiration":{0},
+        "creation":{1}}}""".format(
             next_year_timestamp_ms, now_timestamp_ms
         ),
     }
@@ -108,7 +165,8 @@ class Youtube(Instance):
 
 
 class Kick(Instance):
-    name = "KICK"
+    site_name = "KICK"
+    site_url = "kick.com"
     local_storage = {
         "agreed_to_mature_content": "true",
         "kick_cookie_accepted": "true",
@@ -139,7 +197,8 @@ class Kick(Instance):
 
 
 class Twitch(Instance):
-    name = "TWITCH"
+    site_name = "TWITCH"
+    site_url = "twitch.tv"
     cookie_css = "button[data-a-target=consent-banner-accept]"
     local_storage = {
         "mature": "true",
