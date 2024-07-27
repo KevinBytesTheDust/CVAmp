@@ -1,7 +1,7 @@
 # Crude Viewer Amplifier (CVAmp)
-[![](https://img.shields.io/github/downloads/kevinbytesthedust/vcamp/total)](https://github.com/KevinBytesTheDust/cvamp/releases/latest)
+[![](https://img.shields.io/github/downloads/kevinbytesthedust/cvamp/total)](https://github.com/KevinBytesTheDust/cvamp/releases/latest)
 [![](https://github.com/KevinBytesTheDust/cvamp/actions/workflows/pytest.yml/badge.svg)](https://github.com/KevinBytesTheDust/cvamp/actions/workflows/pytest.yml)
-[![format & lint](https://github.com/KevinBytesTheDust/cvamp/actions/workflows/format_lint.yml/badge.svg)](https://github.com/KevinBytesTheDust/cvamp/actions/workflows/format_lint.yml)
+[![](https://github.com/KevinBytesTheDust/cvamp/actions/workflows/format_lint.yml/badge.svg)](https://github.com/KevinBytesTheDust/cvamp/actions/workflows/format_lint.yml)
 [![](https://github.com/KevinBytesTheDust/cvamp/actions/workflows/build.yml/badge.svg)](https://github.com/KevinBytesTheDust/cvamp/actions/workflows/build.yml)
 
 ![grafik](https://github.com/user-attachments/assets/66110d35-1683-4f95-a48f-a737c5dcedd0)
