@@ -1,0 +1,17 @@
+blank_issues_enabled: true
+
+contact_links:
+  - name: Start a Feature Request
+    url: https://github.com/KevinBytesTheDust/cvamp/discussions/new?category=general
+    about: |
+      Ask for features you would like to see.
+
+  - name: Ask a Question
+    url: https://github.com/KevinBytesTheDust/cvamp/discussions/new?category=q-a
+    about: |
+      Receive help from the users and supporters.
+
+  - name: Start a General Discussion
+    url: https://github.com/KevinBytesTheDust/cvamp/discussions/new?category=general
+    about: |
+      Discuss and exchange with other users and supporters.
