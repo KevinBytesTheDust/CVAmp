@@ -219,7 +219,7 @@ class TabMain(tk.Frame):
         proxy_available_text.place(x=40, y=10)
         proxy_available = tk.Label(self, text="0", borderwidth=2, relief="solid", width=5)
         proxy_available.place(x=70, y=40)
-        proxy_available.configure(text="100")
+        proxy_available.configure(text=len(self.manager.proxies.proxy_list))
 
         lbl_buy = tk.Label(self, text="(buy more)", fg="blue", cursor="hand2")
         lbl_buy.bind(

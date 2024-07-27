@@ -40,11 +40,7 @@ jobs:
       shell: bash
       run: |
         export today=$(date +'%Y%m%d')
-        if [ "$RUNNER_OS" == "Windows" ]; then
-          echo "output_filename=CVAmp${{steps.read_toml.outputs.value}}_${today}_${{runner.os}}-${{runner.arch}}" >> $GITHUB_ENV
-        else
-          echo "output_filename=CVAmp${{steps.read_toml.outputs.value}}_${today}_${{runner.os}}-${{runner.arch}}_experimental" >> $GITHUB_ENV
-        fi
+          echo "output_filename=CVAmp_v${{steps.read_toml.outputs.value}}_${today}_${{runner.os}}-${{runner.arch}}" >> $GITHUB_ENV
 
     - name: Build executable
       shell: bash
@@ -83,7 +79,7 @@ jobs:
       - name: Create draft release with artifacts
         uses: softprops/action-gh-release@v1
         with:
-          name: CVAmp GUI ${{github.ref_name}}
+          name: CVAmp ${{github.ref_name}}
           body_path: docs/release_template_text.md
           prerelease: false
           draft: true
