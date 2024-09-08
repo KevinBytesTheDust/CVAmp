@@ -26,19 +26,19 @@ Get exclusive Feature Previews as a [:gem: Supporter & Feature Tester](https://b
 
 | Platform              |                                Twitch                                |      Youtube       |       Chzzk        |                                 Kick                                 |
 |-----------------------|:--------------------------------------------------------------------:|:------------------:|:------------------:|:--------------------------------------------------------------------:|
-| General Functionality |                          :heavy_check_mark:                          | :heavy_check_mark: | :heavy_check_mark: | ⏳[:gem:](https://github.com/KevinBytesTheDust/cvamp/discussions/276) |
-| Lowest Quality Select |                          :heavy_check_mark:                          | :heavy_check_mark: | :heavy_check_mark: | ⏳[:gem:](https://github.com/KevinBytesTheDust/cvamp/discussions/276) |
-| Status Boxes Updates  |                          :heavy_check_mark:                          | :heavy_check_mark: | :heavy_check_mark: | ⏳[:gem:](https://github.com/KevinBytesTheDust/cvamp/discussions/276) |
-| Login/Authentication  | ⏳[:gem:](https://github.com/KevinBytesTheDust/cvamp/discussions/276) |        :x:         |        :x:         |                                 :x:                                  |
-| Automatic Follow      | ⏳[:gem:](https://github.com/KevinBytesTheDust/cvamp/discussions/276) |        :x:         |        :x:         |                                 :x:                                  |
-| Automatic Chat        | ⏳[:gem:](https://github.com/KevinBytesTheDust/cvamp/discussions/276) |        :x:         |        :x:         |                                 :x:                                  |
-| Low CPU Usage Mode    | ⏳[:gem:](https://github.com/KevinBytesTheDust/cvamp/discussions/276) |        :x:         |        :x:         |                                 :x:                                  |
+| General Functionality |                          :heavy_check_mark:                          | :heavy_check_mark: | :heavy_check_mark: | ⏳[:gem:](https://github.com/KevinBytesTheDust/cvamp/discussions/296) |
+| Lowest Quality Select |                          :heavy_check_mark:                          | :heavy_check_mark: | :heavy_check_mark: | ⏳[:gem:](https://github.com/KevinBytesTheDust/cvamp/discussions/296) |
+| Status Boxes Updates  |                          :heavy_check_mark:                          | :heavy_check_mark: | :heavy_check_mark: | ⏳[:gem:](https://github.com/KevinBytesTheDust/cvamp/discussions/296) |
+| Login/Authentication  | ⏳[:gem:](https://github.com/KevinBytesTheDust/cvamp/discussions/296) |        :x:         |        :x:         |                                 :x:                                  |
+| Automatic Follow      | ⏳[:gem:](https://github.com/KevinBytesTheDust/cvamp/discussions/296) |        :x:         |        :x:         |                                 :x:                                  |
+| Automatic Chat        | ⏳[:gem:](https://github.com/KevinBytesTheDust/cvamp/discussions/296) |        :x:         |        :x:         |                                 :x:                                  |
+| Low CPU Usage Mode    | ⏳[:gem:](https://github.com/KevinBytesTheDust/cvamp/discussions/296) |        :x:         |        :x:         |                                 :x:                                  |
 
-:heavy_check_mark: Supported, :warning: Problems, :x: Unsupported, ⏳ In Development, [:gem: Preview Available](https://github.com/KevinBytesTheDust/cvamp/discussions/276) 
+:heavy_check_mark: Supported, :warning: Problems, :x: Unsupported, ⏳ In Development, [:gem: Preview Available](https://github.com/KevinBytesTheDust/cvamp/discussions/296) 
 
 ### In Action
 
-![](docs/gui.png)
+![image](https://github.com/user-attachments/assets/94611ec5-c6c7-4473-9bb4-3f41dad3b563)
 
 #### Controls and Color codes of the square boxes
 
