@@ -205,6 +205,7 @@ class TabMain(tk.Frame):
         self.manager = manager
         self.headless = tk.BooleanVar(value=manager.get_headless())
         self.auto_restart = tk.BooleanVar(value=manager.get_auto_restart())
+        self.block_video_checkbox_value = tk.BooleanVar(value=False)
 
         global system_default_color
         system_default_color = self.cget("bg")
@@ -250,6 +251,16 @@ class TabMain(tk.Frame):
             offvalue=False,
         )
         auto_restart_checkbox.place(x=255, y=94)
+
+        block_video_checkbox = ttk.Checkbutton(
+            self,
+            text="low cpu",
+            onvalue=True,
+            offvalue=False,
+            variable=self.block_video_checkbox_value,
+            state=tk.DISABLED,
+        )
+        block_video_checkbox.place(x=344, y=94)
 
         # right
         instances_text = tk.Label(self, text="Instances", borderwidth=2)

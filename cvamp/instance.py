@@ -124,26 +124,40 @@ class Instance(ABC):
         self.page.screenshot(path=filename)
 
     def spawn_page(self, restart=False):
-        proxy_dict = self.proxy_dict
+        CHROMIUM_ARGS = [
+            "--window-position={},{}".format(self.location_info["x"], self.location_info["y"]),
+            "--no-sandbox",
+            "--disable-setuid-sandbox",
+            "--no-first-run",
+            "--disable-blink-features=AutomationControlled",
+            "--mute-audio",
+            "--webrtc-ip-handling-policy=disable_non_proxied_udp",
+            "--force-webrtc-ip-handling-policy",
+        ]
 
-        self.status = utils.InstanceStatus.RESTARTING if restart else utils.InstanceStatus.STARTING
+        if self.headless:
+            CHROMIUM_ARGS.append("--headless=old")
+
+        proxy_dict = self.proxy_dict
 
         if not proxy_dict:
             proxy_dict = None
+
+        self.status = utils.InstanceStatus.RESTARTING if restart else utils.InstanceStatus.STARTING
 
         self.playwright = sync_playwright().start()
 
         self.browser = self.playwright.chromium.launch(
             proxy=proxy_dict,
-            headless=self.headless,
             channel="chrome",
-            args=[
-                "--window-position={},{}".format(self.location_info["x"], self.location_info["y"]),
-                "--mute-audio",
-            ],
+            headless=False,
+            args=CHROMIUM_ARGS,
         )
+
+        major_version = self.browser.version.split(".")[0]
         self.context = self.browser.new_context(
             viewport={"width": 800, "height": 600},
+            user_agent=f"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/{major_version}.0.0.0 Safari/537.36",
             proxy=proxy_dict,
         )
 

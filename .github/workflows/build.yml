@@ -60,7 +60,7 @@ jobs:
         dest: ${{env.output_filename}}.zip
 
     - name: Upload zipped artifact ${{ matrix.os }}
-      uses: actions/upload-artifact@v1
+      uses: actions/upload-artifact@v4
       with:
         name: ${{env.output_filename}}
         path: ${{env.output_filename}}.zip

@@ -100,10 +100,11 @@ class Youtube(Instance):
         super().__init__(*args, **kwargs)
 
     def todo_every_loop(self):
-        self.page.keyboard.press("l")
+        if self.page.query_selector('div.html5-video-player:not(.playing-mode)'):
+            self.page.keyboard.press("Space")
 
         try:
-            self.page.click("button.ytp-skip-ad-button", timeout=100)
+            self.page.click("button.ytp-ad-skip-button-modern", timeout=100)
         except:
             pass
 
