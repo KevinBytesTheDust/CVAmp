@@ -1,12 +1,12 @@
 [tool.poetry]
 name = "cvamp"
-version = "0.7.1"
+version = "0.7.2"
 description = "Viewer Amplifier bot with playwright. Spawns low-resolution muted Chrome instances with proxy & user-agent. Requires HTTP proxies."
 authors = ["KevinBytesTheDust <kevin@blueloperlabs.ch>"]
 
 [tool.poetry.dependencies]
 python = "^3.11.0, <3.12"
-playwright = "^1.22.0"
+playwright = "1.43.0"
 psutil = "^5.9.0"
 toml = "^0.10.2"
 sv-ttk = "^0.1"

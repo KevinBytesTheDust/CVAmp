@@ -52,7 +52,7 @@ Get exclusive Feature Previews as a [:gem: Supporter & Feature Tester](https://b
 - CPU load and bandwidth can get heavy. Channels with 160p work best.
 - Tested on Windows 10 with headless ~100, headful ~30. Linux and macOS is experimental.
 
-The Crude Viewer Amplifier (CVAmp) is a small GUI tool that spawns muted Google Chrome instances via [Playwright](https://github.com/microsoft/playwright-python), each with a different user-agent and HTTP proxy connection. Each instance navigates to the streaming channel and selects the lowest possible resolution.
+The Crude Viewer Amplifier (CVAmp) is a small GUI tool that spawns muted Google Chrome instances via [Playwright](https://github.com/microsoft/playwright-python), each with a different HTTP proxy connection. Each instance navigates to the streaming channel and selects the lowest possible resolution.
 
 Read the comprehensive [wiki](https://github.com/KevinBytesTheDust/cvamp/wiki) for a [detailed tutorial](https://github.com/KevinBytesTheDust/cvamp/wiki/Detailed-Tutorial), [usage tips](https://github.com/KevinBytesTheDust/cvamp/wiki/Advanced-features-and-controls) and [troubleshooting steps](https://github.com/KevinBytesTheDust/cvamp/wiki/Troubleshooting).
 
