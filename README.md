@@ -10,7 +10,8 @@
 >Full disclaimer below.
 ### Getting Started
 1. Download the one-file executable for Windows, Linux and MacOS from the [latest CVAmp release](https://github.com/KevinBytesTheDust/cvamp/releases/latest).  
-2. Provide your own proxies or get 10 free for testing [here](https://blueloperlabs.ch/proxy/wf). See our [Proxies Guide](https://github.com/KevinBytesTheDust/cvamp/wiki/Webshare.io-Proxies-Guide) for setup.
+2. Provide your own proxies or get 10 free for testing [here](https://blueloperlabs.ch/proxy/wf). See our [Proxies Guide](https://github.com/KevinBytesTheDust/cvamp/wiki/Webshare.io-Proxies-Guide) for setup.  
+Or try unlimited traffic through [this new proxy provider](https://blueloperlabs.ch/proxy-ps/tf).
    
 Read the comprehensive [wiki](https://github.com/KevinBytesTheDust/cvamp/wiki) for a [detailed tutorial](https://github.com/KevinBytesTheDust/cvamp/wiki/Detailed-Tutorial), [usage tips](https://github.com/KevinBytesTheDust/cvamp/wiki/Advanced-features-and-controls) and [troubleshooting steps](https://github.com/KevinBytesTheDust/cvamp/wiki/Troubleshooting).  
 Ask questions in the [discussions](https://github.com/KevinBytesTheDust/cvamp/discussions) or [report issues](https://github.com/KevinBytesTheDust/cvamp/issues).
