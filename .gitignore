@@ -9,3 +9,4 @@ main_gui.spec
 main.spec
 tests
 cvamp.log
+.vscode

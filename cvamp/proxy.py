@@ -13,9 +13,7 @@ class ProxyGetter:
 
     def build_proxy_list(self):
         try:
-            if self.pathed_file_name.endswith(".json"):
-                raise NotImplementedError("JSON file not implemented yet")
-            elif self.pathed_file_name.endswith(".txt"):
+            if self.pathed_file_name.endswith(".txt"):
                 self.build_proxy_list_txt()
             else:
                 print("File type not supported")
@@ -25,30 +23,38 @@ class ProxyGetter:
 
     def build_proxy_list_txt(self):
         with open(self.pathed_file_name, "r") as fp:
-            proxy_list = fp.read().splitlines()
+            proxy_list = [line.strip() for line in fp if line.strip()]
 
         for proxy in proxy_list:
             proxy_parts = proxy.split(":")
             if len(proxy_parts) == 4:
-                username = proxy_parts[2]
-                password = proxy_parts[3]
-                ip_port = ":".join(proxy_parts[0:2])
-
-                if username != "username":
+                ip, port, username, password = proxy_parts
+                if username.lower() != "username":
                     self.proxy_list.append(
                         {
-                            "server": "http://" + ip_port,
+                            "server": f"http://{ip}:{port}",
                             "username": username,
                             "password": password,
                         }
                     )
-
-        random.shuffle(self.proxy_list)
+                else:
+                    logger.warning(f"Skipping proxy with placeholder username: {proxy}")
+            elif len(proxy_parts) == 2:
+                ip, port = proxy_parts
+                self.proxy_list.append(
+                    {
+                        "server": f"http://{ip}:{port}",
+                        "username": "",
+                        "password": "",
+                    }
+                )
+            else:
+                logger.warning(f"Invalid proxy format: {proxy}")
 
     def get_proxy_as_dict(self) -> dict:
         if not self.proxy_list:
             return {}
 
-        proxy = self.proxy_list.pop(0)
-        self.proxy_list.append(proxy)
+        proxy = self.proxy_list.pop(-1)
+        self.proxy_list.insert(0, proxy)
         return proxy
