@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "cvamp"
-version = "0.7.3"
+version = "0.7.4"
 description = "Viewer Amplifier bot with playwright. Spawns low-resolution muted Chrome instances with proxy & user-agent. Requires HTTP proxies."
 authors = ["KevinBytesTheDust <kevin@blueloperlabs.ch>"]
 
