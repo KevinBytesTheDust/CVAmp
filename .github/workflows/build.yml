@@ -10,57 +10,57 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        os: [ubuntu-20.04]
+        os: [ubuntu-24.04]
         python-version: [3.11]
 
     runs-on: ${{ matrix.os }}
 
     name: Build ${{ matrix.os }} executable
     steps:
-    - uses: actions/checkout@v3
-    - uses: actions/setup-python@v5
-      with:
-        python-version: ${{ matrix.python-version }}
-    - name: Install poetry
-      run: pip install poetry
-    - name: Get packages via poetry
-      run: poetry install
+      - uses: actions/checkout@v3
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+      - name: Install poetry
+        run: pip install poetry
+      - name: Get packages via poetry
+        run: poetry install
 
-    - name: Get CVAmp version number
-      uses: SebRollen/toml-action@v1.0.0
-      id: read_toml
-      with:
-        file: 'pyproject.toml'
-        field: 'tool.poetry.version'
+      - name: Get CVAmp version number
+        uses: SebRollen/toml-action@v1.0.0
+        id: read_toml
+        with:
+          file: "pyproject.toml"
+          field: "tool.poetry.version"
 
-    - name: Create date and file name env variable
-      shell: bash
-      run: |
-        export today=$(date +'%Y%m%d')
-        if [ "$RUNNER_OS" == "Windows" ]; then
-          echo "output_filename=CVAmp${{steps.read_toml.outputs.value}}_${today}_${{runner.os}}-${{runner.arch}}" >> $GITHUB_ENV
-        else
-          echo "output_filename=CVAmp${{steps.read_toml.outputs.value}}_${today}_${{runner.os}}-${{runner.arch}}_experimental" >> $GITHUB_ENV
-        fi
+      - name: Create date and file name env variable
+        shell: bash
+        run: |
+          export today=$(date +'%Y%m%d')
+          if [ "$RUNNER_OS" == "Windows" ]; then
+            echo "output_filename=CVAmp${{steps.read_toml.outputs.value}}_${today}_${{runner.os}}-${{runner.arch}}" >> $GITHUB_ENV
+          else
+            echo "output_filename=CVAmp${{steps.read_toml.outputs.value}}_${today}_${{runner.os}}-${{runner.arch}}_experimental" >> $GITHUB_ENV
+          fi
 
-    - name: Build executable
-      shell: bash
-      run: |
-        if [ "$RUNNER_OS" == "Windows" ]; then
-          poetry run pyinstaller main_gui.py --onefile --add-binary "cvamp_logo.ico;." --add-binary "pyproject.toml;." --icon cvamp_logo.ico --name ${{env.output_filename}}
-        else
-          poetry run pyinstaller main_gui.py --onefile --add-binary "cvamp_logo.ico:." --hidden-import=tkinter --add-binary "pyproject.toml:." --icon cvamp_logo.ico --name ${{env.output_filename}}.bin
-        fi
-        mv ./proxy/ ./dist/
+      - name: Build executable
+        shell: bash
+        run: |
+          if [ "$RUNNER_OS" == "Windows" ]; then
+            poetry run pyinstaller main_gui.py --onefile --add-binary "cvamp_logo.ico;." --add-binary "pyproject.toml;." --icon cvamp_logo.ico --name ${{env.output_filename}}
+          else
+            poetry run pyinstaller main_gui.py --onefile --add-binary "cvamp_logo.ico:." --hidden-import=tkinter --add-binary "pyproject.toml:." --icon cvamp_logo.ico --name ${{env.output_filename}}.bin
+          fi
+          mv ./proxy/ ./dist/
 
-    - name: Zip executable
-      uses: vimtor/action-zip@v1
-      with:
-        files: dist/
-        dest: ${{env.output_filename}}.zip
+      - name: Zip executable
+        uses: vimtor/action-zip@v1
+        with:
+          files: dist/
+          dest: ${{env.output_filename}}.zip
 
-    - name: Upload zipped artifact ${{ matrix.os }}
-      uses: actions/upload-artifact@v4
-      with:
-        name: ${{env.output_filename}}
-        path: ${{env.output_filename}}.zip
+      - name: Upload zipped artifact ${{ matrix.os }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{env.output_filename}}
+          path: ${{env.output_filename}}.zip
