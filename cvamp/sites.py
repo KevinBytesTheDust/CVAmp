@@ -263,7 +263,7 @@ class Twitch(Instance):
         self.status = utils.InstanceStatus.BUFFERING
 
     def todo_after_spawn(self):
-        self.goto_with_retry("https://www.twitch.tv/p/en/legal/giftcard/")
+        self.goto_with_retry("https://www.twitch.tv/privacy/tldr")
 
         try:
             self.page.click(self.cookie_css, timeout=15000)
