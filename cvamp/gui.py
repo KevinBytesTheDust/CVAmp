@@ -284,7 +284,7 @@ class TabMain(tk.Frame):
         # mid log
         channel_url = tk.Entry(self, width=40, name="channel_url_entry")
         channel_url.place(x=180, y=10)
-        channel_url.insert(0, "https://www.twitch.tv/channel_test")
+        channel_url.insert(0, "https://www.twitch.tv/channel_name")
 
         spawn_one = tk.Button(
             self,
