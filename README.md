@@ -24,8 +24,7 @@ Get exclusive Feature Previews as a [:gem: Supporter & Feature Tester](https://b
 ### Mandatory Requirements
 
 - Provide your own private HTTP proxies to the [proxy_list.txt](proxy/proxy_list.txt) or follow our [Proxies Guide](https://github.com/KevinBytesTheDust/cvamp/wiki/Webshare.io-Proxies-Guide).  
-  a. Get 10 free proxies for testing and 10% off your first proxy purchase at [Webshare.io](https://blueloperlabs.ch/proxy/wf).  
-  b. Or try unlimited traffic through [this new proxy provider](https://blueloperlabs.ch/proxy-ps/tf).
+Get 10 free proxies for testing and 10% off your first proxy purchase at [Webshare.io](https://blueloperlabs.ch/proxy/wf).  
 
 - Chrome needs to be already installed on your system.
 
