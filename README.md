@@ -32,17 +32,17 @@ Get 10 free proxies for testing and 10% off your first proxy purchase at [Websha
 
 ### Platform Support Overview
 
-| Platform              |                                Twitch                                 |      Youtube       |       Chzzk        |                                 Kick                                  |
-| --------------------- | :-------------------------------------------------------------------: | :----------------: | :----------------: | :-------------------------------------------------------------------: |
-| General Functionality |                          :heavy_check_mark:                           | :heavy_check_mark: | :heavy_check_mark: | ⏳[:gem:](https://github.com/KevinBytesTheDust/cvamp/discussions/296) |
-| Lowest Quality Select |                          :heavy_check_mark:                           | :heavy_check_mark: | :heavy_check_mark: | ⏳[:gem:](https://github.com/KevinBytesTheDust/cvamp/discussions/296) |
-| Status Boxes Updates  |                          :heavy_check_mark:                           | :heavy_check_mark: | :heavy_check_mark: | ⏳[:gem:](https://github.com/KevinBytesTheDust/cvamp/discussions/296) |
-| Login/Authentication  | ⏳[:gem:](https://github.com/KevinBytesTheDust/cvamp/discussions/296) |        :x:         |        :x:         |                                  :x:                                  |
-| Automatic Follow      | ⏳[:gem:](https://github.com/KevinBytesTheDust/cvamp/discussions/296) |        :x:         |        :x:         |                                  :x:                                  |
-| Automatic Chat        | ⏳[:gem:](https://github.com/KevinBytesTheDust/cvamp/discussions/296) |        :x:         |        :x:         |                                  :x:                                  |
-| Low CPU Usage Mode    | ⏳[:gem:](https://github.com/KevinBytesTheDust/cvamp/discussions/296) |        :x:         |        :x:         |                                  :x:                                  |
+| Platform              |                                Twitch                                |                                 Kick                                 |        Youtube       |         Chzzk        |
+| --------------------- | :------------------------------------------------------------------: | :------------------------------------------------------------------: | :------------------: | :------------------: |
+| General Functionality |                         :heavy\_check\_mark:                         | [⏳ :gem:](https://github.com/KevinBytesTheDust/CVAmp/wiki/Feature-Preview-(Supporter%E2%80%90Only)) | :heavy\_check\_mark: | :heavy\_check\_mark: |
+| Lowest Quality Select |                         :heavy\_check\_mark:                         | [⏳ :gem:](https://github.com/KevinBytesTheDust/CVAmp/wiki/Feature-Preview-(Supporter%E2%80%90Only)) | :heavy\_check\_mark: | :heavy\_check\_mark: |
+| Status Boxes Updates  |                         :heavy\_check\_mark:                         | [⏳ :gem:](https://github.com/KevinBytesTheDust/CVAmp/wiki/Feature-Preview-(Supporter%E2%80%90Only)) | :heavy\_check\_mark: | :heavy\_check\_mark: |
+| Login/Authentication  | [⏳ :gem:](https://github.com/KevinBytesTheDust/CVAmp/wiki/Feature-Preview-(Supporter%E2%80%90Only)) | [⏳ :gem:](https://github.com/KevinBytesTheDust/CVAmp/wiki/Feature-Preview-(Supporter%E2%80%90Only)) |          :x:         |          :x:         |
+| Automatic Chat        | [⏳ :gem:](https://github.com/KevinBytesTheDust/CVAmp/wiki/Feature-Preview-(Supporter%E2%80%90Only)) | [⏳ :gem:](https://github.com/KevinBytesTheDust/CVAmp/wiki/Feature-Preview-(Supporter%E2%80%90Only)) |          :x:         |          :x:         |
+| Automatic Follow      | [⏳ :gem:](https://github.com/KevinBytesTheDust/CVAmp/wiki/Feature-Preview-(Supporter%E2%80%90Only)) |                                  :x:                                 |          :x:         |          :x:         |
+| Low CPU Usage Mode    | [⏳ :gem:](https://github.com/KevinBytesTheDust/CVAmp/wiki/Feature-Preview-(Supporter%E2%80%90Only)) |                                  :x:                                 |          :x:         |          :x:         |
 
-:heavy_check_mark: Supported, :warning: Problems, :x: Unsupported, ⏳ In Development, [:gem: Preview Available](https://github.com/KevinBytesTheDust/cvamp/discussions/296)
+
 
 ### In Action
 
