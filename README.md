@@ -42,7 +42,7 @@ Get 10 free proxies for testing and 10% off your first proxy purchase at [Websha
 | Automatic Follow      | [⏳ :gem:](https://github.com/KevinBytesTheDust/CVAmp/wiki/Feature-Preview-(Supporter%E2%80%90Only)) |                                  :x:                                 |          :x:         |          :x:         |
 | Low CPU Usage Mode    | [⏳ :gem:](https://github.com/KevinBytesTheDust/CVAmp/wiki/Feature-Preview-(Supporter%E2%80%90Only)) |                                  :x:                                 |          :x:         |          :x:         |
 
-
+:heavy_check_mark: Supported, :warning: Problems, :x: Unsupported, ⏳ In Development, [:gem: Preview Available](https://github.com/KevinBytesTheDust/CVAmp/wiki/Feature-Preview-(Supporter%E2%80%90Only))
 
 ### In Action
 
