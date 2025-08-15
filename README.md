@@ -30,11 +30,11 @@ Get 10 free proxies for testing and 10% off your first proxy purchase at [Websha
 
 - Chrome needs to be already installed on your system.
 
-### Platform Support Overview
+### Platform Support Overview (2025.08.15)
 
 | Platform              |                                Twitch                                |                                 Kick                                 |        Youtube       |         Chzzk        |
 | --------------------- | :------------------------------------------------------------------: | :------------------------------------------------------------------: | :------------------: | :------------------: |
-| General Functionality |                         :heavy\_check\_mark:                         | [⏳ :gem:](https://github.com/KevinBytesTheDust/CVAmp/wiki/Feature-Preview-(Supporter%E2%80%90Only)) | :heavy\_check\_mark: | :heavy\_check\_mark: |
+| General Functionality |                         :x:                         | [⏳ :gem:](https://github.com/KevinBytesTheDust/CVAmp/wiki/Feature-Preview-(Supporter%E2%80%90Only)) | :heavy\_check\_mark: | :heavy\_check\_mark: |
 | Lowest Quality Select |                         :heavy\_check\_mark:                         | [⏳ :gem:](https://github.com/KevinBytesTheDust/CVAmp/wiki/Feature-Preview-(Supporter%E2%80%90Only)) | :heavy\_check\_mark: | :heavy\_check\_mark: |
 | Status Boxes Updates  |                         :heavy\_check\_mark:                         | [⏳ :gem:](https://github.com/KevinBytesTheDust/CVAmp/wiki/Feature-Preview-(Supporter%E2%80%90Only)) | :heavy\_check\_mark: | :heavy\_check\_mark: |
 | Login/Authentication  | [⏳ :gem:](https://github.com/KevinBytesTheDust/CVAmp/wiki/Feature-Preview-(Supporter%E2%80%90Only)) | [⏳ :gem:](https://github.com/KevinBytesTheDust/CVAmp/wiki/Feature-Preview-(Supporter%E2%80%90Only)) |          :x:         |          :x:         |
