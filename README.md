@@ -16,12 +16,8 @@
 2. Provide your proxies or follow our comprehensive [Proxies Guide](https://github.com/KevinBytesTheDust/cvamp/wiki/Webshare.io-Proxies-Guide).  
    Get 10 free proxies for testing and 10% off your first proxy purchase at [Webshare.io](https://blueloperlabs.ch/proxy/wf).  
 
-> Tip: Run CVAmp on a [Cloud Server with this guide](https://github.com/KevinBytesTheDust/CVAmp/wiki/Run-on-a-Cloud-Server), to stream lag-free.
-
 Read the comprehensive [wiki](https://github.com/KevinBytesTheDust/cvamp/wiki) for [usage tips](https://github.com/KevinBytesTheDust/cvamp/wiki/Advanced-features-and-controls) and [troubleshooting steps](https://github.com/KevinBytesTheDust/cvamp/wiki/Troubleshooting).  
 Ask questions in the [discussions](https://github.com/KevinBytesTheDust/cvamp/discussions) or [report issues](https://github.com/KevinBytesTheDust/cvamp/issues).
-
-Get Feature Previews as a [:gem: Supporter & Feature Tester](https://blueloperlabs.ch/supporter/wf) with [these exclusive features](https://github.com/KevinBytesTheDust/CVAmp/wiki/Feature-Preview-(Supporter%E2%80%90Only)).
 
 ### Mandatory Requirements
 
@@ -30,19 +26,19 @@ Get 10 free proxies for testing and 10% off your first proxy purchase at [Websha
 
 - Chrome needs to be already installed on your system.
 
-### Platform Support Overview (2025.08.15)
+### Platform Support Overview (2025.10.18)
 
-| Platform              |                                Twitch                                |                                 Kick                                 |        Youtube       |         Chzzk        |
-| --------------------- | :------------------------------------------------------------------: | :------------------------------------------------------------------: | :------------------: | :------------------: |
-| General Functionality |                         :x:                         | [⏳ :gem:](https://github.com/KevinBytesTheDust/CVAmp/wiki/Feature-Preview-(Supporter%E2%80%90Only)) | :heavy\_check\_mark: | :heavy\_check\_mark: |
-| Lowest Quality Select |                         :heavy\_check\_mark:                         | [⏳ :gem:](https://github.com/KevinBytesTheDust/CVAmp/wiki/Feature-Preview-(Supporter%E2%80%90Only)) | :heavy\_check\_mark: | :heavy\_check\_mark: |
-| Status Boxes Updates  |                         :heavy\_check\_mark:                         | [⏳ :gem:](https://github.com/KevinBytesTheDust/CVAmp/wiki/Feature-Preview-(Supporter%E2%80%90Only)) | :heavy\_check\_mark: | :heavy\_check\_mark: |
-| Login/Authentication  | [⏳ :gem:](https://github.com/KevinBytesTheDust/CVAmp/wiki/Feature-Preview-(Supporter%E2%80%90Only)) | [⏳ :gem:](https://github.com/KevinBytesTheDust/CVAmp/wiki/Feature-Preview-(Supporter%E2%80%90Only)) |          :x:         |          :x:         |
-| Automatic Chat        | [⏳ :gem:](https://github.com/KevinBytesTheDust/CVAmp/wiki/Feature-Preview-(Supporter%E2%80%90Only)) | [⏳ :gem:](https://github.com/KevinBytesTheDust/CVAmp/wiki/Feature-Preview-(Supporter%E2%80%90Only)) |          :x:         |          :x:         |
-| Automatic Follow      | [⏳ :gem:](https://github.com/KevinBytesTheDust/CVAmp/wiki/Feature-Preview-(Supporter%E2%80%90Only)) |                                  :x:                                 |          :x:         |          :x:         |
-| Low CPU Usage Mode    | [⏳ :gem:](https://github.com/KevinBytesTheDust/CVAmp/wiki/Feature-Preview-(Supporter%E2%80%90Only)) |                                  :x:                                 |          :x:         |          :x:         |
+| Platform              |      Twitch      |       Kick       |        Youtube       |
+| --------------------- | :--------------: | :--------------: | :------------------: |
+| General Functionality |        :heavy\_check\_mark:        |        ⏳        | :heavy\_check\_mark: |
+| Lowest Quality Select | :heavy\_check\_mark: |        ⏳        | :heavy\_check\_mark: | 
+| Status Boxes Updates  | :heavy\_check\_mark: |        ⏳        | :heavy\_check\_mark: |
+| Login/Authentication  |        ⏳        |        ⏳        |          :x:         |  
+| Automatic Chat        |        ⏳        |        ⏳        |          :x:         |    
+| Automatic Follow      |        ⏳        |       :x:        |          :x:         |   
+| Low CPU Usage Mode    |        ⏳        |       :x:        |          :x:         | 
 
-:heavy_check_mark: Supported, :warning: Problems, :x: Unsupported, ⏳ In Development, [:gem: Preview Available](https://github.com/KevinBytesTheDust/CVAmp/wiki/Feature-Preview-(Supporter%E2%80%90Only))
+:heavy_check_mark: Supported, :warning: Problems, :x: Unsupported, ⏳ In Development
 
 ### In Action
 
@@ -64,8 +60,6 @@ Get 10 free proxies for testing and 10% off your first proxy purchase at [Websha
 The Crude Viewer Amplifier (CVAmp) is a small GUI tool that spawns muted Google Chrome instances via [Playwright](https://github.com/microsoft/playwright-python), each with a different HTTP proxy connection. Each instance navigates to the streaming channel and selects the lowest possible resolution.
 
 Read the comprehensive [wiki](https://github.com/KevinBytesTheDust/cvamp/wiki) for a [detailed tutorial](https://github.com/KevinBytesTheDust/cvamp/wiki/Detailed-Tutorial), [usage tips](https://github.com/KevinBytesTheDust/cvamp/wiki/Advanced-features-and-controls) and [troubleshooting steps](https://github.com/KevinBytesTheDust/cvamp/wiki/Troubleshooting).
-
-Support my creativity and [sponsor me a coffee :coffee:](https://blueloperlabs.ch/supporter/wf)
 
 ### Full disclaimer
 
