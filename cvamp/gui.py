@@ -3,6 +3,7 @@ import logging
 import os
 import sys
 import threading
+import time
 import tkinter as tk
 import webbrowser
 from tkinter import ttk
@@ -17,6 +18,13 @@ from .manager import InstanceManager
 from .utils import InstanceCommands
 
 logger = logging.getLogger(__name__)
+
+
+def open_multiple_urls(*urls):
+    """Open multiple URLs in order with small delays"""
+    for url in urls:
+        webbrowser.open(url, new=2)
+        time.sleep(0.1)
 
 system_default_color = None
 
@@ -148,11 +156,11 @@ class TabChat(tk.Frame):
 
         chat_message_box = tk.Entry(manual, width=60, name="chat_message_box")
         chat_message_box.place(x=15, y=10)
-        chat_message_box.insert(0, "Available in the Feature Preview as a Supporter & Feature Tester.")
+        chat_message_box.insert(0, "Available in the PRO version - now free for everyone!")
         chat_message_box.configure(state="disabled")
 
-        lbl_buy = tk.Label(self, text="Become A Supporter Now!", fg="blue", cursor="hand2")
-        lbl_buy.bind("<Button-1>", lambda event: webbrowser.open("https://blueloperlabs.ch/supporter/tf"))
+        lbl_buy = tk.Label(self, text="Get PRO Version (Free)", fg="blue", cursor="hand2")
+        lbl_buy.bind("<Button-1>", lambda event: webbrowser.open("https://blueloperlabs.ch/cvamp/tf"))
         lbl_buy.place(x=410, y=33)
 
         auto_frame = ttk.Labelframe(self, text='Auto Chat')
@@ -225,10 +233,14 @@ class TabMain(tk.Frame):
         lbl_buy = tk.Label(self, text="(buy more)", fg="blue", cursor="hand2")
         lbl_buy.bind(
             "<Button-1>",
-            lambda event: (
-                webbrowser.open("https://blueloperlabs.ch/proxy/tf")
-                and webbrowser.open("https://github.com/KevinBytesTheDust/cvamp/wiki/Webshare.io-Proxies-Guide", new=2)
-            ),
+            lambda event: threading.Thread(
+                target=open_multiple_urls,
+                args=(
+                    "https://blueloperlabs.ch/proxy/tf",
+                    "https://blueloperlabs.ch/proxy-ps/tf",
+                    "https://github.com/KevinBytesTheDust/cvamp/wiki/Webshare.io-Proxies-Guide",
+                ),
+            ).start(),
         )
         lbl_buy.place(x=58, y=62)
 
@@ -346,18 +358,27 @@ class TabAbout(tk.Frame):
         super().__init__(parent, *args, **kwargs)
         info_text = tk.Label(
             self,
-            text="Thank you for using this tool."
-            "\n\n\n\n"
-            "We only use ko-fi, github and blueloperlabs.ch. Other sites, users and resellers are fake - be careful!",
+            text="Thank You for your support! The Pro version is now available to everyone as a free executable.\n"
+            "We only use GitHub and blueloperlabs.ch. Other sites, users and resellers are fake - be careful!\n"
+            "Purchasing recommended proxies helps the project advance.",
             borderwidth=2,
+            justify="center",
         )
-        info_text.place(x=40, y=10)
+        info_text.place(relx=0.5, y=10, anchor="n")
 
-        lbl_buy = tk.Label(
-            self, text="Get exclusive Feature Previews as a Supporter & Feature Tester.", fg="blue", cursor="hand2"
+        lbl_buy = tk.Label(self, text="Get Recommended Proxies", fg="blue", cursor="hand2")
+        lbl_buy.bind(
+            "<Button-1>",
+            lambda event: threading.Thread(
+                target=open_multiple_urls,
+                args=(
+                    "https://blueloperlabs.ch/proxy/tf",
+                    "https://blueloperlabs.ch/proxy-ps/tf",
+                    "https://github.com/KevinBytesTheDust/cvamp/wiki/Webshare.io-Proxies-Guide",
+                ),
+            ).start(),
         )
-        lbl_buy.bind("<Button-1>", lambda event: webbrowser.open("https://blueloperlabs.ch/supporter/tf"))
-        lbl_buy.place(x=135, y=40)
+        lbl_buy.place(relx=0.5, y=75, anchor="n")
 
 
 class InstanceBox(tk.Frame):
