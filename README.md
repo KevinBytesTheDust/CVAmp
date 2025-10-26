@@ -30,13 +30,13 @@ Get 10 free proxies for testing and 10% off your first proxy purchase at [Websha
 
 | Platform              |      Twitch      |       Kick       |        Youtube       |
 | --------------------- | :--------------: | :--------------: | :------------------: |
-| General Functionality |        :heavy\_check\_mark:        |        ⏳        | :heavy\_check\_mark: |
-| Lowest Quality Select | :heavy\_check\_mark: |        ⏳        | :heavy\_check\_mark: | 
-| Status Boxes Updates  | :heavy\_check\_mark: |        ⏳        | :heavy\_check\_mark: |
-| Login/Authentication  |        ⏳        |        ⏳        |          :x:         |  
-| Automatic Chat        |        ⏳        |        ⏳        |          :x:         |    
-| Automatic Follow      |        ⏳        |       :x:        |          :x:         |   
-| Low CPU Usage Mode    |        ⏳        |       :x:        |          :x:         | 
+| General Functionality |        :heavy\_check\_mark:        |        :heavy\_check\_mark:        | :heavy\_check\_mark: |
+| Lowest Quality Select | :heavy\_check\_mark: |        :heavy\_check\_mark:        | :heavy\_check\_mark: | 
+| Status Boxes Updates  | :heavy\_check\_mark: |        :heavy\_check\_mark:        | :heavy\_check\_mark: |
+| Login/Authentication  |        :heavy\_check\_mark:        |        :heavy\_check\_mark:        |          :x:         |  
+| Automatic Chat        |        :heavy\_check\_mark:        |        :heavy\_check\_mark:        |          :x:         |    
+| Automatic Follow      |        :heavy\_check\_mark:        |       :x:        |          :x:         |   
+| Low CPU Usage Mode    |        :heavy\_check\_mark:        |       :x:        |          :x:         | 
 
 :heavy_check_mark: Supported, :warning: Problems, :x: Unsupported, ⏳ In Development
 
