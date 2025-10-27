@@ -32,7 +32,7 @@ class ProxyGetter:
                 if username.lower() != "username":
                     self.proxy_list.append(
                         {
-                            "server": f"http://{ip}:{port}",
+                            "server": f"socks5://{ip}:{port}",
                             "username": username,
                             "password": password,
                         }
@@ -43,7 +43,7 @@ class ProxyGetter:
                 ip, port = proxy_parts
                 self.proxy_list.append(
                     {
-                        "server": f"http://{ip}:{port}",
+                        "server": f"socks5://{ip}:{port}",
                         "username": "",
                         "password": "",
                     }
