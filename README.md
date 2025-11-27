@@ -26,11 +26,11 @@ Get 10 free proxies for testing and 10% off your first proxy purchase at [Websha
 
 - Chrome needs to be already installed on your system.
 
-### Platform Support Overview (2025.10.18)
+### Platform Support Overview (2025.11.27)
 
 | Platform              |      Twitch      |       Kick       |        Youtube       |
 | --------------------- | :--------------: | :--------------: | :------------------: |
-| General Functionality |        :heavy\_check\_mark:        |        :heavy\_check\_mark:        | :heavy\_check\_mark: |
+| General Functionality |        :warning:        |        :heavy\_check\_mark:        | :heavy\_check\_mark: |
 | Lowest Quality Select | :heavy\_check\_mark: |        :heavy\_check\_mark:        | :heavy\_check\_mark: | 
 | Status Boxes Updates  | :heavy\_check\_mark: |        :heavy\_check\_mark:        | :heavy\_check\_mark: |
 | Login/Authentication  |        :heavy\_check\_mark:        |        :heavy\_check\_mark:        |          :x:         |  
