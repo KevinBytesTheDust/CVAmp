@@ -155,7 +155,7 @@ class InstanceManager:
 
             server_ip = proxy.get("server", "no proxy")
             logger.info(
-                f"Ordered {site_class.site_name} instance {browser_instance_id}, {threading.currentThread().name}, proxy {server_ip}"
+                f"Ordered {site_class.site_name} instance {browser_instance_id}, {threading.current_thread().name}, proxy {server_ip}"
             )
 
             browser_instance = site_class(
